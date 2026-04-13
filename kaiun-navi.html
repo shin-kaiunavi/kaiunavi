@@ -1879,14 +1879,12 @@ function buildShrineUI(deityName) {
   var higanType = getHiganInfo(m, d);
   var s = _state || {};
   var deity = DEITIES[s.juunishi] || {name:deityName, mantra:'おん あびらうんけん ばざらだとばん'};
-  var deityC = DEITY_COLORS[deity.name] || {hex:'#c9a84c'};
 
   var html = '';
-
-  // deityNameをhidden inputに保存（escapeして安全に渡す）
   html += '<input type="hidden" id="shrineDeityName" value="">';
+  html += '<input type="hidden" id="shrineRadius" value="5">';
 
-  // 特別日参拝ガイド
+  // 今日の特別日参拝ガイド
   var activeSpecial = null;
   li.tags.forEach(function(tag){
     if(SHRINE_FREE_MSGS[tag.name] && !activeSpecial) activeSpecial = SHRINE_FREE_MSGS[tag.name];
@@ -1894,7 +1892,7 @@ function buildShrineUI(deityName) {
   if(activeSpecial) {
     html += '<div style="background:linear-gradient(135deg,#1a1408,#0a0806);border:1px solid '+activeSpecial.color+';border-radius:14px;padding:16px;margin-bottom:14px;">'
       +'<div style="font-size:9px;letter-spacing:.3em;color:'+activeSpecial.color+';margin-bottom:6px;">'+activeSpecial.icon+' 今日の参拝ガイド</div>'
-      +'<div style="font-size:12px;color:var(--text);line-height:1.8;margin-bottom:10px;font-weight:600;">'+activeSpecial.title+'</div>'
+      +'<div style="font-size:12px;color:var(--text);line-height:1.8;margin-bottom:8px;font-weight:600;">'+activeSpecial.title+'</div>'
       +'<div style="font-size:11px;color:var(--muted);line-height:1.8;">'+activeSpecial.msg+'</div>'
       +'</div>';
   }
@@ -1906,42 +1904,23 @@ function buildShrineUI(deityName) {
       +'</div>';
   }
 
-  // 恵方情報
-  html += '<div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:14px;">'
-    +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">'
+  // 恵方 + 検索ボタン（シンプルに1枚のカードに統合）
+  html += '<div style="background:var(--surface2);border:1px solid var(--border);border-radius:14px;padding:18px 16px;margin-bottom:14px;">'
+    +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">'
     +'<div>'
-    +'<div style="font-size:9px;letter-spacing:.3em;color:var(--gold);margin-bottom:3px;">'+y+'年の恵方</div>'
-    +'<div style="font-family:var(--serif);font-size:22px;font-weight:800;color:var(--gold-light);">'+eihou+'</div>'
+    +'<div style="font-size:9px;letter-spacing:.3em;color:var(--gold);margin-bottom:4px;">'+y+'年の恵方</div>'
+    +'<div style="font-family:var(--serif);font-size:24px;font-weight:800;color:var(--gold-light);">'+eihou+'</div>'
     +'</div>'
-    +'<div style="width:60px;height:60px;border-radius:50%;background:rgba(201,168,76,.1);border:2px solid rgba(201,168,76,.3);display:flex;align-items:center;justify-content:center;font-size:24px;">🧭</div>'
+    +'<div style="font-size:32px;">🧭</div>'
     +'</div>'
-    +'<div style="font-size:11px;color:var(--muted);line-height:1.7;">現在地から'+eihou+'方向の神社・お寺を恵方として優先表示します。</div>'
-    +'</div>';
-
-  // 検索半径選択（onclick は引数なし - hidden inputから取得）
-  html += '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px;">'
-    +'<div id="shrineR1" onclick="selectShrineRadius(this,1)" style="padding:10px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;text-align:center;cursor:pointer;-webkit-tap-highlight-color:transparent;"><div style="font-family:var(--serif);font-size:16px;font-weight:800;color:var(--muted);margin-bottom:2px;">1km</div><div style="font-size:8px;color:var(--muted);">以内</div></div>'
-    +'<div id="shrineR3" onclick="selectShrineRadius(this,3)" style="padding:10px;background:rgba(201,168,76,.12);border:2px solid var(--gold);border-radius:10px;text-align:center;cursor:pointer;-webkit-tap-highlight-color:transparent;"><div style="font-family:var(--serif);font-size:16px;font-weight:800;color:var(--gold);margin-bottom:2px;">3km</div><div style="font-size:8px;color:var(--muted);">以内</div></div>'
-    +'<div id="shrineR5" onclick="selectShrineRadius(this,5)" style="padding:10px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;text-align:center;cursor:pointer;-webkit-tap-highlight-color:transparent;"><div style="font-family:var(--serif);font-size:16px;font-weight:800;color:var(--muted);margin-bottom:2px;">5km</div><div style="font-size:8px;color:var(--muted);">以内</div></div>'
+    +'<div style="font-size:11px;color:var(--muted);line-height:1.7;margin-bottom:16px;">'
+    +deityName+'ゆかりの神社・お寺を優先表示。恵方（'+eihou+'）方向も案内します。現在地から5km以内を検索します。'
     +'</div>'
-    +'<input type="hidden" id="shrineRadius" value="3">';
-
-  // 検索エリア
-  var specialBadges = li.tags.map(function(t){
-    return '<span style="padding:3px 10px;border-radius:20px;font-size:9px;border:1px solid '+t.color+';color:'+t.color+';">'+t.name+'</span>';
-  }).join('');
-
-  html += '<div style="text-align:center;margin-bottom:14px;">'
-    +'<div style="font-size:22px;margin-bottom:8px;">⛩</div>'
-    +'<div style="font-family:var(--serif);font-size:15px;color:var(--gold-light);margin-bottom:6px;">守護仏ゆかりの神社・お寺を探す</div>'
-    +'<div style="font-size:11px;color:var(--muted);line-height:1.8;margin-bottom:8px;">'+deityName+'にゆかりの場所・恵方（'+eihou+'）の神社を優先表示</div>'
-    +(specialBadges ? '<div style="display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-bottom:10px;">'+specialBadges+'</div>' : '')
-    +'</div>';
-
-  // 検索ボタン（onclick="doShrineSearch()" でhidden inputから読む）
-  html += '<button class="shrine-search-btn" onclick="doShrineSearch()">'
-    +'<span>📍</span><span>現在地で検索する</span></button>'
+    +'<button class="shrine-search-btn" onclick="doShrineSearch()">'
+    +'<span>📍</span><span>現在地で神社・お寺を検索</span>'
+    +'</button>'
     +'<div style="font-size:10px;color:var(--muted);margin-top:8px;text-align:center;">位置情報の許可が必要です</div>'
+    +'</div>'
     +'<div id="shrineResult"></div>';
 
   return html;
@@ -2057,10 +2036,14 @@ function renderShrineResults(elements,myLat,myLon,deityName,resultEl){
   var eihouCount = places.filter(function(p){return p.isEihou;}).length;
 
   // ヘッダーバッジ
-  var headerHTML = '<div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px;">';
-  if(matchCount>0) headerHTML += '<div style="padding:6px 12px;background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.3);border-radius:20px;font-size:10px;color:var(--gold);">✦ '+deityName+'ゆかり '+matchCount+'件</div>';
-  if(eihouCount>0) headerHTML += '<div style="padding:6px 12px;background:rgba(106,177,135,.08);border:1px solid rgba(106,177,135,.3);border-radius:20px;font-size:10px;color:#6ab187;">🧭 恵方（'+eihou+'）'+eihouCount+'件</div>';
-  headerHTML += '<div style="padding:6px 12px;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:20px;font-size:10px;color:var(--muted);">計'+places.length+'件</div>';
+  var headerHTML = '<div style="margin-bottom:14px;">';
+  if(matchCount>0||eihouCount>0){
+    headerHTML += '<div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;">';
+    if(matchCount>0) headerHTML += '<div style="padding:5px 12px;background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.3);border-radius:20px;font-size:10px;color:var(--gold);">🙏 守護仏ゆかり '+matchCount+'件</div>';
+    if(eihouCount>0) headerHTML += '<div style="padding:5px 12px;background:rgba(106,177,135,.08);border:1px solid rgba(106,177,135,.3);border-radius:20px;font-size:10px;color:#6ab187;">🧭 恵方（'+eihou+'）'+eihouCount+'件</div>';
+    headerHTML += '</div>';
+  }
+  headerHTML += '<div style="font-size:10px;color:var(--muted);">現在地から5km以内 · 計'+places.length+'件</div>';
   headerHTML += '</div>';
 
   var listHTML = places.map(function(p){
@@ -2068,8 +2051,8 @@ function renderShrineResults(elements,myLat,myLon,deityName,resultEl){
     var typeLabel = p.isTemple?'お寺':'神社';
     var typeClass = p.isTemple?'temple-tag':'shrine-tag';
     var badges = '';
-    if(p.match) badges += '<span style="font-size:9px;padding:2px 8px;border:1px solid var(--gold-dim);border-radius:10px;color:var(--gold);margin-right:4px;">✦ '+deityName+'ゆかり</span>';
-    if(p.isEihou) badges += '<span style="font-size:9px;padding:2px 8px;border:1px solid rgba(106,177,135,.4);border-radius:10px;color:#6ab187;">🧭 恵方</span>';
+    if(p.match) badges += '<span style="font-size:10px;padding:3px 10px;background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.3);border-radius:20px;color:var(--gold);margin-right:6px;">🙏 守護仏ゆかり</span>';
+    if(p.isEihou) badges += '<span style="font-size:10px;padding:3px 10px;background:rgba(106,177,135,.08);border:1px solid rgba(106,177,135,.3);border-radius:20px;color:#6ab187;">🧭 恵方（'+eihou+'）</span>';
     var googleMapUrl='https://www.google.com/maps/search/?api=1&query='+p.lat+','+p.lon;
     return '<div class="shrine-item'+(p.match?' guardian-match':'')+'" style="'+(p.isEihou&&!p.match?'border-color:rgba(106,177,135,.4);background:rgba(106,177,135,.03);':'')+'">'
       +'<div class="shrine-icon">'+icon+'</div>'
@@ -2082,12 +2065,8 @@ function renderShrineResults(elements,myLat,myLon,deityName,resultEl){
       +'</div>';
   }).join('');
 
-  var radiusEl = document.getElementById('shrineRadius');
-  var radius = radiusEl ? radiusEl.value : '3';
-
   resultEl.innerHTML = headerHTML
     +'<div class="shrine-list">'+listHTML+'</div>'
-    +'<div class="shrine-radius-note">現在地から'+radius+'km以内 · '+places.length+'件</div>'
     +'<div style="text-align:center;margin-top:14px;">'
     +'<div style="font-size:10px;color:var(--gold-dim);cursor:pointer;padding:8px;" onclick="searchNearbyShrine(\''+deityName+'\')">↺ 再検索</div>'
     +'</div>';
