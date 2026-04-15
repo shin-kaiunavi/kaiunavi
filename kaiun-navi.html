@@ -597,6 +597,34 @@ function calcKaku(last,first){
   var gai=Math.max(1,ten+chi-jin+1);
   return [{name:'天格',num:ten},{name:'人格',num:jin},{name:'地格',num:chi},{name:'外格',num:gai},{name:'総格',num:sou}];
 }
+
+var LUCKY_COLORS = [
+  {hex:'#c9a84c',name:'金色',desc:'繁栄と豊かさを象徴する色。財運・成功運を高め、大切な決断の日に力を与えます。',wear:'財布・アクセサリー・スカーフに取り入れて',energy:'財運・成功・決断力を高める'},
+  {hex:'#e8e8e8',name:'白銀',desc:'純粋と清潔を表す色。邪気を払い、新しいスタートのエネルギーを引き寄せます。',wear:'インナー・ハンカチ・靴下に取り入れて',energy:'浄化・新しい始まり・clarity'},
+  {hex:'#c0392b',name:'紅色',desc:'情熱と生命力を表す色。行動力・勝負運・縁を強化します。特に大事な場面で力を発揮。',wear:'口紅・ネクタイ・ポケットチーフに取り入れて',energy:'行動力・勝負運・情熱を引き出す'},
+  {hex:'#5b9bd5',name:'瑠璃色',desc:'知恵と冷静さを象徴する色。判断力を高め、コミュニケーションを円滑にします。',wear:'シャツ・ブラウス・スカーフに取り入れて',energy:'知恵・判断力・コミュニケーションを高める'},
+  {hex:'#6ab187',name:'翠緑',desc:'成長と癒しを表す色。健康運・仕事運を高め、心身のバランスを整えます。',wear:'バッグ・ストール・小物に取り入れて',energy:'成長・癒し・健康運を引き出す'},
+  {hex:'#9b59b6',name:'菫色',desc:'直感と精神性を高める色。インスピレーションを引き出し、創造力を解放します。',wear:'アクセサリー・インナーに取り入れて',energy:'直感・創造力・精神性を高める'},
+  {hex:'#e67e22',name:'橙色',desc:'明るさと社交性を象徴する色。人との縁を引き寄せ、コミュニケーション運を高めます。',wear:'トップス・マフラー・バッグに取り入れて',energy:'縁結び・社交性・明るさをもたらす'},
+  {hex:'#f0d080',name:'山吹色',desc:'金運と豊かさを象徴する日本の吉色。財を呼び込み、幸運を引き寄せます。',wear:'財布・カードケース・小物に取り入れて',energy:'金運・豊かさ・幸運を引き寄せる'},
+  {hex:'#1a3a5c',name:'紺色',desc:'誠実さと信頼を表す色。仕事運・対人運を高め、周囲からの信頼を集めます。',wear:'ジャケット・スーツ・バッグに取り入れて',energy:'信頼・誠実さ・仕事運を高める'},
+  {hex:'#e88fa0',name:'桜色',desc:'縁結びと愛情を象徴する色。恋愛運・人間関係運を高め、温かい縁を引き寄せます。',wear:'アウター・スカーフ・アクセサリーに取り入れて',energy:'縁結び・愛情・人間関係を高める'},
+  {hex:'#2d7a3a',name:'若草色',desc:'新しい始まりと活力を表す色。挑戦運・健康運を高め、前進する力を与えます。',wear:'小物・ストール・インナーに取り入れて',energy:'活力・挑戦運・健康をもたらす'},
+  {hex:'#8b6914',name:'茶金色',desc:'安定と実りを象徴する色。堅実な運気を高め、努力が実を結ぶ力を引き出します。',wear:'ベルト・バッグ・靴に取り入れて',energy:'安定・実り・堅実な運気を高める'},
+  {hex:'#c8a8e8',name:'藤色',desc:'上品さと直感を表す色。センスを磨き、目上の人との縁を引き寄せます。',wear:'スカーフ・アクセサリー・インナーに取り入れて',energy:'上品さ・直感・目上の縁を引き寄せる'},
+  {hex:'#27ae60',name:'常磐色',desc:'永遠の繁栄を象徴する深緑。長期的な成功と健康運を高めます。',wear:'ジャケット・バッグ・小物に取り入れて',energy:'繁栄・健康・長期的な成功をもたらす'},
+  {hex:'#e8c47a',name:'淡金色',desc:'穏やかな豊かさを表す色。日常の運気を底上げし、安定した幸運をもたらします。',wear:'アクセサリー・財布・ハンカチに取り入れて',energy:'穏やかな豊かさ・日常運を高める'},
+  {hex:'#7f8c8d',name:'銀灰色',desc:'バランスと知恵を象徴する色。冷静な判断力を高め、物事を客観的に見る力を与えます。',wear:'バッグ・靴・アクセサリーに取り入れて',energy:'バランス・知恵・冷静さをもたらす'},
+  {hex:'#d4a8f0',name:'薄紫',desc:'霊感と癒しを表す色。ストレスを解放し、精神的な豊かさをもたらします。',wear:'インナー・スカーフ・アクセサリーに取り入れて',energy:'癒し・霊感・精神的豊かさを引き出す'},
+  {hex:'#e8a090',name:'珊瑚色',desc:'温かさと包容力を象徴する色。人を惹きつける魅力を高め、縁を育みます。',wear:'トップス・スカーフ・アクセサリーに取り入れて',energy:'温かさ・魅力・縁を育む力をもたらす'},
+  {hex:'#3d8b6e',name:'青磁色',desc:'清涼と知恵を表す色。頭の回転を高め、試験・面接などに力を発揮します。',wear:'シャツ・インナー・小物に取り入れて',energy:'知恵・清涼感・集中力を高める'},
+  {hex:'#f5e6c8',name:'象牙色',desc:'純粋と上品さを象徴する色。品格を高め、大切な場面での印象を良くします。',wear:'トップス・スカーフ・ハンカチに取り入れて',energy:'品格・純粋さ・印象力を高める'},
+  {hex:'#1a6b8a',name:'浅葱色',desc:'爽やかさと誠実さを表す日本の伝統色。清潔感と信頼感を高めます。',wear:'シャツ・ブラウス・ネクタイに取り入れて',energy:'爽やかさ・誠実さ・信頼感をもたらす'},
+  {hex:'#c04a00',name:'柿色',desc:'収穫と実りを象徴する色。努力が報われる運気を高め、成果を引き出します。',wear:'スカーフ・アクセサリー・バッグに取り入れて',energy:'収穫・実り・努力の成果をもたらす'},
+  {hex:'#8b4513',name:'茶色',desc:'大地の安定を表す色。根を張る力を高め、長期的な安定運をもたらします。',wear:'バッグ・靴・ベルトに取り入れて',energy:'安定・根を張る力・長期運を高める'},
+  {hex:'#4a90d9',name:'空色',desc:'自由と可能性を象徴する色。新しいチャンスを引き寄せ、視野を広げます。',wear:'トップス・スカーフ・小物に取り入れて',energy:'自由・可能性・新しいチャンスをもたらす'},
+];
+
 var ROKUYO=[{name:'先勝',color:'#e67e22',advice:'重要な用事は午前中に。急ぎの判断・連絡は朝のうちに済ませましょう。',desc:'「先んずれば勝つ」。午前中は物事が順調に進む吉の時間帯。午後からは慎重に行動しましょう。'},{name:'友引',color:'#6ab187',advice:'仲間・チームとの協力が吉。感謝を伝えるメッセージが縁を深めます。',desc:'「友を引く」吉日。朝夕は吉、正午のみ凶。慶事には特に良い日で、友人や仲間との縁が深まります。'},{name:'先負',color:'#5b9bd5',advice:'午前は慎重に。焦らず午後から動き出すと物事がスムーズに。',desc:'「先んずれば負け」。急いで行動するより、午後からゆっくり動く方が吉の日。'},{name:'仏滅',color:'#9b59b6',advice:'新規より整理・見直し・準備の日。内なる充電をする一日に。',desc:'「仏も滅する」大凶日。新しいことを始めるより、整理・見直し・準備の日として活用しましょう。'},{name:'大安',color:'#c9a84c',advice:'六曜最吉日！新しい挑戦・契約・出会いに最適。積極的に動いて吉。',desc:'「大いに安し」。六曜最吉日。何事にも吉で、新しい出発・契約・結婚など全ての慶事に最適な日。'},{name:'赤口',color:'#c0392b',advice:'正午前後のみ吉。火・刃物の扱いは丁寧に。急がず慎重に。',desc:'正午のみ吉、その他は凶の日。火・刃物・血に関わることは特に慎重に。'}];
 function calcRokuyo(y,m,d){return ROKUYO[((m+d)%6+6)%6];}
 var ICHU_TABLE={1:[1,13,25],2:[8,20],3:[7,19,31],4:[5,11,17,29],5:[4,16,28],6:[3,9,15,27],7:[2,8,20],8:[1,13,19,25],9:[7,11,23],10:[6,10,22],11:[4,9,21],12:[3,8,15,20]};
@@ -2852,6 +2880,7 @@ function renderDay(date) {
 }
 
 function openPremiumScreen(){
+  try{
   history.pushState({screen:'premium'},'');
   setTimeout(updateTabOrder,50);
   var s=_state;
@@ -2872,18 +2901,9 @@ function openPremiumScreen(){
   var weekColors=getWeekColors(now.getFullYear(),now.getMonth()+1,now.getDate(),s.jIdx,s.kIdx);
   var colorHTML = buildLuckyColorHTML(s, now);
 
-var by=s.by,bm=s.bm,bday=s.bday,kIdx=s.kIdx,jIdx=s.jIdx;
-  var btEl=document.getElementById('birthTime');var btime=btEl?btEl.value:'';
-  var nk=KAN[kIdx]+JUNISHI[jIdx];
-  var gkIdx2=((kIdx+bm)%10+10)%10,gsIdx2=((jIdx+bm)%12+12)%12;
-  var gk=KAN[gkIdx2]+JUNISHI[gsIdx2];
-  var diff=Math.floor((new Date(by,bm-1,bday)-new Date(1900,0,1))/86400000);
-  var dkIdx=((diff%10)+10)%10,dsIdx=((diff%12)+12)%12;
-  var dk=KAN[dkIdx]+JUNISHI[dsIdx];
-  var jk='—';
-  if(btime){var h=parseInt(btime.split(':')[0]);var tIdx=Math.floor(h/2)%12;var tkIdx=((dkIdx*2+tIdx)%10+10)%10;jk=KAN[tkIdx]+JUNISHI[tIdx];}
-  var btimeNote=btime?'':'<br><span style="color:var(--gold-dim)">※出生時刻を入力すると時柱も表示されます</span>';
-  var shichuHTML='<div class="shichu-grid"><div class="shichu-item"><div class="shichu-label">年柱</div><div class="shichu-val">'+nk+'</div><div class="shichu-read">先祖・社会的個性</div></div><div class="shichu-item"><div class="shichu-label">月柱</div><div class="shichu-val">'+gk+'</div><div class="shichu-read">仕事運・才能</div></div><div class="shichu-item"><div class="shichu-label">日柱</div><div class="shichu-val">'+dk+'</div><div class="shichu-read">本質・配偶者運</div></div><div class="shichu-item"><div class="shichu-label">時柱</div><div class="shichu-val">'+jk+'</div><div class="shichu-read">晩年・子孫運</div></div></div><div style="font-size:11px;color:var(--muted);line-height:1.85;padding:12px;background:var(--surface2);border-radius:10px;">日柱はあなたの<strong style="color:var(--text)">本質と魂</strong>を表す最重要の柱です。'+btimeNote+'</div>';
+var btEl=document.getElementById('birthTime');var btime=btEl?btEl.value:'';
+  var shichuHTML='';
+  try{shichuHTML=buildShichuHTML(s,btime);}catch(e){shichuHTML='<div style="color:#e05545;padding:12px;">四柱推命エラー: '+e.message+'</div>';console.error('buildShichuHTML error:',e);}
 
   var deity=DEITIES[s.juunishi]||{name:'大日如来'};
   var fullHTML=''
@@ -2907,8 +2927,14 @@ var by=s.by,bm=s.bm,bday=s.bday,kIdx=s.kIdx,jIdx=s.jIdx;
   document.getElementById('resultScreen').classList.remove('active');
   document.getElementById('premiumScreen').classList.add('active');
   window.scrollTo(0,0);
+  }catch(e){
+    var ed=document.createElement('div');
+    ed.style.cssText='position:fixed;top:0;left:0;right:0;background:#900;color:#fff;padding:12px;font-size:11px;font-family:monospace;z-index:9999;word-break:break-all;white-space:pre-wrap;';
+    ed.textContent='PREMIUM ERROR: '+e.message+'\n'+(e.stack||'').substring(0,400);
+    document.body.appendChild(ed);
+    setTimeout(function(){ed.remove();},15000);
+  }
 }
-
 function closePremiumScreen(){
   document.getElementById('premiumScreen').classList.remove('active');
   document.getElementById('resultScreen').classList.add('active');
@@ -3390,9 +3416,9 @@ function calcAi(){
     var myKb=calcKabala(document.getElementById('lastNameKana').value.trim(),document.getElementById('firstNameKana').value.trim(),s.by,s.bm,s.bday);
     var ptKb=calcKabala(aiLastKana,aiFirstKana,ptBy,ptBm,ptBd);
     var myDiff=Math.floor((new Date(s.by,s.bm-1,s.bday)-new Date(1900,0,1))/86400000);
-    var myDkIdx=((myDiff%10)+10)%10,myDsIdx=((myDiff%12)+12)%12;
+    var myDkIdx=(((myDiff+8)%10)+10)%10,myDsIdx=(((myDiff+8)%12)+12)%12;
     var ptDiff=Math.floor((new Date(ptBy,ptBm-1,ptBd)-new Date(1900,0,1))/86400000);
-    var ptDkIdx=((ptDiff%10)+10)%10,ptDsIdx=((ptDiff%12)+12)%12;
+    var ptDkIdx=(((ptDiff+8)%10)+10)%10,ptDsIdx=(((ptDiff+8)%12)+12)%12;
     var ptGkIdx=((ptKIdx+ptBm)%10+10)%10,ptGsIdx=((ptJIdx+ptBm)%12+12)%12;
     var ptNk=KAN[ptKIdx]+ptJunishi,ptGk=KAN[ptGkIdx]+JUNISHI[ptGsIdx],ptDk=KAN[ptDkIdx]+JUNISHI[ptDsIdx];
     var junishiRel=getJunishiRelation(s.juunishi,ptJunishi);
@@ -3562,7 +3588,7 @@ setTimeout(function(){
     var lastShown = localStorage.getItem('kaiun_notif_last');
     var now = new Date();
     var todayStr = now.getFullYear()+'-'+(now.getMonth()+1)+'-'+now.getDate();
-    // if(lastShown === todayStr) return; // テスト中は毎回表示
+    if(lastShown === todayStr) return; // 同日は1回のみ表示
     var settings = getNotifSettings();
     if(!settings.enabled) return;
     var y=now.getFullYear(), m=now.getMonth()+1, d=now.getDate();
@@ -3591,6 +3617,713 @@ setTimeout(function(){
     }
   } catch(e){}
 }, 800);
+
+// ================================================================
+// 四柱推命 詳細（全部盛り版）- 十二運星・大運グラフ・天中殺
+// ================================================================
+
+
+// ================================================================
+// 四柱推命 天干・地支 詳細データ
+// ================================================================
+var KAN_DATA = {
+'甲':{gogyo:'木',yin:'陽',yinColor:'#e67e22',keyword:'成長・上昇・開拓',
+  desc:'甲は木の陽気。春の大樹のように真っ直ぐ上へと伸びていく力。リーダーシップと開拓精神を持ち、新しい道を切り開きます。',
+  good:'リーダーシップ・行動力・正直さ',weak:'頑固さ・曲げられない意志'},
+'乙':{gogyo:'木',yin:'陰',yinColor:'#9b59b6',keyword:'柔軟・適応・縁',
+  desc:'乙は木の陰気。風に揺れる草花のように、しなやかに環境に適応する力。人との縁を大切にし、柔軟に道を切り開きます。',
+  good:'適応力・協調性・縁を結ぶ力',weak:'優柔不断・流されやすい'},
+'丙':{gogyo:'火',yin:'陽',yinColor:'#e67e22',keyword:'情熱・輝き・カリスマ',
+  desc:'丙は火の陽気。太陽のように全てを照らす力。明るく活発で周囲を惹きつけるカリスマ性があります。',
+  good:'カリスマ・明るさ・行動力',weak:'衝動的・感情的になりやすい'},
+'丁':{gogyo:'火',yin:'陰',yinColor:'#9b59b6',keyword:'繊細・直感・美',
+  desc:'丁は火の陰気。ロウソクの炎のように内側から静かに輝く力。繊細な感性と鋭い直感力を持ちます。',
+  good:'繊細さ・直感力・美意識',weak:'傷つきやすい・気にしすぎ'},
+'戊':{gogyo:'土',yin:'陽',yinColor:'#e67e22',keyword:'安定・包容・信頼',
+  desc:'戊は土の陽気。大山のようにどっしりと構える力。揺るぎない安定感と大きな包容力が特徴です。',
+  good:'安定感・包容力・信頼性',weak:'頑固さ・変化への抵抗'},
+'己':{gogyo:'土',yin:'陰',yinColor:'#9b59b6',keyword:'誠実・繊細・気配り',
+  desc:'己は土の陰気。肥沃な田畑のように物を育てる力。誠実で細やかな気配りが周囲を支えます。',
+  good:'誠実さ・気配り・育てる力',weak:'心配性・自己主張が弱い'},
+'庚':{gogyo:'金',yin:'陽',yinColor:'#e67e22',keyword:'決断・意志・改革',
+  desc:'庚は金の陽気。鋭い刀のように強い意志と決断力を持つ。改革と変革のエネルギーがあります。',
+  good:'決断力・意志の強さ・改革力',weak:'冷徹さ・融通が利かない'},
+'辛':{gogyo:'金',yin:'陰',yinColor:'#9b59b6',keyword:'美意識・完璧・洗練',
+  desc:'辛は金の陰気。磨かれた宝石のように洗練された美意識と完璧を追求する力を持ちます。',
+  good:'美意識・完璧主義・洗練さ',weak:'神経質・完璧主義が裏目に'},
+'壬':{gogyo:'水',yin:'陽',yinColor:'#e67e22',keyword:'知恵・包容・大河',
+  desc:'壬は水の陽気。大海のように広大な知恵と包容力。どんな形にも流れ込む適応力があります。',
+  good:'知恵・包容力・広い視野',weak:'流されやすい・定まらない'},
+'癸':{gogyo:'水',yin:'陰',yinColor:'#9b59b6',keyword:'直感・感性・神秘',
+  desc:'癸は水の陰気。霧雨のように静かに浸透する力。深い直感力と感性、神秘的な魅力があります。',
+  good:'直感力・感性・神秘的魅力',weak:'気分の波・現実逃避傾向'},
+};
+
+var SHI_DATA = {
+'子':{gogyo:'水',yin:'陽',yinColor:'#e67e22',keyword:'知恵・生命力・始まり',
+  desc:'子は水の陽気。全ての始まりのエネルギー。知恵と生命力に溢れ、新しいことへの挑戦力があります。',
+  good:'知恵・行動力・新しい始まり',weak:'落ち着きのなさ・飽きやすさ'},
+'丑':{gogyo:'土',yin:'陰',yinColor:'#9b59b6',keyword:'忍耐・蓄積・堅実',
+  desc:'丑は土の陰気。冬の大地のようにじっくりと蓄積する力。忍耐強く堅実に積み上げる才能があります。',
+  good:'忍耐力・堅実さ・蓄積力',weak:'頑固さ・変化への抵抗'},
+'寅':{gogyo:'木',yin:'陽',yinColor:'#e67e22',keyword:'行動力・勇気・開拓',
+  desc:'寅は木の陽気。虎のような力強い行動力。勇気を持って前進し、新しい道を切り開きます。',
+  good:'行動力・勇気・リーダー性',weak:'衝動的・慎重さに欠ける'},
+'卯':{gogyo:'木',yin:'陰',yinColor:'#9b59b6',keyword:'優雅・直感・感性',
+  desc:'卯は木の陰気。春の草花のような優雅さ。鋭い直感と豊かな感性で人を惹きつけます。',
+  good:'優雅さ・直感力・感性の豊かさ',weak:'気まぐれ・表面的になりやすい'},
+'辰':{gogyo:'土',yin:'陽',yinColor:'#e67e22',keyword:'カリスマ・変化・才能',
+  desc:'辰は土の陽気。龍のような神秘的なカリスマ。大きな変化を引き寄せ、才能を開花させます。',
+  good:'カリスマ・才能・変化への対応',weak:'自我が強い・協調が苦手'},
+'巳':{gogyo:'火',yin:'陰',yinColor:'#9b59b6',keyword:'洞察・神秘・変革',
+  desc:'巳は火の陰気。蛇のような深い洞察力。本質を見抜き静かに変革を起こす力があります。',
+  good:'洞察力・神秘性・変革力',weak:'猜疑心・秘密主義'},
+'午':{gogyo:'火',yin:'陽',yinColor:'#e67e22',keyword:'情熱・自由・行動',
+  desc:'午は火の陽気。馬のような自由な魂。情熱的に走り続け周囲に活力を与えます。',
+  good:'情熱・自由・活力',weak:'衝動的・忍耐が苦手'},
+'未':{gogyo:'土',yin:'陰',yinColor:'#9b59b6',keyword:'温和・思いやり・調和',
+  desc:'未は土の陰気。羊のような穏やかさ。思いやりと調和を重んじ周囲との縁を大切にします。',
+  good:'温和さ・思いやり・調和力',weak:'優柔不断・主張が弱い'},
+'申':{gogyo:'金',yin:'陽',yinColor:'#e67e22',keyword:'機知・器用・革新',
+  desc:'申は金の陽気。猿のような機知と器用さ。頭の回転が速く革新的なアイデアを生み出します。',
+  good:'機知・器用さ・革新性',weak:'飽きやすい・軽率さ'},
+'酉':{gogyo:'金',yin:'陰',yinColor:'#9b59b6',keyword:'美意識・完璧・繊細',
+  desc:'酉は金の陰気。鶏のような鋭い感覚。美意識が高く細部へのこだわりで完璧を追求します。',
+  good:'美意識・繊細さ・完璧主義',weak:'神経質・批判的になりやすい'},
+'戌':{gogyo:'土',yin:'陽',yinColor:'#e67e22',keyword:'誠実・義理・守護',
+  desc:'戌は土の陽気。犬のような誠実さ。義理と信頼を大切にし周囲を守るための強さがあります。',
+  good:'誠実さ・義理・守護力',weak:'融通が利かない・頑固さ'},
+'亥':{gogyo:'水',yin:'陰',yinColor:'#9b59b6',keyword:'知恵・探求・意志',
+  desc:'亥は水の陰気。猪のような直進力と水の知恵。困難にも屈せず最後まで貫く強さがあります。',
+  good:'探求力・意志の強さ・知恵',weak:'頑固さ・視野が狭くなりやすい'},
+};
+
+// 五行相互作用
+var GOGYO_RELATION = {
+'木':{'木':'比和','火':'相生（木生火）','土':'相剋（木剋土）','金':'相剋（金剋木）','水':'相生（水生木）'},
+'火':{'木':'相生（木生火）','火':'比和','土':'相生（火生土）','金':'相剋（火剋金）','水':'相剋（水剋火）'},
+'土':{'木':'相剋（木剋土）','火':'相生（火生土）','土':'比和','金':'相生（土生金）','水':'相剋（土剋水）'},
+'金':{'木':'相剋（金剋木）','火':'相剋（火剋金）','土':'相生（土生金）','金':'比和','水':'相生（金生水）'},
+'水':{'木':'相生（水生木）','火':'相剋（水剋火）','土':'相剋（土剋水）','金':'相生（金生水）','水':'比和'},
+};
+
+var GOGYO_RELATION_DESC = {
+'比和':'同じ五行。純粋にエネルギーが増幅します。良い面も悪い面も強く出る、純粋な性質。',
+'相生（木生火）':'木が火を生む関係。天干が地支を育て、互いを高め合う理想的な組み合わせ。',
+'相生（火生土）':'火が土を生む関係。天干が地支を育て、互いを高め合う理想的な組み合わせ。',
+'相生（土生金）':'土が金を生む関係。天干が地支を育て、互いを高め合う理想的な組み合わせ。',
+'相生（金生水）':'金が水を生む関係。天干が地支を育て、互いを高め合う理想的な組み合わせ。',
+'相生（水生木）':'水が木を生む関係。天干が地支を育て、互いを高め合う理想的な組み合わせ。',
+'相剋（木剋土）':'木が土を剋す関係。天干と地支が相互に刺激し合い、強い個性と葛藤を生む。',
+'相剋（火剋金）':'火が金を剋す関係。天干と地支が相互に刺激し合い、強い個性と葛藤を生む。',
+'相剋（土剋水）':'土が水を剋す関係。天干と地支が相互に刺激し合い、強い個性と葛藤を生む。',
+'相剋（金剋木）':'金が木を剋す関係。天干と地支が相互に刺激し合い、強い個性と葛藤を生む。',
+'相剋（水剋火）':'水が火を剋す関係。天干と地支が相互に刺激し合い、強い個性と葛藤を生む。',
+};
+
+var PILLAR_ROLE = {
+'年柱':'先祖・家系から受け継いだ運気。社会的な個性・外から見たあなたの印象。',
+'月柱':'仕事運・才能・対人関係。あなたが最も力を発揮する分野。',
+'日柱':'最重要の柱。あなたの本質・魂・内なる自分。パートナーとの縁も示します。',
+'時柱':'晩年の運気・子孫との縁・夢と理想。人生の後半に向けたエネルギー。',
+};
+
+// 陰陽組み合わせ
+var YIN_YANG_COMBO = {
+'陽陽':{label:'陽×陽',color:'#e67e22',desc:'外向きの強いエネルギー。積極的・社交的で行動力があります。リーダーシップを発揮しやすい反面、衝突も起きやすい。'},
+'陰陰':{label:'陰×陰',color:'#9b59b6',desc:'内向きの繊細なエネルギー。感性豊かで深く考える力があります。直感力と創造性に優れ、静かな強さを持ちます。'},
+'陽陰':{label:'陽×陰',color:'#6ab187',desc:'外の積極性と内の繊細さが調和。バランスが取れた安定したエネルギー。表は明るく、内に深みがある。'},
+'陰陽':{label:'陰×陽',color:'#5b9bd5',desc:'内に力を秘め外に実践する。柔中有剛の性質。見た目は穏やかでも内に強い意志を持ちます。'},
+};
+
+function showPillarModal(pillarName, kanIdx, shiIdx, jusei) {
+  var kanName = KAN[kanIdx];
+  var shiName = JUNISHI[shiIdx];
+  var kd = KAN_DATA[kanName] || {};
+  var sd = SHI_DATA[shiName] || {};
+  var juData = JUNI_USEI_DATA[jusei] || JUNI_USEI_DATA['長生'];
+  var gogyoRel = GOGYO_RELATION[kd.gogyo] ? GOGYO_RELATION[kd.gogyo][sd.gogyo] : '比和';
+  var relDesc = GOGYO_RELATION_DESC[gogyoRel] || '';
+  var yinComboKey = kd.yin + sd.yin;
+  var yinCombo = YIN_YANG_COMBO[yinComboKey] || YIN_YANG_COMBO['陽陽'];
+  var roleDesc = PILLAR_ROLE[pillarName] || '';
+  var gogyoColors = {'木':'#2d7a3a','火':'#c0392b','土':'#c9a84c','金':'#b8b8b8','水':'#1a3a5c'};
+  var kanColor = gogyoColors[kd.gogyo] || '#c9a84c';
+  var shiColor = gogyoColors[sd.gogyo] || '#5b9bd5';
+  var isRelSho = gogyoRel.indexOf('相生')>=0;
+  var isRelKok = gogyoRel.indexOf('相剋')>=0;
+  var relColor = isRelSho?'#6ab187':isRelKok?'#e05545':'#c9a84c';
+
+  var body = ''
+    // 柱タイトル
+    +'<div style="text-align:center;margin-bottom:18px;padding-bottom:16px;border-bottom:1px solid var(--border);">'
+    +'<div style="display:flex;align-items:center;justify-content:center;gap:16px;margin-bottom:12px;">'
+    +'<div style="text-align:center;">'
+    +'<div style="font-size:9px;color:var(--muted);margin-bottom:3px;">天干</div>'
+    +'<div style="font-family:var(--serif);font-size:52px;font-weight:800;color:'+kanColor+';line-height:1;">'+kanName+'</div>'
+    +'<div style="font-size:10px;color:'+kanColor+';">'+kd.gogyo+'の'+kd.yin+'</div>'
+    +'</div>'
+    +'<div style="font-size:28px;color:var(--border);">×</div>'
+    +'<div style="text-align:center;">'
+    +'<div style="font-size:9px;color:var(--muted);margin-bottom:3px;">地支</div>'
+    +'<div style="font-family:var(--serif);font-size:52px;font-weight:800;color:'+shiColor+';line-height:1;">'+shiName+'</div>'
+    +'<div style="font-size:10px;color:'+shiColor+';">'+sd.gogyo+'の'+sd.yin+'</div>'
+    +'</div>'
+    +'</div>'
+    +'<div style="display:inline-flex;align-items:center;gap:6px;padding:5px 14px;border-radius:20px;border:1px solid '+yinCombo.color+'40;background:'+yinCombo.color+'12;">'
+    +'<span style="font-size:11px;color:'+yinCombo.color+';font-weight:700;">'+yinCombo.label+'</span>'
+    +'</div>'
+    +'</div>'
+
+    // 柱の役割
+    +'<div style="background:rgba(201,168,76,.06);border:1px solid rgba(201,168,76,.2);border-radius:12px;padding:13px 14px;margin-bottom:12px;">'
+    +'<div style="font-size:8px;letter-spacing:.3em;color:var(--gold);margin-bottom:6px;">✦ '+pillarName+'の意味</div>'
+    +'<div style="font-size:12px;color:var(--text);line-height:1.8;">'+roleDesc+'</div>'
+    +'</div>'
+
+    // 陰陽組み合わせ
+    +'<div style="background:'+yinCombo.color+'10;border:1px solid '+yinCombo.color+'40;border-radius:12px;padding:13px 14px;margin-bottom:12px;">'
+    +'<div style="font-size:8px;letter-spacing:.3em;color:'+yinCombo.color+';margin-bottom:6px;">'+yinCombo.label+' — 陰陽の組み合わせ</div>'
+    +'<div style="font-size:12px;color:var(--text);line-height:1.8;">'+yinCombo.desc+'</div>'
+    +'</div>'
+
+    // 天干の解説
+    +'<div style="background:var(--surface2);border-radius:12px;padding:13px 14px;margin-bottom:10px;">'
+    +'<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">'
+    +'<div style="font-family:var(--serif);font-size:22px;font-weight:800;color:'+kanColor+';">'+kanName+'</div>'
+    +'<div>'
+    +'<div style="font-size:9px;color:var(--muted);">天干｜'+kd.gogyo+'の'+kd.yin+'気</div>'
+    +'<div style="font-size:10px;color:'+kanColor+';font-weight:700;">'+kd.keyword+'</div>'
+    +'</div></div>'
+    +'<div style="font-size:12px;color:var(--muted);line-height:1.8;margin-bottom:8px;">'+kd.desc+'</div>'
+    +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">'
+    +'<div style="padding:7px 9px;background:rgba(106,177,135,.06);border:1px solid rgba(106,177,135,.2);border-radius:8px;">'
+    +'<div style="font-size:8px;color:#6ab187;margin-bottom:3px;">✦ 強み</div>'
+    +'<div style="font-size:10px;color:var(--muted);">'+kd.good+'</div></div>'
+    +'<div style="padding:7px 9px;background:rgba(224,85,69,.04);border:1px solid rgba(224,85,69,.15);border-radius:8px;">'
+    +'<div style="font-size:8px;color:#e05545;margin-bottom:3px;">◇ 課題</div>'
+    +'<div style="font-size:10px;color:var(--muted);">'+kd.weak+'</div></div>'
+    +'</div></div>'
+
+    // 地支の解説
+    +'<div style="background:var(--surface2);border-radius:12px;padding:13px 14px;margin-bottom:10px;">'
+    +'<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">'
+    +'<div style="font-family:var(--serif);font-size:22px;font-weight:800;color:'+shiColor+';">'+shiName+'</div>'
+    +'<div>'
+    +'<div style="font-size:9px;color:var(--muted);">地支｜'+sd.gogyo+'の'+sd.yin+'気</div>'
+    +'<div style="font-size:10px;color:'+shiColor+';font-weight:700;">'+sd.keyword+'</div>'
+    +'</div></div>'
+    +'<div style="font-size:12px;color:var(--muted);line-height:1.8;margin-bottom:8px;">'+sd.desc+'</div>'
+    +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">'
+    +'<div style="padding:7px 9px;background:rgba(106,177,135,.06);border:1px solid rgba(106,177,135,.2);border-radius:8px;">'
+    +'<div style="font-size:8px;color:#6ab187;margin-bottom:3px;">✦ 強み</div>'
+    +'<div style="font-size:10px;color:var(--muted);">'+sd.good+'</div></div>'
+    +'<div style="padding:7px 9px;background:rgba(224,85,69,.04);border:1px solid rgba(224,85,69,.15);border-radius:8px;">'
+    +'<div style="font-size:8px;color:#e05545;margin-bottom:3px;">◇ 課題</div>'
+    +'<div style="font-size:10px;color:var(--muted);">'+sd.weak+'</div></div>'
+    +'</div></div>'
+
+    // 五行関係
+    +'<div style="padding:13px 14px;background:'+relColor+'0e;border:1px solid '+relColor+'40;border-radius:12px;margin-bottom:10px;">'
+    +'<div style="font-size:8px;letter-spacing:.25em;color:'+relColor+';margin-bottom:6px;">'+kd.gogyo+' × '+sd.gogyo+' — '+gogyoRel+'</div>'
+    +'<div style="font-size:12px;color:var(--text);line-height:1.8;">'+relDesc+'</div>'
+    +'</div>'
+
+    // 十二運星
+    +'<div style="padding:13px 14px;background:'+juData.color+'0e;border:1px solid '+juData.color+'40;border-radius:12px;">'
+    +'<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">'
+    +'<span style="font-size:20px;">'+juData.icon+'</span>'
+    +'<div>'
+    +'<div style="font-size:9px;letter-spacing:.2em;color:'+juData.color+';">十二運星</div>'
+    +'<div style="font-family:var(--serif);font-size:18px;font-weight:800;color:'+juData.color+';">'+jusei+'</div>'
+    +'</div></div>'
+    +'<div style="font-size:12px;color:var(--text);line-height:1.8;">'+juData.desc+'</div>'
+    +'</div>';
+
+  document.getElementById('modalTitle').textContent = pillarName+' — '+kanName+shiName;
+  document.getElementById('modalSub').textContent = kd.gogyo+'の'+kd.yin+' × '+sd.gogyo+'の'+sd.yin;
+  document.getElementById('modalBody').innerHTML = body;
+  _openModalOverlay();
+}
+
+function buildMeishikiSynthesis(pillars) {
+  // pillars: [{label, kanIdx, shiIdx, jusei}]
+  var gogyoCount={'木':0,'火':0,'土':0,'金':0,'水':0};
+  var shiGogyo2=['水','土','木','木','土','火','火','土','金','金','土','水'];
+  pillars.forEach(function(p){
+    if(KAN_DATA[KAN[p.kanIdx]]) gogyoCount[KAN_DATA[KAN[p.kanIdx]].gogyo]++;
+    var sg=shiGogyo2[p.shiIdx];
+    if(sg) gogyoCount[sg]++;
+  });
+  // 日干が主星
+  var dayKan = KAN[pillars[2]?pillars[2].kanIdx:0];
+  var kd = KAN_DATA[dayKan]||{gogyo:'土',yin:'陽',keyword:'安定'};
+  var dayShi = JUNISHI[pillars[2]?pillars[2].shiIdx:0];
+  var sd = SHI_DATA[dayShi]||{gogyo:'土',yin:'陽',keyword:'安定'};
+
+  // 強い五行・弱い五行
+  var maxG='木',maxV=0,minG='木',minV=999;
+  Object.keys(gogyoCount).forEach(function(g){
+    if(gogyoCount[g]>maxV){maxV=gogyoCount[g];maxG=g;}
+    if(gogyoCount[g]<minV){minV=gogyoCount[g];minG=g;}
+  });
+
+  var yinCount=0,yangCount=0;
+  pillars.forEach(function(p){
+    var kyn=KAN_DATA[KAN[p.kanIdx]];
+    var syn=SHI_DATA[JUNISHI[p.shiIdx]];
+    if(kyn&&kyn.yin==='陽')yangCount++;else yinCount++;
+    if(syn&&syn.yin==='陽')yangCount++;else yinCount++;
+  });
+  var yinYang=yangCount>yinCount?'陽が強い命式。外向きで積極的、行動力があります。':yinCount>yangCount?'陰が強い命式。内向きで感性豊か、深く考える力があります。':'陰陽のバランスが取れた命式。内外のバランスが良く、安定した運気です。';
+
+  var gogyoColors2={'木':'#2d7a3a','火':'#c0392b','土':'#c9a84c','金':'#b8b8b8','水':'#1a3a5c'};
+
+  return '<div style="background:linear-gradient(135deg,#1a1508,#0d0b08);border:1px solid var(--gold-dim);border-radius:14px;padding:18px 16px;margin-bottom:14px;position:relative;overflow:hidden;">'
+    +'<div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);"></div>'
+    +'<div style="font-size:9px;letter-spacing:.35em;color:var(--gold);margin-bottom:14px;">命 式 総 合 鑑 定</div>'
+    +'<div style="font-size:14px;color:var(--text);line-height:1.9;font-family:var(--serif);font-weight:600;margin-bottom:14px;">'
+    +'日干「<span style="color:'+gogyoColors2[kd.gogyo]+';">'+dayKan+'</span>」を主星とするあなたは、<strong>'+kd.keyword+'</strong>の人。'
+    +'日支「<span style="color:'+gogyoColors2[sd.gogyo]+';">'+dayShi+'</span>」の<strong>'+sd.keyword+'</strong>が本質を支えています。'
+    +'</div>'
+    +'<div style="font-size:12px;color:var(--muted);line-height:1.85;margin-bottom:14px;">'
+    +(yangCount>yinCount?'陽が強い命式。外向きで積極的、行動力があります。':yinCount>yangCount?'陰が強い命式。内向きで感性豊か、深く考える力があります。':'陰陽のバランスが取れた命式。内外のバランスが良く、安定した運気です。')
+    +' 五行では「<span style="color:'+gogyoColors2[maxG]+';">'+maxG+'</span>」のエネルギーが最も強く、'+GOGYO_DESC[maxG]+'</div>'
+    +'<div style="background:rgba(255,255,255,.04);border-radius:10px;padding:12px;font-size:11px;color:var(--muted);line-height:1.8;">'
+    +'<div style="font-size:8px;letter-spacing:.3em;color:var(--gold);margin-bottom:6px;">✦ 各柱をタップすると詳細が見られます</div>'
+    +'天干×地支の組み合わせ、陰陽、五行の相互作用を詳しく解説します。'
+    +'</div></div>';
+}
+
+var JUNI_USEI_TABLE = {
+'甲':['沐浴','冠帯','建禄','帝旺','衰','病','死','墓','絶','胎','養','長生'],
+'乙':['病','衰','帝旺','建禄','冠帯','沐浴','長生','養','胎','絶','墓','死'],
+'丙':['胎','養','長生','沐浴','冠帯','建禄','帝旺','衰','病','死','墓','絶'],
+'丁':['絶','墓','死','病','衰','帝旺','建禄','冠帯','沐浴','長生','養','胎'],
+'戊':['胎','養','長生','沐浴','冠帯','建禄','帝旺','衰','病','死','墓','絶'],
+'己':['絶','墓','死','病','衰','帝旺','建禄','冠帯','沐浴','長生','養','胎'],
+'庚':['死','墓','絶','胎','養','長生','沐浴','冠帯','建禄','帝旺','衰','病'],
+'辛':['長生','養','胎','絶','墓','死','病','衰','帝旺','建禄','冠帯','沐浴'],
+'壬':['帝旺','衰','病','死','墓','絶','胎','養','長生','沐浴','冠帯','建禄'],
+'癸':['建禄','冠帯','沐浴','長生','養','胎','絶','墓','死','病','衰','帝旺'],
+};
+
+var JUNI_USEI_DATA = {
+'長生':{score:80,icon:'🌱',short:'誕生・始まり',color:'#6ab187',
+  desc:'新しいエネルギーが生まれる段階。周囲からのサポートを受けやすく、伸びしろが大きい。可能性に満ちた時期です。'},
+'沐浴':{score:50,icon:'💧',short:'感受性・才気',color:'#5b9bd5',
+  desc:'感受性が高く、芸術的才能が開花しやすい段階。感情の波が大きく不安定になりやすい側面も。'},
+'冠帯':{score:70,icon:'👑',short:'成長・向上',color:'#c9a84c',
+  desc:'社会に出て力をつけていく段階。実力をつけ周囲から認められ始める時期。向上心と行動力が高まります。'},
+'建禄':{score:85,icon:'⚡',short:'独立・実力発揮',color:'#e67e22',
+  desc:'自立して実力を発揮する段階。安定した力があり独立や実績を積みやすい。自信と実行力が最大化します。'},
+'帝旺':{score:95,icon:'✦',short:'頂点・全盛期',color:'#f0d080',
+  desc:'エネルギーが頂点に達する最強の段階。リーダーシップ・影響力・実力全てが最大値。大きな成功を掴みやすい時期。'},
+'衰':{score:55,icon:'🍂',short:'安定・成熟',color:'#9b7fd0',
+  desc:'勢いは落ち着くが、円熟した知恵と安定感が生まれる段階。焦らず堅実に歩むことで安定した成果が得られます。'},
+'病':{score:40,icon:'🌙',short:'内省・休息',color:'#e07845',
+  desc:'エネルギーが内に向かう段階。無理をせず体調管理を優先し、内面を整える時期として活用することが吉。'},
+'死':{score:30,icon:'🔄',short:'転換・変化',color:'#e05545',
+  desc:'一つのサイクルが終わり次の始まりを準備する段階。大きな変化の時期。手放すことで次のステージへ進めます。'},
+'墓':{score:45,icon:'🌿',short:'蓄積・整理',color:'#7f8c8d',
+  desc:'過去を整理し力を蓄える段階。見えない場所での積み上げが後の飛躍の土台になります。'},
+'絶':{score:35,icon:'🌬',short:'空白・準備',color:'#c0392b',
+  desc:'エネルギーが最も低下する段階。しかし次の誕生への準備期。焦らず静かに次の種を蒔く時期です。'},
+'胎':{score:60,icon:'🥚',short:'潜在力・可能性',color:'#9b59b6',
+  desc:'新しい命が宿る段階。大きな可能性を内に秘め、静かに力を育てている時期。丁寧に準備を進めることが大切。'},
+'養':{score:65,icon:'🌾',short:'育成・準備',color:'#27ae60',
+  desc:'力を育む段階。周囲のサポートを受けながら着実に力をつけていく時期。縁と環境を大切にすることが吉。'},
+};
+
+var TENCHUSATSU_DATA = {
+'戌亥天中殺':{shiIdx:[10,11],color:'#9b59b6',keyword:'人間関係・精神性',
+  desc:'天中殺の地支が「戌・亥」。人間関係や精神的なことで空回りしやすい時期が巡ります。',
+  strength:'現実的・物質的な才能が強く、形あるものを作り上げる力があります。',
+  how:'戌亥の年・月は新しい人間関係の開拓より、既存の縁を大切にすることが吉。精神的に整える時間を優先してください。',
+  avoid:'新規の縁・精神世界への深入り・大きな精神的決断',good:'現実的な仕事・モノづくり・財の積み上げ'},
+'申酉天中殺':{shiIdx:[8,9],color:'#c9a84c',keyword:'経済・仕事',
+  desc:'天中殺の地支が「申・酉」。仕事・経済的なことで空回りしやすい時期が巡ります。',
+  strength:'精神的・芸術的な才能が強く、感性を活かした分野で輝けます。',
+  how:'申酉の年・月は大きな経済的決断・転職・独立は避けて。精神と芸術に力を注ぐことが吉。',
+  avoid:'転職・独立・大きな投資・経済的冒険',good:'芸術・精神性・学び・人とのつながり'},
+'午未天中殺':{shiIdx:[6,7],color:'#e67e22',keyword:'家庭・南の縁',
+  desc:'天中殺の地支が「午・未」。家庭・南方向の縁で空回りしやすい時期が巡ります。',
+  strength:'社会的・外向きの才能が強く、外の世界で実力を発揮できます。',
+  how:'午未の年・月は家庭内の大きな変化・引越し（南方面）は避けて。外の仕事・社会活動に集中することが吉。',
+  avoid:'家庭内の大きな変化・南への引越し・家族関係の大きな決断',good:'社会活動・仕事・外向きの挑戦'},
+'辰巳天中殺':{shiIdx:[4,5],color:'#27ae60',keyword:'才能・目上の縁',
+  desc:'天中殺の地支が「辰・巳」。才能発揮・目上との縁で空回りしやすい時期が巡ります。',
+  strength:'下から積み上げる力・大衆との縁が強く、草の根からの成長が得意です。',
+  how:'辰巳の年・月は上を向いて背伸びするより、今いる場所で誠実に積み上げることが吉。',
+  avoid:'昇進・目上への直訴・才能の誇示・飛躍的な上昇志向',good:'地道な積み上げ・現場での実務・大衆との縁'},
+'寅卯天中殺':{shiIdx:[2,3],color:'#c0392b',keyword:'行動・東の縁',
+  desc:'天中殺の地支が「寅・卯」。行動・東方向の縁で空回りしやすい時期が巡ります。',
+  strength:'安定・内向きの才能が強く、じっくり腰を据えたことで成果を出せます。',
+  how:'寅卯の年・月は衝動的な行動・東への引越し・無計画な挑戦は避けて。計画と準備に時間をかけることが吉。',
+  avoid:'衝動的な行動・東への引越し・新しい挑戦の強行',good:'計画・準備・安定した継続・内向きの充実'},
+'子丑天中殺':{shiIdx:[0,1],color:'#5b9bd5',keyword:'基盤・北の縁',
+  desc:'天中殺の地支が「子・丑」。基盤・北方向の縁で空回りしやすい時期が巡ります。',
+  strength:'上昇・発展の才能が強く、高みを目指す挑戦で力を発揮できます。',
+  how:'子丑の年・月は土地・家・基盤に関わる大きな決断は避けて。上を向いて発展することに集中することが吉。',
+  avoid:'土地購入・家の建替え・北への引越し・基盤の大変化',good:'昇進・上昇志向・発展・高みへの挑戦'},
+};
+
+var SETSU_DAY=[6,4,6,5,6,6,7,8,8,8,7,7];
+
+function getJuniUsei(kanName,shiIdx){
+  var t=JUNI_USEI_TABLE[kanName];
+  return t?t[shiIdx]:'長生';
+}
+
+function getTenChuSatsu(dayDiff){
+  // 1900/1/1 = 壬申(位置8)が正しい基準 → +8オフセット
+  var idx=((dayDiff+8)%60+60)%60;
+  var keys=['戌亥天中殺','申酉天中殺','午未天中殺','辰巳天中殺','寅卯天中殺','子丑天中殺'];
+  var key=keys[Math.floor(idx/10)];
+  return {key:key,data:TENCHUSATSU_DATA[key]};
+}
+
+function calcDaun(by,bm,bd,gender,kIdx){
+  var isYoKan=kIdx%2===0;
+  var isMale=(gender==='male'||gender==='other');
+  var forward=(isYoKan===isMale);
+  var setsuDay=SETSU_DAY[bm-1];
+  var daysToSetsu;
+  if(forward){
+    if(bd<=setsuDay){daysToSetsu=setsuDay-bd;}
+    else{var nextM=(bm%12)+1;var daysInM=new Date(by,bm,0).getDate();daysToSetsu=(daysInM-bd)+SETSU_DAY[nextM-1];}
+  }else{
+    if(bd>setsuDay){daysToSetsu=bd-setsuDay;}
+    else{var prevM=bm===1?12:bm-1;daysToSetsu=bd+(new Date(by,prevM-1,0).getDate()-SETSU_DAY[prevM-1]);}
+  }
+  var startAge=Math.max(1,Math.round(daysToSetsu/3));
+  var gkKanIdx=((kIdx+bm)%10+10)%10;
+  var gkShiIdx=((((by-1900)%12+12)%12+bm)%12+12)%12;
+  var periods=[];
+  for(var i=0;i<9;i++){
+    var offset=forward?(i+1):-(i+1);
+    periods.push({
+      age:startAge+i*10,endAge:startAge+(i+1)*10,
+      kan:KAN[((gkKanIdx+offset)%10+10)%10],
+      shi:JUNISHI[((gkShiIdx+offset)%12+12)%12],
+      kanIdx:((gkKanIdx+offset)%10+10)%10,
+      shiIdx:((gkShiIdx+offset)%12+12)%12,
+    });
+  }
+  return {startAge:startAge,forward:forward,periods:periods};
+}
+
+function getDaunScore(period,dayKanName){
+  var ju=getJuniUsei(dayKanName,period.shiIdx);
+  var d=JUNI_USEI_DATA[ju];
+  return d?d.score:60;
+}
+
+function buildShichuHTML(s,btime){
+  var by=s.by,bm=s.bm,bday=s.bday,kIdx=s.kIdx,jIdx=s.jIdx,gender=s.gender||'male';
+  var nkKanIdx=kIdx,nkShiIdx=jIdx;
+  var gkKanIdx=((kIdx+bm)%10+10)%10;
+  var gkShiIdx=((jIdx+bm)%12+12)%12;
+  var dayDiff=Math.floor((new Date(by,bm-1,bday)-new Date(1900,0,1))/86400000);
+  // 1900/1/1 = 壬申(位置8)が正しい基準 → +8オフセット
+  var dkKanIdx=(((dayDiff+8)%10)+10)%10;
+  var dkShiIdx=(((dayDiff+8)%12)+12)%12;
+  var dayKanName=KAN[dkKanIdx];
+  var hasTime=btime&&btime.trim()!=='';
+  var jkKanIdx=-1,jkShiIdx=-1;
+  if(hasTime){
+    var h=parseInt(btime.split(':')[0]);
+    jkShiIdx=Math.floor(((h+1)%24)/2)%12;
+    jkKanIdx=((dkKanIdx*2+jkShiIdx)%10+10)%10;
+  }
+  var tcs=getTenChuSatsu(dayDiff);
+  var tcsData=tcs.data;
+  var daun=calcDaun(by,bm,bday,gender,kIdx);
+  var nkJu=getJuniUsei(dayKanName,nkShiIdx);
+  var gkJu=getJuniUsei(dayKanName,gkShiIdx);
+  var dkJu=getJuniUsei(dayKanName,dkShiIdx);
+  var jkJu=hasTime?getJuniUsei(dayKanName,jkShiIdx):null;
+
+  // 五行バランス
+  var gogyoCount={'木':0,'火':0,'土':0,'金':0,'水':0};
+  var shiGogyo=['水','土','木','木','土','火','火','土','金','金','土','水'];
+  var pillars2=[{k:nkKanIdx,s:nkShiIdx},{k:gkKanIdx,s:gkShiIdx},{k:dkKanIdx,s:dkShiIdx}];
+  if(hasTime)pillars2.push({k:jkKanIdx,s:jkShiIdx});
+  pillars2.forEach(function(p){
+    if(GOGYO[p.k])gogyoCount[GOGYO[p.k]]=(gogyoCount[GOGYO[p.k]]||0)+1;
+    var sg=shiGogyo[p.s];
+    if(sg&&gogyoCount[sg]!==undefined)gogyoCount[sg]++;
+  });
+
+  // 現在年齢
+  var now2=new Date();
+  var currentAge=now2.getFullYear()-by-(now2.getMonth()<bm-1||(now2.getMonth()===bm-1&&now2.getDate()<bday)?1:0);
+  var currentDaun=null;
+  daun.periods.forEach(function(p){if(currentAge>=p.age&&currentAge<p.endAge)currentDaun=p;});
+  if(!currentDaun&&daun.periods.length>0)currentDaun=daun.periods[0];
+
+  // 柱カード生成
+  function pillarCard(label,ki,si,ju,pillarName){
+    var juData=JUNI_USEI_DATA[ju]||JUNI_USEI_DATA['長生'];
+    var gk=GOGYO[ki]||'木';
+    var gkC=GOGYO_COLORS[gk]||{main:'#c9a84c',sub:'#c9a84c'};
+    var sg=shiGogyo[si];
+    var sgC=GOGYO_COLORS[sg]||{main:'#5b9bd5',sub:'#5b9bd5'};
+    var isYo=['甲','丙','戊','庚','壬'].indexOf(KAN[ki])>=0;
+    var pnSafe=(pillarName||label).replace(/[^\u4e00-\u9fff\u3040-\u309f\u30a0-\u30ffa-zA-Z]/g,'');
+    return '<div style="background:var(--surface2);border:1px solid var(--border);border-radius:14px;overflow:hidden;cursor:pointer;-webkit-tap-highlight-color:transparent;" onclick="showPillarModal(\'' + (pillarName||label) + '\','+ki+','+si+',\'' + ju + '\')">'
+      +'<div style="height:3px;background:linear-gradient(90deg,'+gkC.main+','+sgC.main+');"></div>'
+      +'<div style="padding:12px 8px;">'
+      +'<div style="font-size:8px;letter-spacing:.2em;color:var(--muted);margin-bottom:8px;text-align:center;">'+label+'</div>'
+      +'<div style="display:flex;align-items:center;justify-content:center;gap:4px;margin-bottom:8px;">'
+      +'<div style="text-align:center;">'
+      +'<div style="font-size:7px;color:var(--muted);">天干</div>'
+      +'<div style="font-family:var(--serif);font-size:32px;font-weight:800;color:'+gkC.sub+';line-height:1.1;">'+KAN[ki]+'</div>'
+      +'<div style="font-size:8px;color:var(--muted);">'+gk+(isYo?'陽':'陰')+'</div>'
+      +'</div>'
+      +'<div style="font-size:14px;color:var(--border);margin-top:4px;">|</div>'
+      +'<div style="text-align:center;">'
+      +'<div style="font-size:7px;color:var(--muted);">地支</div>'
+      +'<div style="font-family:var(--serif);font-size:32px;font-weight:800;color:'+sgC.sub+';line-height:1.1;">'+JUNISHI[si]+'</div>'
+      +'<div style="font-size:8px;color:var(--muted);">'+sg+'の気</div>'
+      +'</div>'
+      +'</div>'
+      +'<div style="background:rgba(255,255,255,.04);border-radius:8px;padding:7px;border:1px solid '+juData.color+'40;margin:0 2px;">'
+      +'<div style="font-size:7px;color:'+juData.color+';margin-bottom:3px;letter-spacing:.1em;text-align:center;">十二運星</div>'
+      +'<div style="display:flex;align-items:center;justify-content:center;gap:4px;">'
+      +'<span style="font-size:12px;">'+juData.icon+'</span>'
+      +'<div style="text-align:center;">'
+      +'<div style="font-size:11px;font-weight:800;color:'+juData.color+';">'+ju+'</div>'
+      +'<div style="font-size:7px;color:var(--muted);">'+juData.short+'</div>'
+      +'</div></div>'
+      +'</div>'
+      +'</div></div>';
+  }
+
+  // 大運グラフ
+  function buildDaunGraph(){
+    var W=320,H=130,padT=10,padB=18,padL=8,padR=8;
+    var drawW=W-padL-padR,drawH=H-padT-padB;
+    var maxAge=80,minSc=20,maxSc=99;
+    var points=[];
+    for(var age=0;age<=maxAge;age++){
+      var sc=50;
+      daun.periods.forEach(function(p){if(age>=p.age&&age<p.endAge)sc=getDaunScore(p,dayKanName);});
+      if(age<daun.startAge)sc=40+(age/daun.startAge)*25;
+      var yji=((age+jIdx)%12+12)%12;
+      if(tcsData&&tcsData.shiIdx.indexOf(yji)>=0)sc=Math.max(20,sc-20);
+      points.push(Math.min(99,Math.max(20,Math.round(sc))));
+    }
+    function px(a){return padL+a/maxAge*drawW;}
+    function py(v){return padT+(1-(v-minSc)/(maxSc-minSc))*drawH;}
+    var pathD='M '+px(0)+' '+py(points[0]);
+    for(var i=1;i<=maxAge;i++){
+      var cx1=px(i-1)+(px(i)-px(i-1))*0.5,cy1=py(points[i-1]);
+      var cx2=px(i-1)+(px(i)-px(i-1))*0.5,cy2=py(points[i]);
+      pathD+=' C '+cx1+' '+cy1+' '+cx2+' '+cy2+' '+px(i)+' '+py(points[i]);
+    }
+    var fillD=pathD+' L '+px(maxAge)+' '+(H-padB)+' L '+padL+' '+(H-padB)+' Z';
+    var tcsZ='',inZ=false,zS=0;
+    for(var a2=0;a2<=maxAge;a2++){
+      var yji2=((a2+jIdx)%12+12)%12;
+      var isTZ=tcsData&&tcsData.shiIdx.indexOf(yji2)>=0;
+      if(isTZ&&!inZ){inZ=true;zS=a2;}
+      if(!isTZ&&inZ){tcsZ+='<rect x="'+px(zS)+'" y="'+padT+'" width="'+(px(a2)-px(zS))+'" height="'+drawH+'" fill="rgba(192,57,43,.15)" rx="1.5"/>';inZ=false;}
+    }
+    var grid='';
+    [40,60,80].forEach(function(v){grid+='<line x1="'+padL+'" y1="'+py(v)+'" x2="'+(W-padR)+'" y2="'+py(v)+'" stroke="rgba(255,255,255,.05)" stroke-width="0.5"/>';});
+    grid+='<line x1="'+padL+'" y1="'+py(80)+'" x2="'+(W-padR)+'" y2="'+py(80)+'" stroke="rgba(201,168,76,.12)" stroke-width="0.8" stroke-dasharray="3,3"/>';
+    var dLines='';
+    daun.periods.forEach(function(p){
+      if(p.age<=maxAge&&p.age>0){
+        dLines+='<line x1="'+px(p.age)+'" y1="'+padT+'" x2="'+px(p.age)+'" y2="'+(H-padB)+'" stroke="rgba(201,168,76,.18)" stroke-width="0.5" stroke-dasharray="2,2"/>';
+        dLines+='<text x="'+px(p.age)+'" y="'+(H-padB+11)+'" text-anchor="middle" font-size="6.5" fill="rgba(201,168,76,.45)">'+p.age+'</text>';
+      }
+    });
+    var cAge=Math.min(currentAge,maxAge);
+    var cx=px(cAge),cy=py(points[cAge]);
+    var cSc=points[cAge];
+    var cCol=cSc>=80?'#f0d080':cSc>=60?'#6ab187':'#e05545';
+    return '<svg width="100%" viewBox="0 0 '+W+' '+H+'" style="display:block;">'
+      +'<defs><linearGradient id="dg2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#c9a84c" stop-opacity="0.35"/><stop offset="100%" stop-color="#c9a84c" stop-opacity="0.02"/></linearGradient></defs>'
+      +tcsZ+grid+dLines
+      +'<path d="'+fillD+'" fill="url(#dg2)"/>'
+      +'<path d="'+pathD+'" fill="none" stroke="#c9a84c" stroke-width="1.8" stroke-linecap="round"/>'
+      +'<line x1="'+cx+'" y1="'+padT+'" x2="'+cx+'" y2="'+(H-padB)+'" stroke="rgba(255,255,255,.25)" stroke-width="0.8" stroke-dasharray="3,2"/>'
+      +'<circle cx="'+cx+'" cy="'+cy+'" r="5" fill="'+cCol+'" stroke="#fff" stroke-width="1.5"/>'
+      +'<text x="'+padL+'" y="'+(H-padB+11)+'" font-size="6.5" fill="rgba(201,168,76,.4)">0</text>'
+      +'<text x="'+(W-padR)+'" y="'+(H-padB+11)+'" text-anchor="end" font-size="6.5" fill="rgba(201,168,76,.4)">80歳</text>'
+      +'</svg>';
+  }
+
+  // 五行バランス
+  function buildGogyoBalance(){
+    var order=['木','火','土','金','水'];
+    var gColors={'木':'#2d7a3a','火':'#c0392b','土':'#c9a84c','金':'#b8b8b8','水':'#1a3a5c'};
+    var maxV=Math.max.apply(null,order.map(function(g){return gogyoCount[g]||0;}))||1;
+    var html2='<div style="display:flex;flex-direction:column;gap:6px;">';
+    order.forEach(function(g){
+      var cnt=gogyoCount[g]||0;
+      var w=cnt/maxV*100;
+      var lbl=cnt===0?'欠如':cnt>=4?'過多':'普通';
+      var lc=cnt===0?'#e05545':cnt>=4?'#f0d080':'#6ab187';
+      html2+='<div style="display:flex;align-items:center;gap:8px;">'
+        +'<div style="font-family:var(--serif);font-size:14px;font-weight:800;color:'+gColors[g]+';min-width:14px;">'+g+'</div>'
+        +'<div style="flex:1;height:7px;background:var(--surface3);border-radius:3px;overflow:hidden;">'
+        +'<div style="height:100%;width:'+w+'%;background:'+gColors[g]+';border-radius:3px;"></div>'
+        +'</div>'
+        +'<div style="font-size:9px;color:'+lc+';min-width:24px;">'+lbl+'</div>'
+        +'<div style="font-size:9px;color:var(--muted);min-width:12px;">'+cnt+'</div>'
+        +'</div>';
+    });
+    html2+='</div>';
+    var advice=[];
+    order.forEach(function(g){
+      if(!gogyoCount[g])advice.push(g+'が欠如——'+g+'の色を取り入れて補うと吉。');
+      if(gogyoCount[g]>=4)advice.push(g+'が過多——過剰なエネルギーを意識的に発散を。');
+    });
+    if(advice.length>0)html2+='<div style="margin-top:10px;padding:10px 12px;background:rgba(201,168,76,.04);border:1px solid rgba(201,168,76,.12);border-radius:10px;font-size:10px;color:var(--muted);line-height:1.8;">'+advice.join('<br>')+'</div>';
+    return html2;
+  }
+
+  var pillarsCount=hasTime?4:3;
+  var html='';
+
+  // 命式総合鑑定
+  var synthPillars=[{label:'年柱',kanIdx:nkKanIdx,shiIdx:nkShiIdx,jusei:nkJu},{label:'月柱',kanIdx:gkKanIdx,shiIdx:gkShiIdx,jusei:gkJu},{label:'日柱',kanIdx:dkKanIdx,shiIdx:dkShiIdx,jusei:dkJu}];
+  if(hasTime)synthPillars.push({label:'時柱',kanIdx:jkKanIdx,shiIdx:jkShiIdx,jusei:jkJu});
+  html+=buildMeishikiSynthesis(synthPillars);
+
+  // 命式グリッド
+  html+='<div style="font-size:9px;letter-spacing:.35em;color:var(--gold);margin-bottom:10px;">命 式（タップで詳細）</div>';
+  html+='<div style="display:grid;grid-template-columns:repeat('+pillarsCount+',1fr);gap:6px;margin-bottom:14px;">';
+  html+=pillarCard('年 柱｜先祖',nkKanIdx,nkShiIdx,nkJu,'年柱');
+  html+=pillarCard('月 柱｜才能',gkKanIdx,gkShiIdx,gkJu,'月柱');
+  html+=pillarCard('日 柱｜本質',dkKanIdx,dkShiIdx,dkJu,'日柱');
+  if(hasTime)html+=pillarCard('時 柱｜晩年',jkKanIdx,jkShiIdx,jkJu,'時柱');
+  html+='</div>';
+  if(!hasTime)html+='<div style="font-size:10px;color:var(--gold-dim);text-align:center;padding:6px 0 12px;letter-spacing:.1em;">✦ 出生時刻を入力すると時柱も表示されます</div>';
+
+  // 五行バランス
+  html+='<div style="background:var(--surface2);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:12px;">'
+    +'<div style="font-size:9px;letter-spacing:.35em;color:var(--gold);margin-bottom:12px;">五 行 バ ラ ン ス</div>'
+    +buildGogyoBalance()
+    +'</div>';
+
+  // 天中殺期間を「年の地支」ベースで正確に計算
+  // 空亡地支の最初のインデックス
+  var tcsFirstZhi=tcsData?tcsData.shiIdx[0]:0;
+  // 現在年から遡って最近の天中殺開始年を探す
+  var nowYear2=new Date().getFullYear();
+  // 今年の節分（2月4日）以降かどうかで当年を含めるか判定
+  var nowMonth2=new Date().getMonth()+1;
+  var nowDay2=new Date().getDate();
+  var effectiveYear=nowYear2;
+  // 節分前は前年扱い
+  if(nowMonth2<2||(nowMonth2===2&&nowDay2<4))effectiveYear=nowYear2-1;
+  // effectiveYearから遡って最初の天中殺開始年を探す
+  function getYearZhi(y){return((y-1900)%12+12)%12;}
+  var tcsStartYearY=effectiveYear;
+  for(var i2=0;i2<12;i2++){
+    if(getYearZhi(tcsStartYearY)===tcsFirstZhi)break;
+    tcsStartYearY--;
+  }
+  var tcsEndYearY=tcsStartYearY+2;
+  var tcsStartAgeY=tcsStartYearY-by;
+  var tcsEndAgeY=tcsEndYearY-by;
+  var tcsYearStr=tcsStartAgeY+'歳の節分（'+tcsStartYearY+'年2月頃）〜'+tcsEndAgeY+'歳の節分（'+tcsEndYearY+'年2月頃）';
+
+  // 天中殺
+  html+='<div style="background:linear-gradient(135deg,#0f0a1a,#08060f);border:1px solid '+tcsData.color+';border-radius:16px;overflow:hidden;margin-bottom:12px;">'
+    +'<div style="height:3px;background:linear-gradient(90deg,transparent,'+tcsData.color+',transparent);"></div>'
+    +'<div style="padding:16px;">'
+    +'<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">'
+    +'<span style="font-size:22px;">🌑</span>'
+    +'<div><div style="font-size:9px;letter-spacing:.2em;color:'+tcsData.color+';margin-bottom:2px;">あなたの天中殺</div>'
+    +'<div style="font-family:var(--serif);font-size:20px;font-weight:800;color:var(--gold-light);">'+tcs.key+'</div></div>'
+    +'</div>'
+    +'<div style="font-size:12px;color:var(--muted);line-height:1.8;margin-bottom:10px;">'+tcsData.desc+'</div>'
+    +'<div style="background:rgba(255,255,255,.06);border:1px solid '+tcsData.color+'40;border-radius:10px;padding:12px 14px;margin-bottom:10px;">'
+    +'<div style="font-size:8px;letter-spacing:.3em;color:'+tcsData.color+';margin-bottom:8px;">🌑 天 中 殺 の 期 間</div>'
+    +'<div style="font-family:var(--serif);font-size:13px;font-weight:800;color:var(--gold-light);line-height:1.9;">'+tcsYearStr+'</div>'
+    +'<div style="font-size:10px;color:var(--muted);margin-top:6px;line-height:1.6;">※節分（立春・2月4日頃）を境に切り替わります</div>'
+    +'</div>'
+    +'<div style="background:rgba(255,255,255,.04);border-radius:10px;padding:10px;margin-bottom:8px;">'
+    +'<div style="font-size:8px;letter-spacing:.25em;color:'+tcsData.color+';margin-bottom:5px;">✦ あなたの強み</div>'
+    +'<div style="font-size:11px;color:var(--text);line-height:1.75;">'+tcsData.strength+'</div>'
+    +'</div>'
+    +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">'
+    +'<div style="padding:9px;background:rgba(224,85,69,.05);border:1px solid rgba(224,85,69,.2);border-radius:10px;">'
+    +'<div style="font-size:8px;color:#e05545;margin-bottom:4px;">✕ 避けること</div>'
+    +'<div style="font-size:10px;color:var(--muted);line-height:1.6;">'+tcsData.avoid+'</div></div>'
+    +'<div style="padding:9px;background:rgba(106,177,135,.05);border:1px solid rgba(106,177,135,.2);border-radius:10px;">'
+    +'<div style="font-size:8px;color:#6ab187;margin-bottom:4px;">✦ 伸ばすこと</div>'
+    +'<div style="font-size:10px;color:var(--muted);line-height:1.6;">'+tcsData.good+'</div></div>'
+    +'</div>'
+    +'<div style="background:rgba(255,255,255,.03);border-radius:10px;padding:10px;">'
+    +'<div style="font-size:8px;letter-spacing:.2em;color:'+tcsData.color+';margin-bottom:5px;">天中殺期の過ごし方</div>'
+    +'<div style="font-size:11px;color:var(--text);line-height:1.8;">'+tcsData.how+'</div>'
+    +'</div></div></div>';
+
+  // 大運グラフ
+  html+='<div style="background:var(--surface2);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:12px;">'
+    +'<div style="font-size:9px;letter-spacing:.35em;color:var(--gold);margin-bottom:3px;">大 運 グ ラ フ</div>'
+    +'<div style="font-size:9px;color:var(--muted);margin-bottom:10px;">0〜80歳の運気の流れ　赤ゾーン＝天中殺期</div>'
+    +buildDaunGraph()
+    +'<div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:10px;">'
+    +'<div style="display:flex;align-items:center;gap:4px;font-size:9px;color:var(--gold);"><div style="width:10px;height:2px;background:#c9a84c;border-radius:1px;"></div>運気曲線</div>'
+    +'<div style="display:flex;align-items:center;gap:4px;font-size:9px;color:#e05545;"><div style="width:10px;height:7px;background:rgba(192,57,43,.35);border-radius:2px;"></div>天中殺期</div>'
+    +'<div style="display:flex;align-items:center;gap:4px;font-size:9px;color:var(--gold);"><div style="width:8px;height:8px;border-radius:50%;background:#f0d080;border:1.5px solid #fff;"></div>現在地</div>'
+    +'</div></div>';
+
+  // 現在の大運
+  if(currentDaun){
+    var cdJu=getJuniUsei(dayKanName,currentDaun.shiIdx);
+    var cdJuD=JUNI_USEI_DATA[cdJu]||JUNI_USEI_DATA['長生'];
+    html+='<div style="background:linear-gradient(135deg,#1a1508,#0d0b08);border:1px solid var(--gold-dim);border-radius:14px;padding:16px;margin-bottom:12px;">'
+      +'<div style="font-size:9px;letter-spacing:.35em;color:var(--gold);margin-bottom:10px;">現 在 の 大 運（'+currentDaun.age+'〜'+Math.min(currentDaun.endAge,80)+'歳）</div>'
+      +'<div style="display:flex;align-items:center;gap:14px;margin-bottom:12px;">'
+      +'<div style="text-align:center;">'
+      +'<div style="font-size:8px;color:var(--muted);margin-bottom:2px;">大運干支</div>'
+      +'<div style="font-family:var(--serif);font-size:32px;font-weight:800;color:var(--gold);">'+currentDaun.kan+currentDaun.shi+'</div>'
+      +'</div>'
+      +'<div style="flex:1;">'
+      +'<div style="display:flex;align-items:center;gap:6px;margin-bottom:5px;">'
+      +'<span style="font-size:16px;">'+cdJuD.icon+'</span>'
+      +'<span style="font-family:var(--serif);font-size:17px;font-weight:800;color:'+cdJuD.color+';">'+cdJu+'</span>'
+      +'</div>'
+      +'<div style="font-size:10px;color:var(--muted);margin-bottom:5px;">'+cdJuD.short+'</div>'
+      +'<div style="font-size:11px;color:var(--text);line-height:1.7;">'+cdJuD.desc+'</div>'
+      +'</div></div></div>';
+  }
+
+  // 大運一覧
+  html+='<div style="background:var(--surface2);border:1px solid var(--border);border-radius:14px;padding:16px;">'
+    +'<div style="font-size:9px;letter-spacing:.35em;color:var(--gold);margin-bottom:10px;">大 運 一 覧</div>'
+    +'<div style="display:flex;flex-direction:column;gap:5px;">';
+  daun.periods.forEach(function(p){
+    if(p.age>80)return;
+    var ju2=getJuniUsei(dayKanName,p.shiIdx);
+    var juD2=JUNI_USEI_DATA[ju2]||JUNI_USEI_DATA['長生'];
+    var isCur=currentDaun&&p.age===currentDaun.age;
+    var isTcsP=tcsData&&tcsData.shiIdx.indexOf(p.shiIdx)>=0;
+    html+='<div style="display:flex;align-items:center;gap:8px;padding:9px 10px;border-radius:9px;background:'+(isCur?'rgba(201,168,76,.08)':'rgba(255,255,255,.02)')+';border:1px solid '+(isCur?'var(--gold-dim)':'var(--border)')+'">'
+      +'<div style="min-width:52px;font-size:9px;color:'+(isCur?'var(--gold)':'var(--muted)')+';font-weight:'+(isCur?'800':'400')+';">'+p.age+'〜'+Math.min(p.endAge,80)+'歳</div>'
+      +'<div style="font-family:var(--serif);font-size:16px;font-weight:800;color:'+(isCur?'var(--gold)':'var(--gold-dim)')+';">'+p.kan+p.shi+'</div>'
+      +'<div style="flex:1;">'
+      +'<div style="display:flex;align-items:center;gap:4px;">'
+      +'<span style="font-size:11px;">'+juD2.icon+'</span>'
+      +'<span style="font-size:10px;font-weight:700;color:'+juD2.color+';">'+ju2+'</span>'
+      +(isTcsP?'<span style="font-size:7px;color:#e05545;padding:1px 5px;border:1px solid rgba(192,57,43,.4);border-radius:8px;margin-left:2px;">天中殺</span>':'')
+      +(isCur?'<span style="font-size:7px;color:var(--gold);padding:1px 5px;border:1px solid rgba(201,168,76,.4);border-radius:8px;margin-left:2px;">現在</span>':'')
+      +'</div>'
+      +'<div style="font-size:8px;color:var(--muted);">'+juD2.short+'</div>'
+      +'</div></div>';
+  });
+  html+='</div></div>';
+  return html;
+}
+
 </script>
 </body>
 </html>
