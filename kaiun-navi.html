@@ -1566,12 +1566,52 @@ var _currentTone='mix';
 var _aiMsgCache={};
 var _aiMsgExtraSeed=0;
 function refreshAIMsg(){_aiMsgExtraSeed++;_aiMsgCache={};generateAIMsg(_currentTone||'mix');}
+var CLAUDE_API_ENDPOINT='https://kaiunavi.vercel.app/api/claude';
 function generateAIMsg(tone){
   var loadingEl=document.getElementById('aiMsgLoading');
   if(loadingEl){loadingEl.style.display='flex';loadingEl.style.opacity='1';}
   var shareEl=document.querySelector('.msg-share');
   if(shareEl)shareEl.style.opacity='0';
-  setTimeout(function(){var text=buildLocalMsg(tone);_aiMsgCache[tone]=text;renderAIMsgResult(text);},800);
+  if(_aiMsgCache[tone]){renderAIMsgResult(_aiMsgCache[tone]);return;}
+  var s=_state;
+  var now=new Date();
+  var y=now.getFullYear(),m=now.getMonth()+1,d=now.getDate(),h=now.getHours();
+  var r=calcRokuyo(y,m,d);
+  var li=getLuckyInfo(y,m,d);
+  var luckyNames=li.tags.map(function(t){return t.name;}).join('、')||'なし';
+  var deity=DEITIES[s.juunishi]||{name:'大日如来',mantra:'おん あびらうんけん ばざらだとばん'};
+  var gogyo=GOGYO[s.kIdx]||'';
+  var firstName=s.firstNameKana||s.firstName||'あなた';
+  var timePhrase=h<6?'夜明け前':h<11?'朝':h<14?'昼':h<17?'午後':h<20?'夕方':'夜';
+  var toneLabel=tone==='positive'?'前向き・励まし系':tone==='calm'?'穏やか・瞑想系':tone==='lucky'?'開運・金運系':'バランス型';
+  var systemPrompt='あなたは日本の開運ナビアプリの守護仏です。ユーザーへの今日の神託メッセージを生成します。\n'
+    +'以下の条件を必ず守ってください：\n'
+    +'・200〜280文字程度の日本語メッセージ\n'
+    +'・「'+firstName+'へ。」で始める\n'
+    +'・守護仏（'+deity.name+'）の視点から語りかける\n'
+    +'・真言「'+deity.mantra+'」を末尾に添える\n'
+    +'・改行を適切に入れて読みやすくする\n'
+    +'・トーン：'+toneLabel+'\n'
+    +'・余計な前置きや説明は不要。メッセージ本文のみ出力する';
+  var userPrompt='今日の情報：\n'
+    +'・日付：'+y+'年'+m+'月'+d+'日（'+timePhrase+'）\n'
+    +'・六曜：'+r.name+'\n'
+    +'・吉日：'+luckyNames+(li.isBad?'、不成就日':'')+'\n'
+    +'・守護仏：'+deity.name+'\n'
+    +'・五行：'+gogyo+'\n'
+    +'・ユーザー名：'+firstName+'\n\n'
+    +'上記を踏まえた今日の神託メッセージを生成してください。';
+  fetch(CLAUDE_API_ENDPOINT,{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({system:systemPrompt,messages:[{role:'user',content:userPrompt}],max_tokens:400})
+  }).then(function(res){return res.json();}).then(function(data){
+    var text=(data.content&&data.content[0]&&data.content[0].text)||'';
+    if(text){_aiMsgCache[tone]=text;renderAIMsgResult(text);}
+    else{var fallback=buildLocalMsg(tone);_aiMsgCache[tone]=fallback;renderAIMsgResult(fallback);}
+  }).catch(function(){
+    var fallback=buildLocalMsg(tone);_aiMsgCache[tone]=fallback;renderAIMsgResult(fallback);
+  });
 }
 var GOGYO_VOICE={'木':'木の気を持つあなたは、春の芽吹きのように上へ伸びていく力があります。','火':'火の気を持つあなたは、周囲を明るく照らす情熱と変革の力を持っています。','土':'土の気を持つあなたは、大地のようにどっしりと構え、周囲を支える器があります。','金':'金の気を持つあなたは、鋭い判断力と強い意志で、物事を完成させる力があります。','水':'水の気を持つあなたは、どんな形にも適応し、深い知恵で道を切り開いていきます。'};
 var LUCKY_MSGS={tensha_daian:[['天赦日と大安が重なる、年に数回しかない奇跡の日です。天が全てを許し、全てに吉の光が注いでいます。','今日あなたが踏み出す一歩は、普通の日の何倍もの力を持っています。大切な決断を、今日の光の中で。'],['天赦日——天が全てを許す日。そして大安——全ての事が安らかに整う日。この二つが重なる今日は、まさに開運の頂点です。','躊躇っていたことがあれば、今日こそ動く日。あなたの行動を、天が全力で後押ししています。']],tensha:[['年に数回しかない天赦日が来ました。天があなたの過去を全て許し、新しい光の中へ招いています。','重かった荷物を、今日は少し降ろしてください。新しいスタートを切るのに、これ以上ない日です。'],['天赦日——天が全てを赦す日。守護仏の加護が、今日は特に強く降り注いでいます。','大きな決断、新しい縁、前へ踏み出す勇気。今日の行動は必ず実を結びます。']],ichiryu_daian:[['一粒の種が万倍になる日と、全てに吉の大安が重なっています。','あなたが今日動かした縁は、必ず大きく実ります。感謝を持って、丁寧に一日を。']],ichiryu:[['一粒万倍日——小さな種が万倍になる特別な日です。今日あなたが始めることは、必ず大きく花開きます。','迷っていることがあれば、今日の光の中で最初の一歩を踏み出してください。'],['今日は一粒万倍日。あなたの小さな行動が、大きな豊かさへと育っていく日です。','感謝の言葉をひとつ多く。笑顔をひとつ多く。それだけで、今日の運気は大きく動きます。']],mi:[['今日は巳の日——弁財天の縁日です。財運と縁の気が、あなたの周りに流れています。','財布の中を整理し、感謝の参拝をしてみてください。縁と豊かさがあなたのもとに向かってきます。']],tora:[['今日は寅の日——毘沙門天の縁日です。「寅の日の金は倍になる」という言葉があります。','勝負事、新しい挑戦、金運アクション。今日の力強い運気に乗って、前へ。']],shingetsu:[['今夜は新月。新しい始まりのエネルギーが満ちています。','月が姿を隠すこの夜に、心の中の願いを静かに書き出してみてください。']],mangetsu:[['今夜は満月——完成と収穫のエネルギーが満ちています。','ここまで歩んできた道を、今夜は感謝と共に振り返ってください。']],daian:[['大安の朝が来ました。六曜最吉日の今日、全ての道に吉の光が射しています。','新しい出会い、大切な決断、感謝を伝える行動——今日はその全てが吉の方向へ動いていきます。'],['大安——大いに安し。今日はあなたの行動全てが、穏やかな吉の気に包まれています。','何か始めたいことがあれば、今日がその日。縁を結びたい人がいれば、今日連絡を。']],fujo:[['不成就日の今日は、新しく始めるより、丁寧に続けることが大切な一日です。','整理・確認・見直し。今日は内側を整える日として使うことで、明日以降の運気が高まります。']]};
