@@ -1,0 +1,1142 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="color-scheme" content="light only">
+<meta name="supported-color-schemes" content="light">
+<title>ともし</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@200;300;400&family=Shippori+Mincho:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --white: #FDFAF6;
+    --cream: #F7F2EA;
+    --warm: #EDE5D8;
+    --text-deep: #3A3228;
+    --text-mid: #6B5F54;
+    --text-soft: #9E9088;
+    --gold: #C9A96E;
+    --gold-light: #E8D5B0;
+    --light-glow: rgba(255, 245, 230, 0.9);
+    --bg-color: #FDFAF6;
+    --glow-color: rgba(255, 248, 235, 1);
+  }
+
+  /* 朝の表情 */
+  body.time-morning {
+    --bg-color: #FDF8F4;
+    --glow-color: rgba(255, 235, 210, 0.5);
+  }
+
+  /* 昼の表情 */
+  body.time-noon {
+    --bg-color: #FDFAF6;
+    --glow-color: rgba(255, 248, 235, 1);
+  }
+
+  /* 夜の表情 */
+  body.time-night {
+    --bg-color: #F5F2F8;
+    --glow-color: rgba(220, 215, 240, 0.6);
+  }
+
+  body {
+    transition: background-color 1.5s ease;
+  }
+
+  /* ダークモード強制無効 */
+  @media (prefers-color-scheme: dark) {
+    html, body, .container, .setup-overlay,
+    .date-block, .guardian-block, .ai-message-block, .nav-item {
+      background-color: #FDFAF6 !important;
+      color: #3A3228 !important;
+    }
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  html, body {
+    height: 100%;
+    background: var(--bg-color);
+    font-family: 'Noto Serif JP', 'Shippori Mincho', serif;
+    color: var(--text-deep);
+    overflow-x: hidden;
+    color-scheme: light only;
+  }
+
+  /* 背景の柔らかい光 */
+  body::before {
+    content: '';
+    position: fixed;
+    top: -20%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 140%;
+    height: 70%;
+    background: radial-gradient(ellipse at center top, 
+      var(--glow-color) 0%, 
+      rgba(253, 250, 246, 0.8) 40%, 
+      transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+    transition: background 1.5s ease;
+  }
+
+  body::after {
+    content: '';
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 30%;
+    background: linear-gradient(to top, rgba(237, 229, 216, 0.3), transparent);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 28px;
+    padding-top: env(safe-area-inset-top, 20px);
+    padding-bottom: 60px;
+  }
+
+  /* ロゴ */
+  .logo {
+    margin-top: 52px;
+    margin-bottom: 56px;
+    opacity: 0;
+    animation: fadeUp 1.2s ease forwards;
+    animation-delay: 0.2s;
+    text-align: center;
+  }
+
+  .logo-flame {
+    display: block;
+    font-size: 22px;
+    margin-bottom: 8px;
+    animation: flicker 3s ease-in-out infinite;
+  }
+
+  /* 朝：大きくゆっくり */
+  body.time-morning .logo-flame {
+    animation: flickerMorning 4s ease-in-out infinite;
+  }
+
+  /* 夜：小さくふわふわ */
+  body.time-night .logo-flame {
+    animation: flickerNight 2s ease-in-out infinite;
+    font-size: 18px;
+  }
+
+  @keyframes flickerMorning {
+    0%, 100% { opacity: 1; transform: scale(1.1); }
+    50% { opacity: 0.9; transform: scale(0.95); }
+  }
+
+  @keyframes flickerNight {
+    0%, 100% { opacity: 0.9; transform: scale(0.95) translateY(1px); }
+    50% { opacity: 0.7; transform: scale(0.88) translateY(-1px); }
+  }
+
+  .logo-text {
+    font-size: 13px;
+    letter-spacing: 0.5em;
+    color: var(--text-soft);
+    font-weight: 200;
+  }
+
+  @keyframes flicker {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.85; transform: scale(0.96); }
+  }
+
+  /* メインカード群 */
+  .cards {
+    width: 100%;
+    max-width: 380px;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  /* ①感謝の言葉 */
+  .gratitude-line {
+    text-align: center;
+    margin-bottom: 44px;
+    opacity: 0;
+    animation: fadeUp 1.4s ease forwards;
+    animation-delay: 0.8s;
+  }
+
+  .gratitude-line p {
+    font-size: 13px;
+    font-weight: 300;
+    color: var(--text-soft);
+    letter-spacing: 0.18em;
+    line-height: 2.2;
+  }
+
+  .gratitude-line .highlight {
+    color: var(--gold);
+    font-weight: 400;
+  }
+
+  /* ②挨拶 */
+  .greeting-block {
+    text-align: center;
+    margin-bottom: 48px;
+    opacity: 0;
+    animation: fadeUp 1.4s ease forwards;
+    animation-delay: 1.4s;
+  }
+
+  .greeting-time {
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    color: var(--text-soft);
+    margin-bottom: 10px;
+    font-weight: 200;
+  }
+
+  .greeting-name {
+    font-size: 26px;
+    font-weight: 200;
+    color: var(--text-deep);
+    letter-spacing: 0.08em;
+    line-height: 1.4;
+  }
+
+  .greeting-name span {
+    font-size: 14px;
+    font-weight: 300;
+    color: var(--text-mid);
+    letter-spacing: 0.2em;
+    display: block;
+    margin-top: 6px;
+  }
+
+  /* ③日付・ご縁日 */
+  .date-block {
+    background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(247,242,234,0.6));
+    border: 1px solid rgba(201, 169, 110, 0.2);
+    border-radius: 16px;
+    padding: 22px 24px;
+    margin-bottom: 20px;
+    opacity: 0;
+    animation: fadeUp 1.4s ease forwards;
+    animation-delay: 2.0s;
+    backdrop-filter: blur(8px);
+    text-align: center;
+  }
+
+  .date-label {
+    font-size: 10px;
+    letter-spacing: 0.35em;
+    color: var(--text-soft);
+    margin-bottom: 10px;
+    font-weight: 200;
+  }
+
+  .date-main {
+    font-size: 18px;
+    font-weight: 300;
+    color: var(--text-deep);
+    letter-spacing: 0.05em;
+    margin-bottom: 12px;
+  }
+
+  .ennichi-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: linear-gradient(135deg, rgba(201,169,110,0.15), rgba(232,213,176,0.2));
+    border: 1px solid rgba(201,169,110,0.3);
+    border-radius: 20px;
+    padding: 6px 14px;
+  }
+
+  .ennichi-badge .dot {
+    width: 5px;
+    height: 5px;
+    background: var(--gold);
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .ennichi-badge p {
+    font-size: 12px;
+    color: var(--text-mid);
+    letter-spacing: 0.12em;
+    font-weight: 300;
+  }
+
+  /* ④守護仏 */
+  .guardian-block {
+    background: linear-gradient(135deg, rgba(255,255,255,0.7), rgba(247,242,234,0.4));
+    border: 1px solid rgba(201, 169, 110, 0.15);
+    border-radius: 16px;
+    padding: 22px 24px;
+    margin-bottom: 20px;
+    opacity: 0;
+    animation: fadeUp 1.4s ease forwards;
+    animation-delay: 2.6s;
+    text-align: center;
+  }
+
+  .guardian-label {
+    font-size: 10px;
+    letter-spacing: 0.35em;
+    color: var(--text-soft);
+    margin-bottom: 10px;
+    font-weight: 200;
+  }
+
+  .guardian-name {
+    font-size: 20px;
+    font-weight: 300;
+    color: var(--text-deep);
+    letter-spacing: 0.1em;
+    margin-bottom: 8px;
+  }
+
+  .guardian-message {
+    font-size: 12px;
+    color: var(--text-mid);
+    letter-spacing: 0.12em;
+    line-height: 1.9;
+    font-weight: 300;
+  }
+
+  /* ⑤AIの一言 */
+  .ai-message-block {
+    background: linear-gradient(160deg, 
+      rgba(255, 250, 240, 0.95) 0%, 
+      rgba(247, 242, 234, 0.8) 100%);
+    border: 1px solid rgba(201, 169, 110, 0.25);
+    border-radius: 20px;
+    padding: 28px 24px;
+    margin-bottom: 20px;
+    opacity: 0;
+    animation: fadeUp 1.4s ease forwards;
+    animation-delay: 3.2s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .ai-message-block::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(to right, transparent, var(--gold-light), transparent);
+  }
+
+  .ai-label {
+    font-size: 10px;
+    letter-spacing: 0.35em;
+    color: var(--gold);
+    margin-bottom: 14px;
+    font-weight: 300;
+    text-align: center;
+  }
+
+  .ai-message-text {
+    font-size: 14px;
+    color: var(--text-deep);
+    letter-spacing: 0.08em;
+    line-height: 2.4;
+    font-weight: 300;
+    word-break: keep-all;
+    overflow-wrap: anywhere;
+    text-align: center;
+  }
+
+  /* 区切り線 */
+  .divider {
+    width: 40px;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--gold-light), transparent);
+    margin: 32px auto;
+    opacity: 0;
+    animation: fadeIn 1s ease forwards;
+    animation-delay: 3.8s;
+  }
+
+  /* 下部ナビ */
+  .bottom-nav {
+    width: 100%;
+    max-width: 380px;
+    opacity: 0;
+    animation: fadeUp 1.4s ease forwards;
+    animation-delay: 4.0s;
+  }
+
+  .nav-label {
+    text-align: center;
+    font-size: 10px;
+    letter-spacing: 0.35em;
+    color: var(--text-soft);
+    margin-bottom: 16px;
+    font-weight: 200;
+  }
+
+  .nav-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .nav-item {
+    background: rgba(255,255,255,0.7);
+    border: 1px solid rgba(201,169,110,0.18);
+    border-radius: 14px;
+    padding: 18px 16px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+  }
+
+  .nav-item:active {
+    transform: scale(0.97);
+    background: rgba(247,242,234,0.9);
+  }
+
+  .nav-item-icon {
+    font-size: 20px;
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  .nav-item-text {
+    font-size: 11px;
+    color: var(--text-mid);
+    letter-spacing: 0.15em;
+    font-weight: 300;
+    display: block;
+  }
+
+  /* アニメーション */
+  @keyframes fadeUp {
+    from {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  /* 初回設定モーダル */
+  .setup-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(253,250,246,0.97);
+    backdrop-filter: blur(12px);
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 32px;
+    animation: fadeIn 0.8s ease forwards;
+  }
+
+  .setup-flame {
+    font-size: 32px;
+    margin-bottom: 16px;
+    animation: flicker 3s ease-in-out infinite;
+  }
+
+  .setup-title {
+    font-size: 28px;
+    font-weight: 200;
+    letter-spacing: 0.3em;
+    color: var(--text-deep);
+    margin-bottom: 8px;
+  }
+
+  .setup-subtitle {
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    color: var(--text-soft);
+    font-weight: 200;
+    margin-bottom: 48px;
+    text-align: center;
+    line-height: 2;
+  }
+
+  .setup-form {
+    width: 100%;
+    max-width: 320px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .setup-field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .name-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    width: 100%;
+  }
+
+  .setup-field label {
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    color: var(--text-soft);
+    font-weight: 200;
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .setup-field input {
+    background: rgba(255,255,255,0.9);
+    border: 1px solid rgba(201,169,110,0.4);
+    border-radius: 12px;
+    padding: 16px 12px;
+    font-size: 18px;
+    font-family: 'Noto Serif JP', serif;
+    font-weight: 300;
+    color: var(--text-deep);
+    letter-spacing: 0.05em;
+    outline: none;
+    width: 100%;
+    -webkit-appearance: none;
+    transition: border-color 0.3s;
+  }
+
+  .setup-field input:focus {
+    border-color: rgba(201,169,110,0.6);
+  }
+
+  .setup-btn {
+    margin-top: 12px;
+    background: linear-gradient(135deg, rgba(201,169,110,0.9), rgba(184,148,90,0.9));
+    border: none;
+    border-radius: 14px;
+    padding: 16px;
+    font-size: 14px;
+    font-family: 'Noto Serif JP', serif;
+    font-weight: 300;
+    color: white;
+    letter-spacing: 0.3em;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .setup-btn:active {
+    transform: scale(0.98);
+    opacity: 0.9;
+  }
+
+  /* こぼし・ともし ボタンペア */
+  .action-pair {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 32px;
+    opacity: 0;
+    animation: fadeUp 1.4s ease forwards;
+    animation-delay: 1.2s;
+  }
+
+  .action-btn {
+    background: rgba(255,255,255,0.7);
+    border: 1px solid rgba(201,169,110,0.2);
+    border-radius: 16px;
+    padding: 20px 12px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'Noto Serif JP', serif;
+  }
+
+  .action-btn:active {
+    transform: scale(0.97);
+    background: rgba(247,242,234,0.9);
+  }
+
+  .action-btn-icon { font-size: 24px; display: block; margin-bottom: 8px; }
+  .action-btn-title { font-size: 13px; color: var(--text-deep); letter-spacing: 0.15em; font-weight: 300; display: block; margin-bottom: 4px; }
+  .action-btn-sub { font-size: 10px; color: var(--text-soft); letter-spacing: 0.1em; font-weight: 200; display: block; }
+
+  /* こぼしモーダル */
+  .koboshi-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(253,250,246,0.97);
+    backdrop-filter: blur(12px);
+    z-index: 100;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    padding: 60px 28px 40px;
+    overflow-y: auto;
+  }
+  .koboshi-overlay.active { display: flex; }
+  .koboshi-title { font-size: 18px; font-weight: 200; letter-spacing: 0.3em; color: var(--text-deep); margin-bottom: 8px; }
+  .koboshi-subtitle { font-size: 11px; letter-spacing: 0.2em; color: var(--text-soft); margin-bottom: 32px; text-align: center; line-height: 2; font-weight: 200; }
+  .koboshi-textarea { width: 100%; max-width: 360px; min-height: 140px; background: rgba(255,255,255,0.9); border: 1px solid rgba(201,169,110,0.3); border-radius: 16px; padding: 18px; font-size: 16px; font-family: 'Noto Serif JP', serif; font-weight: 300; color: var(--text-deep); letter-spacing: 0.05em; line-height: 1.9; outline: none; resize: none; margin-bottom: 20px; }
+  .koboshi-send-btn { width: 100%; max-width: 360px; background: linear-gradient(135deg, rgba(201,169,110,0.9), rgba(184,148,90,0.9)); border: none; border-radius: 14px; padding: 16px; font-size: 14px; font-family: 'Noto Serif JP', serif; font-weight: 300; color: white; letter-spacing: 0.3em; cursor: pointer; margin-bottom: 16px; }
+  .koboshi-close-btn { background: none; border: none; font-size: 11px; color: var(--text-soft); letter-spacing: 0.2em; font-family: 'Noto Serif JP', serif; cursor: pointer; padding: 8px; }
+  .koboshi-response { width: 100%; max-width: 360px; background: linear-gradient(160deg, rgba(255,250,240,0.95), rgba(247,242,234,0.8)); border: 1px solid rgba(201,169,110,0.25); border-radius: 20px; padding: 28px 22px; margin-bottom: 20px; display: none; }
+  .koboshi-response.active { display: block; }
+  .koboshi-response-label { font-size: 10px; letter-spacing: 0.35em; color: var(--gold); margin-bottom: 14px; text-align: center; font-weight: 300; }
+  .koboshi-response-text { font-size: 14px; color: var(--text-deep); letter-spacing: 0.08em; line-height: 2.4; font-weight: 300; text-align: center; }
+  .koboshi-used { width: 100%; max-width: 360px; text-align: center; padding: 24px; background: rgba(255,255,255,0.6); border: 1px solid rgba(201,169,110,0.15); border-radius: 16px; display: none; }
+  .koboshi-used.active { display: block; }
+  .koboshi-used p { font-size: 12px; color: var(--text-soft); letter-spacing: 0.15em; line-height: 2.2; font-weight: 200; }
+
+  /* ともしモーダル */
+  .tomoshi-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(253,250,246,0.97);
+    backdrop-filter: blur(12px);
+    z-index: 100;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 28px 40px;
+  }
+  .tomoshi-modal.active { display: flex; }
+  .tomoshi-modal-flame { font-size: 32px; margin-bottom: 16px; animation: flicker 3s ease-in-out infinite; }
+  .tomoshi-modal-label { font-size: 10px; letter-spacing: 0.35em; color: var(--gold); margin-bottom: 24px; font-weight: 300; }
+  .tomoshi-modal-text { font-size: 15px; color: var(--text-deep); letter-spacing: 0.08em; line-height: 2.6; font-weight: 300; text-align: center; max-width: 340px; margin-bottom: 40px; }
+  .tomoshi-modal-close { background: none; border: none; font-size: 11px; color: var(--text-soft); letter-spacing: 0.2em; font-family: 'Noto Serif JP', serif; cursor: pointer; padding: 8px; }
+</style>
+</head>
+<body>
+
+<!-- 初回設定モーダル -->
+<div class="setup-overlay" id="setupOverlay">
+  <div class="setup-flame">🕯️</div>
+  <h1 class="setup-title">ともし</h1>
+  <p class="setup-subtitle">
+    今日という日を迎えられた<br>
+    ありがとうございます
+  </p>
+  <div class="setup-form">
+    <div class="name-row">
+      <div class="setup-field">
+        <label>姓</label>
+        <input type="text" id="inputLastName" placeholder="林" maxlength="8">
+      </div>
+      <div class="setup-field">
+        <label>名</label>
+        <input type="text" id="inputFirstName" placeholder="伸" maxlength="8">
+      </div>
+    </div>
+    <div class="setup-field">
+      <label>呼び名（アプリでの呼び方）</label>
+      <input type="text" id="inputNickname" placeholder="例：しんさん、のぶちゃん" maxlength="12">
+    </div>
+    <div class="setup-field">
+      <label>生年月日</label>
+      <div style="display:grid; grid-template-columns:2fr 1fr 1fr; gap:8px;">
+        <select id="inputYear" style="background:rgba(255,255,255,0.9); border:1px solid rgba(201,169,110,0.4); border-radius:12px; padding:16px 10px; font-size:16px; font-family:'Noto Serif JP',serif; font-weight:300; color:#3A3228; outline:none; -webkit-appearance:none; appearance:none; text-align:center;">
+          <option value="">年</option>
+        </select>
+        <select id="inputMonth" style="background:rgba(255,255,255,0.9); border:1px solid rgba(201,169,110,0.4); border-radius:12px; padding:16px 10px; font-size:16px; font-family:'Noto Serif JP',serif; font-weight:300; color:#3A3228; outline:none; -webkit-appearance:none; appearance:none; text-align:center;">
+          <option value="">月</option>
+        </select>
+        <select id="inputDay" style="background:rgba(255,255,255,0.9); border:1px solid rgba(201,169,110,0.4); border-radius:12px; padding:16px 10px; font-size:16px; font-family:'Noto Serif JP',serif; font-weight:300; color:#3A3228; outline:none; -webkit-appearance:none; appearance:none; text-align:center;">
+          <option value="">日</option>
+        </select>
+      </div>
+    </div>
+    <button class="setup-btn" onclick="startApp()">灯 す</button>
+    <p id="setupError" style="text-align:center; color:#c0756a; font-size:12px; letter-spacing:0.15em; margin-top:8px; min-height:20px;"></p>
+  </div>
+</div>
+
+<!-- ともしモーダル -->
+<div class="tomoshi-modal" id="tomoshiModal">
+  <span class="tomoshi-modal-flame">🕯️</span>
+  <p class="tomoshi-modal-label">今日のともし</p>
+  <p class="tomoshi-modal-text" id="tomoshiModalText">…</p>
+  <button class="tomoshi-modal-close" onclick="document.getElementById('tomoshiModal').classList.remove('active')">とじる</button>
+</div>
+
+<!-- こぼしモーダル -->
+<div class="koboshi-overlay" id="koboshiOverlay">
+  <p class="koboshi-title">今日のこぼし</p>
+  <p class="koboshi-subtitle">今日だけ、ひとつだけ<br>打ち明けてみてください</p>
+
+  <!-- 入力エリア（未使用時） -->
+  <div id="koboshiInputArea" style="width:100%; max-width:360px; display:flex; flex-direction:column; align-items:center;">
+    <textarea class="koboshi-textarea" id="koboshiText" placeholder="今日の気持ちや悩みをここに…"></textarea>
+    <button class="koboshi-send-btn" onclick="sendKoboshi()">ともしに打ち明ける</button>
+  </div>
+
+  <!-- 返答エリア -->
+  <div class="koboshi-response" id="koboshiResponse">
+    <p class="koboshi-response-label">ともしより</p>
+    <p class="koboshi-response-text" id="koboshiResponseText">…</p>
+  </div>
+
+  <!-- 使用済みメッセージ -->
+  <div class="koboshi-used" id="koboshiUsed">
+    <p>今日のこぼしは<br>もう使いました</p>
+    <p style="margin-top:12px;">また明日、ここで待っています</p>
+  </div>
+
+  <button class="koboshi-close-btn" onclick="closeKoboshi()">とじる</button>
+</div>
+
+<!-- メイン画面 -->
+<div class="container" id="mainApp" style="display:none;">
+
+  <!-- ロゴ -->
+  <div class="logo">
+    <span class="logo-flame">🕯️</span>
+    <span class="logo-text">と も し</span>
+  </div>
+
+  <div class="cards">
+
+    <!-- ①感謝の言葉 -->
+    <div class="gratitude-line">
+      <p>今日という日を迎えられた</p>
+      <p class="highlight">ありがとうございます</p>
+    </div>
+
+    <!-- ②挨拶 -->
+    <div class="greeting-block">
+      <p class="greeting-time" id="timeLabel">おはようございます</p>
+      <div class="greeting-name">
+        <span id="userName">しんさん</span>
+        <span>今日もそばにいます</span>
+      </div>
+    </div>
+
+    <!-- こぼし・ともし ボタンペア -->
+    <div class="action-pair">
+      <button class="action-btn" onclick="openKoboshi()">
+        <span class="action-btn-icon">💬</span>
+        <span class="action-btn-title">今日のこぼし</span>
+        <span class="action-btn-sub">打ち明ける</span>
+      </button>
+      <button class="action-btn" onclick="scrollToTomoshi()">
+        <span class="action-btn-icon">🕯️</span>
+        <span class="action-btn-title">今日のともし</span>
+        <span class="action-btn-sub">受け取る</span>
+      </button>
+    </div>
+
+    <!-- ③日付・ご縁日 -->
+    <div class="date-block">
+      <p class="date-label">今日という日</p>
+      <p class="date-main" id="todayDate">—</p>
+      <div class="ennichi-badge">
+        <div class="dot"></div>
+        <p id="ennichiText">今日のご縁日を確認中</p>
+      </div>
+    </div>
+
+    <!-- ④守護仏 -->
+    <div class="guardian-block">
+      <p class="guardian-label">あなたの守護仏</p>
+      <p class="guardian-name" id="guardianName">—</p>
+      <p class="guardian-message" id="guardianMessage">あなたをずっと見守っています</p>
+    </div>
+
+    <!-- ⑤AIの今日だけの一言 -->
+    <div class="ai-message-block">
+      <p class="ai-label">今日のともし</p>
+      <p class="ai-message-text" id="aiMessage">今日もあなたは充分に満たされています。感謝の心が、すべての縁を引き寄せます。ゆっくりと、深く息を吸って。今日という一日が、あなたにとって穏やかで温かなものとなりますように。</p>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- リセットボタン -->
+    <div style="text-align:center; margin-bottom: 16px; opacity:0; animation: fadeIn 1s ease forwards; animation-delay: 4.2s;">
+      <button onclick="resetApp()" style="background:none; border:none; font-size:11px; color:var(--text-soft); letter-spacing:0.2em; font-family:'Noto Serif JP',serif; cursor:pointer; padding:8px 16px;">情報を変更する</button>
+    </div>
+
+    <!-- 下部ナビ -->
+    <div class="bottom-nav">
+      <p class="nav-label">じ ぶ ん 辞 書</p>
+      <div class="nav-grid">
+        <a class="nav-item" href="#">
+          <span class="nav-item-icon">🙏</span>
+          <span class="nav-item-text">あなたの守護仏</span>
+        </a>
+        <a class="nav-item" href="#">
+          <span class="nav-item-icon">✨</span>
+          <span class="nav-item-text">今日のあなた</span>
+        </a>
+        <a class="nav-item" href="#">
+          <span class="nav-item-icon">📅</span>
+          <span class="nav-item-text">今月のあなた</span>
+        </a>
+        <a class="nav-item" href="#">
+          <span class="nav-item-icon">🧭</span>
+          <span class="nav-item-text">あなたの方位</span>
+        </a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// 守護仏データ（干支別）
+const GUARDIAN = {
+  '子': { name: '千手観音菩薩', message: '慈悲の千の手で、あなたをやさしく包んでいます' },
+  '丑': { name: '虚空蔵菩薩', message: '無限の智恵と慈悲で、あなたの道を照らしています' },
+  '寅': { name: '虚空蔵菩薩', message: '無限の智恵と慈悲で、あなたの道を照らしています' },
+  '卯': { name: '文殊菩薩', message: '智恵の光で、あなたの迷いを晴らしています' },
+  '辰': { name: '普賢菩薩', message: '実践の力で、あなたの一歩一歩を支えています' },
+  '巳': { name: '普賢菩薩', message: '実践の力で、あなたの一歩一歩を支えています' },
+  '午': { name: '勢至菩薩', message: '智慧の光明で、あなたを迷いから救い続けています' },
+  '未': { name: '大日如来', message: 'すべての中心として、あなたを温かく照らしています' },
+  '申': { name: '大日如来', message: 'すべての中心として、あなたを温かく照らしています' },
+  '酉': { name: '不動明王', message: '揺るぎない意志で、あなたの障害を取り除きます' },
+  '戌': { name: '阿弥陀如来', message: '無限の光と命で、あなたをずっと見守っています' },
+  '亥': { name: '阿弥陀如来', message: '無限の光と命で、あなたをずっと見守っています' },
+};
+
+// ご縁日データ（日別）
+const ENNICHI = {
+  1: '定光仏', 2: '燈明仏', 3: '多宝仏', 4: '阿閦仏',
+  5: '弥勒仏', 6: '二萬燈明仏', 7: '三萬燈明仏', 8: '薬師如来',
+  9: '大通智勝仏', 10: '日月燈明仏', 11: '歓喜仏（聖天様）', 12: '難勝仏',
+  13: '虚空蔵菩薩', 14: '普賢菩薩', 15: '阿弥陀仏', 16: '陀羅尼菩薩',
+  17: '龍樹菩薩', 18: '観世音菩薩', 19: '日光菩薩', 20: '月光菩薩',
+  21: '無尽意菩薩', 22: '施無畏菩薩', 23: '大勢至菩薩', 24: '地蔵菩薩',
+  25: '文殊菩薩', 26: '薬上菩薩', 27: '盧遮那仏', 28: '大日如来',
+  29: '薬王菩薩', 30: '釈迦如来', 31: '定光仏'
+};
+
+// 干支計算
+function getEto(year) {
+  const eto = ['子','丑','寅','卯','辰','巳','午','未','申','酉','戌','亥'];
+  return eto[(year - 4) % 12];
+}
+
+// 時間帯
+function getTimeLabel() {
+  const h = new Date().getHours();
+  if (h >= 5 && h < 11) {
+    document.body.classList.add('time-morning');
+    document.body.classList.remove('time-noon','time-night');
+    return 'おはようございます';
+  } else if (h >= 11 && h < 17) {
+    document.body.classList.add('time-noon');
+    document.body.classList.remove('time-morning','time-night');
+    return 'こんにちは';
+  } else {
+    document.body.classList.add('time-night');
+    document.body.classList.remove('time-morning','time-noon');
+    return 'こんばんは';
+  }
+}
+
+// アプリ開始
+function startApp() {
+  const errEl = document.getElementById('setupError');
+  const lastName = document.getElementById('inputLastName').value.trim();
+  const firstName = document.getElementById('inputFirstName').value.trim();
+  const nickname = document.getElementById('inputNickname').value.trim();
+  const year = document.getElementById('inputYear').value;
+  const month = document.getElementById('inputMonth').value;
+  const day = document.getElementById('inputDay').value;
+  if (!lastName || !firstName || !nickname || !year || !month || !day) {
+    errEl.textContent = 'すべての項目を入力してください';
+    return;
+  }
+  errEl.textContent = '';
+  const name = lastName + firstName;
+  const birth = `${year}-${month.padStart(2,'0')}-${day.padStart(2,'0')}`;
+  localStorage.setItem('tomoshi_name', name);
+  localStorage.setItem('tomoshi_nickname', nickname);
+  localStorage.setItem('tomoshi_birth', birth);
+  showMain(name, nickname, birth);
+}
+
+// セレクター初期化
+function initSelectors() {
+  const yearSel = document.getElementById('inputYear');
+  const monthSel = document.getElementById('inputMonth');
+  const daySel = document.getElementById('inputDay');
+  if (!yearSel) return;
+  const currentYear = new Date().getFullYear();
+  for (let y = currentYear; y >= 1920; y--) {
+    const opt = document.createElement('option');
+    opt.value = y; opt.textContent = y + '年';
+    yearSel.appendChild(opt);
+  }
+  for (let m = 1; m <= 12; m++) {
+    const opt = document.createElement('option');
+    opt.value = m; opt.textContent = m + '月';
+    monthSel.appendChild(opt);
+  }
+  for (let d = 1; d <= 31; d++) {
+    const opt = document.createElement('option');
+    opt.value = d; opt.textContent = d + '日';
+    daySel.appendChild(opt);
+  }
+}
+
+function showMain(name, nickname, birth) {
+  document.getElementById('setupOverlay').style.display = 'none';
+  document.getElementById('mainApp').style.display = 'flex';
+
+  // 呼び名で表示
+  document.getElementById('userName').textContent = nickname;
+
+  // 時間帯
+  document.getElementById('timeLabel').textContent = getTimeLabel();
+
+  // 日付
+  const today = new Date();
+  const month = today.getMonth() + 1;
+  const day = today.getDate();
+  const weekdays = ['日','月','火','水','木','金','土'];
+  document.getElementById('todayDate').textContent =
+    `${today.getFullYear()}年${month}月${day}日（${weekdays[today.getDay()]}）`;
+
+  // ご縁日
+  const ennichi = ENNICHI[day] || '諸仏';
+  document.getElementById('ennichiText').textContent = `${ennichi} のご縁日`;
+
+  // 守護仏
+  const birthYear = new Date(birth).getFullYear();
+  const eto = getEto(birthYear);
+  const guardian = GUARDIAN[eto] || { name: '大日如来', message: 'あなたをずっと見守っています' };
+  document.getElementById('guardianName').textContent = guardian.name;
+  document.getElementById('guardianMessage').textContent = guardian.message;
+
+  // AI一言生成
+  generateTomoshiMessage(nickname, guardian.name, ennichi);
+}
+
+// AI一言生成
+let _tomoshiReady = false;
+
+async function generateTomoshiMessage(nickname, guardianName, ennichi) {
+  const el = document.getElementById('aiMessage');
+  el.textContent = '…';
+  _tomoshiReady = false;
+
+  const h = new Date().getHours();
+  const timePart = h >= 5 && h < 11 ? '朝' : h >= 11 && h < 17 ? '昼' : '夜';
+  const today = new Date();
+  const dateStr = `${today.getFullYear()}年${today.getMonth()+1}月${today.getDate()}日`;
+
+  const prompt = `必ず日本語で返答してください。
+
+あなたは「ともし」という心に寄り添うアプリの声です。
+以下の情報をもとに、${nickname}への今日だけの言葉を作ってください。
+
+・呼び名：${nickname}
+・今日：${dateStr}（${timePart}）
+・守護仏：${guardianName}
+・今日のご縁日：${ennichi}
+
+ルール：
+- 必ず日本語のみで書く
+- ひらがな多め、漢字は最小限
+- やさしく包み込む言葉
+- 「大丈夫」「ありがとう」「そばにいる」の気持ちを込める
+- 3〜4文、短くシンプルに
+- 説教や指示はしない
+- ${nickname}と${guardianName}の縁を自然に盛り込む
+- 返答は本文のみ、余計な説明なし`;
+
+  try {
+    const res = await fetch('https://kaiunavi.vercel.app/api/claude', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        system: '必ず日本語で返答してください。あなたは「ともし」という心に寄り添うアプリの声です。',
+        messages: [{ role: 'user', content: prompt }],
+        max_tokens: 300
+      })
+    });
+    const rawText = await res.text();
+    let data;
+    try {
+      data = JSON.parse(rawText);
+    } catch(parseErr) {
+      el.textContent = '【parse error】status=' + res.status + ' body=' + rawText.slice(0,100);
+      _tomoshiReady = true;
+      return;
+    }
+    if (data.error) {
+      el.textContent = '【API error】' + data.error.message;
+      _tomoshiReady = true;
+      return;
+    }
+    const text = data.content?.[0]?.text || '今日もそばにいます。';
+    el.textContent = text;
+    _tomoshiReady = true;
+    const modal = document.getElementById('tomoshiModal');
+    if (modal.classList.contains('active')) {
+      document.getElementById('tomoshiModalText').textContent = text;
+    }
+  } catch(e) {
+    el.textContent = '【catch】' + e.message;
+    _tomoshiReady = true;
+  }
+}
+
+function resetApp() {
+  localStorage.removeItem('tomoshi_name');
+  localStorage.removeItem('tomoshi_nickname');
+  localStorage.removeItem('tomoshi_birth');
+  document.getElementById('setupOverlay').style.display = 'flex';
+  document.getElementById('mainApp').style.display = 'none';
+}
+
+// こぼし関連
+function openKoboshi() {
+  const overlay = document.getElementById('koboshiOverlay');
+  overlay.classList.add('active');
+  const today = new Date().toDateString();
+  const usedDate = localStorage.getItem('tomoshi_koboshi_date');
+  const savedResponse = localStorage.getItem('tomoshi_koboshi_response');
+
+  if (usedDate === today && savedResponse) {
+    // 使用済み＋返答あり
+    document.getElementById('koboshiInputArea').style.display = 'none';
+    document.getElementById('koboshiResponse').classList.add('active');
+    document.getElementById('koboshiResponseText').textContent = savedResponse;
+    document.getElementById('koboshiUsed').classList.add('active');
+  } else if (usedDate === today) {
+    // 使用済みのみ
+    document.getElementById('koboshiInputArea').style.display = 'none';
+    document.getElementById('koboshiUsed').classList.add('active');
+  } else {
+    // 未使用
+    document.getElementById('koboshiInputArea').style.display = 'flex';
+    document.getElementById('koboshiResponse').classList.remove('active');
+    document.getElementById('koboshiUsed').classList.remove('active');
+  }
+}
+
+function closeKoboshi() {
+  document.getElementById('koboshiOverlay').classList.remove('active');
+}
+
+function scrollToTomoshi() {
+  const modal = document.getElementById('tomoshiModal');
+  const msg = document.getElementById('aiMessage').textContent;
+  document.getElementById('tomoshiModalText').textContent = _tomoshiReady ? msg : 'ともしの言葉を準備しています…';
+  modal.classList.add('active');
+}
+
+async function sendKoboshi() {
+  const text = document.getElementById('koboshiText').value.trim();
+  if (!text) return;
+
+  const btn = document.querySelector('.koboshi-send-btn');
+  btn.textContent = '…';
+  btn.disabled = true;
+
+  const nickname = localStorage.getItem('tomoshi_nickname') || 'あなた';
+  const birth = localStorage.getItem('tomoshi_birth') || '';
+  const today = new Date();
+  const day = today.getDate();
+  const ennichi = ENNICHI[day] || '諸仏';
+  const birthYear = birth ? new Date(birth).getFullYear() : 1980;
+  const eto = getEto(birthYear);
+  const guardian = GUARDIAN[eto] || { name: '大日如来' };
+  const h = today.getHours();
+  const timePart = h >= 5 && h < 11 ? '朝' : h >= 11 && h < 17 ? '昼' : '夜';
+
+  const prompt = `必ず日本語で返答してください。
+
+あなたは「ともし」という心に寄り添うアプリです。
+${nickname}が今日だけの「こぼし」を打ち明けてくれました。
+
+【${nickname}のこぼし】
+${text}
+
+【${nickname}の情報】
+・守護仏：${guardian.name}
+・今日のご縁日：${ennichi}
+・時間帯：${timePart}
+
+以下のルールで寄り添った返答をしてください：
+- 必ず日本語のみ
+- ひらがな多め、やさしい言葉
+- 説教・指示・アドバイスを押しつけない
+- まず気持ちをしっかり受け止める
+- 守護仏・ご縁日・吉方位など「じぶん辞書」の財産を自然に織り交ぜる
+- 具体的で温かい言葉をかける
+- 5〜7文程度、しっかりと寄り添う
+- 最後に「今日もそばにいます」の気持ちで締める
+- 返答は本文のみ`;
+
+  try {
+    const res = await fetch('https://kaiunavi.vercel.app/api/claude', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        system: '必ず日本語で返答してください。あなたは「ともし」という心に寄り添うアプリです。',
+        messages: [{ role: 'user', content: prompt }],
+        max_tokens: 600
+      })
+    });
+    const data = await res.json();
+    const response = data.content?.[0]?.text || 'そばにいます。';
+
+    // 保存
+    localStorage.setItem('tomoshi_koboshi_date', today.toDateString());
+    localStorage.setItem('tomoshi_koboshi_response', response);
+
+    // 表示
+    document.getElementById('koboshiInputArea').style.display = 'none';
+    document.getElementById('koboshiResponseText').textContent = response;
+    document.getElementById('koboshiResponse').classList.add('active');
+
+  } catch(e) {
+    document.getElementById('koboshiInputArea').style.display = 'none';
+    document.getElementById('koboshiResponseText').textContent = 'あなたの気持ち、ちゃんと届きました。今日もそばにいます。';
+    document.getElementById('koboshiResponse').classList.add('active');
+    localStorage.setItem('tomoshi_koboshi_date', today.toDateString());
+  }
+}
+
+// 初期化
+window.onload = function() {
+  initSelectors();
+  const savedName = localStorage.getItem('tomoshi_name');
+  const savedNickname = localStorage.getItem('tomoshi_nickname');
+  const savedBirth = localStorage.getItem('tomoshi_birth');
+  if (savedName && savedNickname && savedBirth) {
+    showMain(savedName, savedNickname, savedBirth);
+  }
+};
+</script>
+</body>
+</html>
