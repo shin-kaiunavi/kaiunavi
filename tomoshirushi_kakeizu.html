@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="color-scheme" content="light only">
+<title>ボンちゃん家系図 | ともしるし</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@200;300;400&family=Shippori+Mincho:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --white: #FDFAF6;
+    --cream: #F7F2EA;
+    --warm: #EDE5D8;
+    --text-deep: #3A3228;
+    --text-mid: #6B5F54;
+    --text-soft: #9E9088;
+    --gold: #C9A96E;
+    --gold-light: #E8D5B0;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    html, body, .card { background-color: #FDFAF6 !important; color: #3A3228 !important; }
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+  html, body {
+    min-height: 100%;
+    background: var(--white);
+    font-family: 'Noto Serif JP', 'Shippori Mincho', serif;
+    color: var(--text-deep);
+    color-scheme: light only;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    top: -20%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 140%;
+    height: 70%;
+    background: radial-gradient(ellipse at center top, rgba(255, 248, 235, 1) 0%, rgba(253, 250, 246, 0.8) 40%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    position: relative;
+    z-index: 1;
+    max-width: 420px;
+    margin: 0 auto;
+    padding: 48px 24px 80px;
+  }
+
+  .header { text-align: center; margin-bottom: 56px; }
+
+  .header-flame { font-size: 24px; margin-bottom: 14px; display: block; animation: flicker 3s ease-in-out infinite; }
+
+  @keyframes flicker {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.85; transform: scale(0.96); }
+  }
+
+  .header-title {
+    font-size: 22px;
+    font-weight: 200;
+    letter-spacing: 0.35em;
+    color: var(--text-deep);
+    margin-bottom: 12px;
+  }
+
+  .header-subtitle {
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    color: var(--text-soft);
+    font-weight: 200;
+    line-height: 2;
+  }
+
+  .intro {
+    background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(247,242,234,0.6));
+    border: 1px solid rgba(201, 169, 110, 0.2);
+    border-radius: 16px;
+    padding: 24px 22px;
+    margin-bottom: 40px;
+    backdrop-filter: blur(8px);
+  }
+
+  .intro-label {
+    font-size: 10px;
+    letter-spacing: 0.35em;
+    color: var(--gold);
+    margin-bottom: 14px;
+    text-align: center;
+    font-weight: 300;
+  }
+
+  .intro p {
+    font-size: 12px;
+    color: var(--text-mid);
+    letter-spacing: 0.08em;
+    line-height: 2.2;
+    font-weight: 300;
+    text-align: center;
+  }
+
+  .intro p + p { margin-top: 12px; }
+
+  .intro-highlight { color: var(--gold); font-weight: 400; }
+
+  .divider-dot {
+    text-align: center;
+    margin: 24px 0 36px;
+    font-size: 10px;
+    color: var(--gold-light);
+    letter-spacing: 0.8em;
+  }
+
+  .card {
+    background: linear-gradient(135deg, rgba(255,255,255,0.8), rgba(247,242,234,0.5));
+    border: 1px solid rgba(201, 169, 110, 0.18);
+    border-radius: 20px;
+    padding: 28px 22px;
+    margin-bottom: 20px;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 4px 20px rgba(201,169,110,0.06);
+  }
+
+  .card-top { display: flex; align-items: center; gap: 18px; margin-bottom: 18px; }
+
+  .card-bonji-wrap {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    background: radial-gradient(circle at center, rgba(255,250,235,1) 0%, rgba(247,242,234,0.6) 70%, transparent 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    border: 1px solid rgba(201,169,110,0.2);
+    box-shadow: 0 2px 12px rgba(201,169,110,0.1);
+  }
+
+  .card-bonji-wrap svg { width: 84%; height: 84%; display: block; }
+
+  .card-identity { flex: 1; }
+
+  .card-name {
+    font-size: 18px;
+    font-weight: 300;
+    color: var(--text-deep);
+    letter-spacing: 0.2em;
+    margin-bottom: 6px;
+  }
+
+  .card-tag {
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    color: var(--gold);
+    font-weight: 300;
+  }
+
+  .card-eto-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 18px;
+    padding-bottom: 16px;
+    border-bottom: 1px dashed rgba(201,169,110,0.2);
+  }
+
+  .eto-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(201,169,110,0.1);
+    border: 1px solid rgba(201,169,110,0.25);
+    border-radius: 12px;
+    padding: 4px 12px;
+    font-size: 11px;
+    color: var(--text-mid);
+    letter-spacing: 0.12em;
+    font-weight: 300;
+  }
+
+  .card-guardian-label {
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    color: var(--text-soft);
+    margin-bottom: 6px;
+    font-weight: 200;
+  }
+
+  .card-guardian-name {
+    font-size: 15px;
+    color: var(--text-deep);
+    letter-spacing: 0.1em;
+    font-weight: 300;
+    margin-bottom: 10px;
+  }
+
+  .card-meaning {
+    font-size: 12px;
+    color: var(--text-mid);
+    letter-spacing: 0.08em;
+    line-height: 2;
+    font-weight: 300;
+  }
+
+  .card-shingon {
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px dashed rgba(201,169,110,0.2);
+  }
+
+  .card-shingon-label {
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    color: var(--text-soft);
+    margin-bottom: 6px;
+    font-weight: 200;
+  }
+
+  .card-shingon-text {
+    font-size: 11px;
+    color: var(--text-mid);
+    letter-spacing: 0.1em;
+    line-height: 1.8;
+    font-weight: 300;
+  }
+
+  .footer { text-align: center; margin-top: 48px; }
+
+  .footer p {
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    color: var(--text-soft);
+    font-weight: 200;
+    line-height: 2.2;
+  }
+
+  .footer .mark { color: var(--gold); font-size: 14px; display: block; margin-bottom: 12px; }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <div class="header">
+    <span class="header-flame">🕯️</span>
+    <h1 class="header-title">ボ ン ち ゃ ん 家 系 図</h1>
+    <p class="header-subtitle">7 つ の と も し る し<br>そ れ ぞ れ の 物 語</p>
+  </div>
+
+  <div class="intro">
+    <p class="intro-label">は じ め に</p>
+    <p>ボンちゃんは、<span class="intro-highlight">梵字を宿したやわらかなしるし</span>。</p>
+    <p>表はかわいい守りのキャラクター、裏には守護仏の真言と意味が息づいています。</p>
+    <p>7 つ の ボ ン ち ゃ ん が、1 2 の 干 支 を 見 守 っ て い ま す。</p>
+  </div>
+
+  <div class="divider-dot">・ ・ ・</div>
+
+  <!-- キリーク -->
+  <div class="card">
+    <div class="card-top">
+      <div class="card-bonji-wrap">
+        <svg viewBox="-50 -50 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="0" cy="-40" r="3.5" fill="#C9A96E"/><path d="M -22 -22 Q -30 -5, -22 14 Q -10 28, 4 22 Q 12 15, 8 4 Q 4 -8, -8 -14" stroke="#C9A96E" stroke-width="5" fill="none" stroke-linecap="round"/><path d="M 0 -10 Q 12 -4, 18 6 Q 22 18, 14 26" stroke="#C9A96E" stroke-width="4.5" fill="none" stroke-linecap="round"/><path d="M -18 -8 Q -24 -14, -20 -20" stroke="#C9A96E" stroke-width="3" fill="none" stroke-linecap="round"/><circle cx="30" cy="-2" r="3" fill="#C9A96E"/><circle cx="30" cy="12" r="3" fill="#C9A96E"/></svg>
+      </div>
+      <div class="card-identity">
+        <p class="card-name">キ リ ー ク</p>
+        <p class="card-tag">B O Ñ  -  0 1</p>
+      </div>
+    </div>
+    <div class="card-eto-row">
+      <span class="eto-badge">子（ねずみ）</span>
+      <span class="eto-badge">戌（いぬ）</span>
+      <span class="eto-badge">亥（いのしし）</span>
+    </div>
+    <p class="card-guardian-label">守 護 仏</p>
+    <p class="card-guardian-name">千手観音菩薩 ・ 阿弥陀如来</p>
+    <p class="card-meaning">千の手であらゆる苦しみに応える慈悲の仏。そして無限の光と命で、すべてを救う仏。キリークは、どんな時もあなたに手を差し伸べる「救い」のしるし。</p>
+    <div class="card-shingon">
+      <p class="card-shingon-label">真 言</p>
+      <p class="card-shingon-text">オン・バサラ・タラマ・キリク<br>オン・アミリタテイセイカラウン</p>
+    </div>
+  </div>
+
+  <!-- タラーク -->
+  <div class="card">
+    <div class="card-top">
+      <div class="card-bonji-wrap">
+        <svg viewBox="-50 -50 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M -6 -38 Q 0 -44, 6 -38" stroke="#C9A96E" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M -22 -18 Q -28 -2, -22 14 Q -10 26, 4 22 Q 16 14, 20 4 Q 24 -10, 16 -20 Q 8 -24, -2 -22" stroke="#C9A96E" stroke-width="5.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M -4 0 Q 6 6, 10 0" stroke="#C9A96E" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M 18 16 Q 24 22, 28 18" stroke="#C9A96E" stroke-width="2.5" fill="none" stroke-linecap="round"/><circle cx="32" cy="-6" r="3" fill="#C9A96E"/><circle cx="32" cy="8" r="3" fill="#C9A96E"/></svg>
+      </div>
+      <div class="card-identity">
+        <p class="card-name">タ ラ ー ク</p>
+        <p class="card-tag">B O Ñ  -  0 2</p>
+      </div>
+    </div>
+    <div class="card-eto-row">
+      <span class="eto-badge">丑（うし）</span>
+      <span class="eto-badge">寅（とら）</span>
+    </div>
+    <p class="card-guardian-label">守 護 仏</p>
+    <p class="card-guardian-name">虚空蔵菩薩</p>
+    <p class="card-meaning">無限の智慧と慈悲を、虚空のように蓄える仏。タラークは、広い空のようにあなたを受け止め、いつでも智恵を降らせてくれる「叡智」のしるし。</p>
+    <div class="card-shingon">
+      <p class="card-shingon-label">真 言</p>
+      <p class="card-shingon-text">ノウボウ・アキャシャキャラバヤ・オン・アリ・キャマリ・ボリ・ソワカ</p>
+    </div>
+  </div>
+
+  <!-- マン -->
+  <div class="card">
+    <div class="card-top">
+      <div class="card-bonji-wrap">
+        <svg viewBox="-50 -50 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="0" cy="-38" r="4" fill="#C9A96E"/><path d="M -20 -15 Q -26 0, -18 18 Q -5 30, 10 24 Q 22 16, 22 0 Q 20 -16, 8 -20 Q -4 -22, -14 -16" stroke="#C9A96E" stroke-width="5.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M -10 2 Q 0 8, 8 2" stroke="#C9A96E" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M 22 14 Q 30 18, 32 12" stroke="#C9A96E" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>
+      </div>
+      <div class="card-identity">
+        <p class="card-name">マ ン</p>
+        <p class="card-tag">B O Ñ  -  0 3</p>
+      </div>
+    </div>
+    <div class="card-eto-row">
+      <span class="eto-badge">卯（うさぎ）</span>
+    </div>
+    <p class="card-guardian-label">守 護 仏</p>
+    <p class="card-guardian-name">文殊菩薩</p>
+    <p class="card-meaning">智慧を司り、迷いを断ち切る仏。マンは、霧の中で光る一筋の道しるべ。あなたが迷った時、すっと正しい選択を照らしてくれる「智慧」のしるし。</p>
+    <div class="card-shingon">
+      <p class="card-shingon-label">真 言</p>
+      <p class="card-shingon-text">オン・アラハシャノウ</p>
+    </div>
+  </div>
+
+  <!-- アン -->
+  <div class="card">
+    <div class="card-top">
+      <div class="card-bonji-wrap">
+        <svg viewBox="-50 -50 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="0" cy="-38" r="4" fill="#C9A96E"/><path d="M -22 -12 Q -26 4, -18 18 Q -6 26, 8 22 Q 20 16, 22 2 Q 22 -12, 10 -18 Q -2 -20, -14 -16" stroke="#C9A96E" stroke-width="5.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M -10 8 Q 0 12, 10 8" stroke="#C9A96E" stroke-width="3" fill="none" stroke-linecap="round"/><circle cx="0" cy="-4" r="2" fill="#C9A96E"/></svg>
+      </div>
+      <div class="card-identity">
+        <p class="card-name">ア ン</p>
+        <p class="card-tag">B O Ñ  -  0 4</p>
+      </div>
+    </div>
+    <div class="card-eto-row">
+      <span class="eto-badge">辰（たつ）</span>
+      <span class="eto-badge">巳（へび）</span>
+    </div>
+    <p class="card-guardian-label">守 護 仏</p>
+    <p class="card-guardian-name">普賢菩薩</p>
+    <p class="card-meaning">行動と実践の力を授ける仏。アンは、地に足のついた歩みを守り、あなたの一歩一歩をしっかり支えてくれる「実行」のしるし。</p>
+    <div class="card-shingon">
+      <p class="card-shingon-label">真 言</p>
+      <p class="card-shingon-text">オン・サンマヤサトバン</p>
+    </div>
+  </div>
+
+  <!-- サク -->
+  <div class="card">
+    <div class="card-top">
+      <div class="card-bonji-wrap">
+        <svg viewBox="-50 -50 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M -4 -42 Q 0 -36, 4 -42" stroke="#C9A96E" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M -20 -10 Q -26 6, -18 18 Q -4 26, 10 20 Q 20 12, 20 0 Q 18 -14, 6 -20 Q -8 -22, -18 -14" stroke="#C9A96E" stroke-width="5.5" fill="none" stroke-linecap="round"/><path d="M -2 -12 Q 2 -4, 0 4" stroke="#C9A96E" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M 18 -8 Q 24 -12, 26 -6" stroke="#C9A96E" stroke-width="2.5" fill="none" stroke-linecap="round"/><circle cx="32" cy="-2" r="3" fill="#C9A96E"/><circle cx="32" cy="12" r="3" fill="#C9A96E"/></svg>
+      </div>
+      <div class="card-identity">
+        <p class="card-name">サ ク</p>
+        <p class="card-tag">B O Ñ  -  0 5</p>
+      </div>
+    </div>
+    <div class="card-eto-row">
+      <span class="eto-badge">午（うま）</span>
+    </div>
+    <p class="card-guardian-label">守 護 仏</p>
+    <p class="card-guardian-name">勢至菩薩</p>
+    <p class="card-meaning">智慧の光で、迷いから救い出す仏。サクは、暗い夜に灯る小さな明かり。どんな時もあなたの内側を明るく照らしてくれる「光明」のしるし。</p>
+    <div class="card-shingon">
+      <p class="card-shingon-label">真 言</p>
+      <p class="card-shingon-text">オン・サンザンサク・ソワカ</p>
+    </div>
+  </div>
+
+  <!-- バン -->
+  <div class="card">
+    <div class="card-top">
+      <div class="card-bonji-wrap">
+        <svg viewBox="-50 -50 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="0" cy="-38" r="4" fill="#C9A96E"/><path d="M -18 -20 Q -26 -8, -22 10 Q -15 26, -2 26 Q 12 24, 18 10 Q 22 -5, 14 -18 Q 6 -26, -6 -24" stroke="#C9A96E" stroke-width="5.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M 18 8 Q 28 14, 32 8" stroke="#C9A96E" stroke-width="3.5" fill="none" stroke-linecap="round"/><circle cx="-6" cy="-24" r="2" fill="#C9A96E"/></svg>
+      </div>
+      <div class="card-identity">
+        <p class="card-name">バ ン</p>
+        <p class="card-tag">B O Ñ  -  0 6</p>
+      </div>
+    </div>
+    <div class="card-eto-row">
+      <span class="eto-badge">未（ひつじ）</span>
+      <span class="eto-badge">申（さる）</span>
+    </div>
+    <p class="card-guardian-label">守 護 仏</p>
+    <p class="card-guardian-name">大日如来</p>
+    <p class="card-meaning">宇宙の真理そのもの、すべての中心。バンは、どんな現象の奥にも変わらず在り続ける「ほんとう」のしるし。静かで、大きくて、揺るがない。</p>
+    <div class="card-shingon">
+      <p class="card-shingon-label">真 言</p>
+      <p class="card-shingon-text">オン・アビラウンケン・バザラダトバン</p>
+    </div>
+  </div>
+
+  <!-- カーン -->
+  <div class="card">
+    <div class="card-top">
+      <div class="card-bonji-wrap">
+        <svg viewBox="-50 -50 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="0" cy="-38" r="4" fill="#C9A96E"/><path d="M -16 -20 Q -22 -8, -20 8 Q -16 22, -4 24 Q 10 22, 16 10 Q 22 -4, 18 -16 Q 12 -22, 0 -22" stroke="#C9A96E" stroke-width="5.5" fill="none" stroke-linecap="round"/><path d="M 14 -10 Q 22 -10, 26 -2" stroke="#C9A96E" stroke-width="4" fill="none" stroke-linecap="round"/><path d="M 0 -8 Q 6 -2, 2 6 Q 0 10, -2 8" stroke="#C9A96E" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M -10 14 Q 0 18, 10 14" stroke="#C9A96E" stroke-width="3" fill="none" stroke-linecap="round"/></svg>
+      </div>
+      <div class="card-identity">
+        <p class="card-name">カ ー ン</p>
+        <p class="card-tag">B O Ñ  -  0 7</p>
+      </div>
+    </div>
+    <div class="card-eto-row">
+      <span class="eto-badge">酉（とり）</span>
+    </div>
+    <p class="card-guardian-label">守 護 仏</p>
+    <p class="card-guardian-name">不動明王</p>
+    <p class="card-meaning">揺るぎない意志で、邪気を退ける仏。カーンの中には小さな炎が灯っていて、あなたに降りかかる禍いを、きっぱりと断ってくれる「結界」のしるし。</p>
+    <div class="card-shingon">
+      <p class="card-shingon-label">真 言</p>
+      <p class="card-shingon-text">ノウマク・サマンダバサラダン・カン</p>
+    </div>
+  </div>
+
+  <div class="footer">
+    <span class="mark">・</span>
+    <p>7 つ の ボ ン ち ゃ ん が<br>い つ も そ ば に い ま す</p>
+  </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <title>ともしるし・マン（文殊菩薩）</title>
+  <desc>卯年の守護仏を宿したボンちゃん</desc>
+  <g transform="translate(100, 100)">
+    <circle cx="0" cy="0" r="80" fill="#FDF8F0" stroke="#E8D5B0" stroke-width="1.2"/>
+    <circle cx="0" cy="-49" r="5" fill="#C9A96E"/>
+    <path d="M -26 -19 Q -33 0, -23 23 Q -6 38, 13 31 Q 28 20, 28 0 Q 26 -20, 10 -26 Q -5 -28, -18 -20" stroke="#C9A96E" stroke-width="7" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M -13 3 Q 0 10, 10 3" stroke="#C9A96E" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <path d="M 28 18 Q 38 23, 41 15" stroke="#C9A96E" stroke-width="3" fill="none" stroke-linecap="round"/>
+  </g>
+</svg>

@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <title>ともしるし・キリーク（千手観音菩薩・阿弥陀如来）</title>
+  <desc>子年・戌年・亥年の守護仏を宿したボンちゃん</desc>
+  <g transform="translate(100, 100)">
+    <circle cx="0" cy="0" r="80" fill="#FDF8F0" stroke="#E8D5B0" stroke-width="1.2"/>
+    <circle cx="0" cy="-52" r="4.5" fill="#C9A96E"/>
+    <path d="M -28 -28 Q -38 -6, -28 18 Q -13 36, 5 28 Q 15 19, 10 5 Q 5 -10, -10 -18" stroke="#C9A96E" stroke-width="6.5" fill="none" stroke-linecap="round"/>
+    <path d="M 0 -13 Q 15 -5, 23 8 Q 28 23, 18 33" stroke="#C9A96E" stroke-width="6" fill="none" stroke-linecap="round"/>
+    <path d="M -23 -10 Q -31 -18, -26 -26" stroke="#C9A96E" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <circle cx="38" cy="-3" r="4" fill="#C9A96E"/>
+    <circle cx="38" cy="15" r="4" fill="#C9A96E"/>
+  </g>
+</svg>

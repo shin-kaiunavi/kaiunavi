@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <title>ともしるし・アン（普賢菩薩）</title>
+  <desc>辰年・巳年の守護仏を宿したボンちゃん</desc>
+  <g transform="translate(100, 100)">
+    <circle cx="0" cy="0" r="80" fill="#FDF8F0" stroke="#E8D5B0" stroke-width="1.2"/>
+    <circle cx="0" cy="-49" r="5" fill="#C9A96E"/>
+    <path d="M -28 -15 Q -33 5, -23 23 Q -8 33, 10 28 Q 26 20, 28 3 Q 28 -15, 13 -23 Q -3 -26, -18 -20" stroke="#C9A96E" stroke-width="7" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M -13 10 Q 0 15, 13 10" stroke="#C9A96E" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <circle cx="0" cy="-5" r="2.5" fill="#C9A96E"/>
+  </g>
+</svg>

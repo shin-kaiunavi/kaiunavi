@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <title>ともしるし・タラーク（虚空蔵菩薩）</title>
+  <desc>丑年・寅年の守護仏を宿したボンちゃん</desc>
+  <g transform="translate(100, 100)">
+    <circle cx="0" cy="0" r="80" fill="#FDF8F0" stroke="#E8D5B0" stroke-width="1.2"/>
+    <path d="M -8 -50 Q 0 -58, 8 -50" stroke="#C9A96E" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <path d="M -28 -23 Q -36 -3, -28 18 Q -13 33, 5 28 Q 20 18, 25 5 Q 31 -13, 20 -26 Q 10 -31, -3 -28" stroke="#C9A96E" stroke-width="7" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M -5 0 Q 8 8, 13 0" stroke="#C9A96E" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <path d="M 23 20 Q 31 28, 36 23" stroke="#C9A96E" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <circle cx="41" cy="-8" r="4" fill="#C9A96E"/>
+    <circle cx="41" cy="10" r="4" fill="#C9A96E"/>
+  </g>
+</svg>

@@ -631,9 +631,211 @@
   .tomoshi-modal-label { font-size: 10px; letter-spacing: 0.35em; color: var(--gold); margin-bottom: 24px; font-weight: 300; }
   .tomoshi-modal-text { font-size: 15px; color: var(--text-deep); letter-spacing: 0.08em; line-height: 2.6; font-weight: 300; text-align: center; max-width: 340px; margin-bottom: 40px; }
   .tomoshi-modal-close { background: none; border: none; font-size: 11px; color: var(--text-soft); letter-spacing: 0.2em; font-family: 'Noto Serif JP', serif; cursor: pointer; padding: 8px; }
+
+  /* 守護仏詳細モーダル */
+  .guardian-detail-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(253,250,246,0.98);
+    backdrop-filter: blur(12px);
+    z-index: 100;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    padding: 60px 28px 40px;
+    overflow-y: auto;
+  }
+  .guardian-detail-overlay.active { display: flex; }
+
+  .guardian-detail-inner {
+    width: 100%;
+    max-width: 360px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .guardian-detail-label {
+    font-size: 10px;
+    letter-spacing: 0.35em;
+    color: var(--gold);
+    margin-bottom: 28px;
+    font-weight: 300;
+  }
+
+  .guardian-detail-bonji-wrap {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    background: radial-gradient(circle at center, rgba(255,250,235,1) 0%, rgba(247,242,234,0.6) 70%, transparent 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 14px;
+    border: 1px solid rgba(201,169,110,0.2);
+    box-shadow: 0 4px 20px rgba(201,169,110,0.12);
+  }
+
+  .guardian-detail-bonji {
+    width: 100%;
+    height: 100%;
+    color: var(--gold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    filter: drop-shadow(0 2px 4px rgba(201,169,110,0.2));
+  }
+
+  .guardian-detail-bonji svg {
+    width: 92%;
+    height: 92%;
+    display: block;
+  }
+
+  .guardian-detail-bonji-sub {
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    color: var(--text-soft);
+    font-weight: 200;
+    margin-bottom: 28px;
+  }
+
+  .guardian-detail-name {
+    font-size: 22px;
+    font-weight: 300;
+    color: var(--text-deep);
+    letter-spacing: 0.12em;
+    margin-bottom: 12px;
+    text-align: center;
+  }
+
+  .guardian-detail-meaning {
+    font-size: 13px;
+    color: var(--text-mid);
+    letter-spacing: 0.1em;
+    line-height: 2;
+    font-weight: 300;
+    text-align: center;
+    margin-bottom: 32px;
+    padding: 0 8px;
+  }
+
+  .guardian-detail-divider {
+    width: 40px;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--gold-light), transparent);
+    margin: 8px auto 32px;
+  }
+
+  .locked-section {
+    width: 100%;
+    background: linear-gradient(135deg, rgba(255,255,255,0.6), rgba(247,242,234,0.4));
+    border: 1px dashed rgba(201,169,110,0.3);
+    border-radius: 16px;
+    padding: 22px 20px;
+    margin-bottom: 16px;
+    position: relative;
+  }
+
+  .locked-section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+  }
+
+  .locked-section-title {
+    font-size: 11px;
+    color: var(--text-mid);
+    letter-spacing: 0.25em;
+    font-weight: 300;
+  }
+
+  .locked-badge {
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+    background: rgba(201,169,110,0.1);
+    border: 1px solid rgba(201,169,110,0.25);
+    border-radius: 10px;
+    padding: 3px 10px;
+    font-weight: 300;
+  }
+
+  .locked-preview {
+    font-size: 12px;
+    color: var(--text-soft);
+    letter-spacing: 0.08em;
+    line-height: 1.9;
+    font-weight: 200;
+    filter: blur(4px);
+    user-select: none;
+    pointer-events: none;
+    text-align: center;
+  }
+
+  .locked-icon {
+    display: block;
+    text-align: center;
+    font-size: 14px;
+    color: var(--text-soft);
+    margin-top: 10px;
+    opacity: 0.5;
+  }
+
+  .guardian-detail-close {
+    background: none;
+    border: none;
+    font-size: 11px;
+    color: var(--text-soft);
+    letter-spacing: 0.2em;
+    font-family: 'Noto Serif JP', serif;
+    cursor: pointer;
+    padding: 16px;
+    margin-top: 20px;
+  }
 </style>
 </head>
 <body>
+
+<!-- 守護仏詳細モーダル -->
+<div class="guardian-detail-overlay" id="guardianDetailOverlay">
+  <div class="guardian-detail-inner">
+    <p class="guardian-detail-label">あ な た の 守 護 仏</p>
+
+    <div class="guardian-detail-bonji-wrap">
+      <div class="guardian-detail-bonji" id="guardianDetailBonji"></div>
+    </div>
+    <p class="guardian-detail-bonji-sub" id="guardianDetailBonjiSub">ボンちゃん</p>
+
+    <p class="guardian-detail-name" id="guardianDetailName">—</p>
+    <p class="guardian-detail-meaning" id="guardianDetailMeaning">—</p>
+
+    <div class="guardian-detail-divider"></div>
+
+    <!-- 真言（有料） -->
+    <div class="locked-section">
+      <div class="locked-section-header">
+        <span class="locked-section-title">真 言</span>
+        <span class="locked-badge">ミ ディ ア ム</span>
+      </div>
+      <p class="locked-preview">オン・バサラ・タラマ・キリク</p>
+      <span class="locked-icon">🔒</span>
+    </div>
+
+    <!-- 今日のAIメッセージ（有料） -->
+    <div class="locked-section">
+      <div class="locked-section-header">
+        <span class="locked-section-title">今 日 の お 言 葉</span>
+        <span class="locked-badge">ミ ディ ア ム</span>
+      </div>
+      <p class="locked-preview">今日という日、あなたの守護仏から届く一言</p>
+      <span class="locked-icon">🔒</span>
+    </div>
+
+    <button class="guardian-detail-close" onclick="closeGuardianDetail()">と じ る</button>
+  </div>
+</div>
 
 <!-- 初回設定モーダル -->
 <div class="setup-overlay" id="setupOverlay">
@@ -785,7 +987,7 @@
     <div class="bottom-nav">
       <p class="nav-label">じ ぶ ん 辞 書</p>
       <div class="nav-grid">
-        <a class="nav-item" href="#">
+        <a class="nav-item" href="javascript:void(0)" onclick="openGuardianDetail()">
           <span class="nav-item-icon">🙏</span>
           <span class="nav-item-text">あなたの守護仏</span>
         </a>
@@ -810,18 +1012,29 @@
 <script>
 // 守護仏データ（干支別）
 const GUARDIAN = {
-  '子': { name: '千手観音菩薩', message: '慈悲の千の手で、あなたをやさしく包んでいます' },
-  '丑': { name: '虚空蔵菩薩', message: '無限の智恵と慈悲で、あなたの道を照らしています' },
-  '寅': { name: '虚空蔵菩薩', message: '無限の智恵と慈悲で、あなたの道を照らしています' },
-  '卯': { name: '文殊菩薩', message: '智恵の光で、あなたの迷いを晴らしています' },
-  '辰': { name: '普賢菩薩', message: '実践の力で、あなたの一歩一歩を支えています' },
-  '巳': { name: '普賢菩薩', message: '実践の力で、あなたの一歩一歩を支えています' },
-  '午': { name: '勢至菩薩', message: '智慧の光明で、あなたを迷いから救い続けています' },
-  '未': { name: '大日如来', message: 'すべての中心として、あなたを温かく照らしています' },
-  '申': { name: '大日如来', message: 'すべての中心として、あなたを温かく照らしています' },
-  '酉': { name: '不動明王', message: '揺るぎない意志で、あなたの障害を取り除きます' },
-  '戌': { name: '阿弥陀如来', message: '無限の光と命で、あなたをずっと見守っています' },
-  '亥': { name: '阿弥陀如来', message: '無限の光と命で、あなたをずっと見守っています' },
+  '子': { name: '千手観音菩薩', message: '慈悲の千の手で、あなたをやさしく包んでいます', bonji: 'キリーク', shingon: 'オン・バサラ・タラマ・キリク', meaning: '千の手で、あらゆる苦しみに応える慈悲の仏' },
+  '丑': { name: '虚空蔵菩薩', message: '無限の智恵と慈悲で、あなたの道を照らしています', bonji: 'タラーク', shingon: 'ノウボウ・アキャシャキャラバヤ・オン・アリ・キャマリ・ボリ・ソワカ', meaning: '無限の智慧と慈悲を、虚空のように蓄える仏' },
+  '寅': { name: '虚空蔵菩薩', message: '無限の智恵と慈悲で、あなたの道を照らしています', bonji: 'タラーク', shingon: 'ノウボウ・アキャシャキャラバヤ・オン・アリ・キャマリ・ボリ・ソワカ', meaning: '無限の智慧と慈悲を、虚空のように蓄える仏' },
+  '卯': { name: '文殊菩薩', message: '智恵の光で、あなたの迷いを晴らしています', bonji: 'マン', shingon: 'オン・アラハシャノウ', meaning: '智慧を司り、迷いを断ち切る仏' },
+  '辰': { name: '普賢菩薩', message: '実践の力で、あなたの一歩一歩を支えています', bonji: 'アン', shingon: 'オン・サンマヤサトバン', meaning: '行動と実践の力を授ける仏' },
+  '巳': { name: '普賢菩薩', message: '実践の力で、あなたの一歩一歩を支えています', bonji: 'アン', shingon: 'オン・サンマヤサトバン', meaning: '行動と実践の力を授ける仏' },
+  '午': { name: '勢至菩薩', message: '智慧の光明で、あなたを迷いから救い続けています', bonji: 'サク', shingon: 'オン・サンザンサク・ソワカ', meaning: '智慧の光で、迷いから救い出す仏' },
+  '未': { name: '大日如来', message: 'すべての中心として、あなたを温かく照らしています', bonji: 'バン', shingon: 'オン・アビラウンケン・バザラダトバン', meaning: '宇宙の真理そのもの、すべての中心' },
+  '申': { name: '大日如来', message: 'すべての中心として、あなたを温かく照らしています', bonji: 'バン', shingon: 'オン・アビラウンケン・バザラダトバン', meaning: '宇宙の真理そのもの、すべての中心' },
+  '酉': { name: '不動明王', message: '揺るぎない意志で、あなたの障害を取り除きます', bonji: 'カーン', shingon: 'ノウマク・サマンダバサラダン・カン', meaning: '揺るぎない意志で、邪気を退ける仏' },
+  '戌': { name: '阿弥陀如来', message: '無限の光と命で、あなたをずっと見守っています', bonji: 'キリーク', shingon: 'オン・アミリタテイセイカラウン', meaning: '無限の光と命で、すべてを救う仏' },
+  '亥': { name: '阿弥陀如来', message: '無限の光と命で、あなたをずっと見守っています', bonji: 'キリーク', shingon: 'オン・アミリタテイセイカラウン', meaning: '無限の光と命で、すべてを救う仏' },
+};
+
+// ともしるし（ボンちゃん）SVG データ
+const TOMOSHIRUSHI_SVG = {
+  'キリーク': `<svg viewBox="-50 -50 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="0" cy="-40" r="3.5" fill="#C9A96E"/><path d="M -22 -22 Q -30 -5, -22 14 Q -10 28, 4 22 Q 12 15, 8 4 Q 4 -8, -8 -14" stroke="#C9A96E" stroke-width="5" fill="none" stroke-linecap="round"/><path d="M 0 -10 Q 12 -4, 18 6 Q 22 18, 14 26" stroke="#C9A96E" stroke-width="4.5" fill="none" stroke-linecap="round"/><path d="M -18 -8 Q -24 -14, -20 -20" stroke="#C9A96E" stroke-width="3" fill="none" stroke-linecap="round"/><circle cx="30" cy="-2" r="3" fill="#C9A96E"/><circle cx="30" cy="12" r="3" fill="#C9A96E"/></svg>`,
+  'タラーク': `<svg viewBox="-50 -50 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M -6 -38 Q 0 -44, 6 -38" stroke="#C9A96E" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M -22 -18 Q -28 -2, -22 14 Q -10 26, 4 22 Q 16 14, 20 4 Q 24 -10, 16 -20 Q 8 -24, -2 -22" stroke="#C9A96E" stroke-width="5.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M -4 0 Q 6 6, 10 0" stroke="#C9A96E" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M 18 16 Q 24 22, 28 18" stroke="#C9A96E" stroke-width="2.5" fill="none" stroke-linecap="round"/><circle cx="32" cy="-6" r="3" fill="#C9A96E"/><circle cx="32" cy="8" r="3" fill="#C9A96E"/></svg>`,
+  'マン': `<svg viewBox="-50 -50 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="0" cy="-38" r="4" fill="#C9A96E"/><path d="M -20 -15 Q -26 0, -18 18 Q -5 30, 10 24 Q 22 16, 22 0 Q 20 -16, 8 -20 Q -4 -22, -14 -16" stroke="#C9A96E" stroke-width="5.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M -10 2 Q 0 8, 8 2" stroke="#C9A96E" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M 22 14 Q 30 18, 32 12" stroke="#C9A96E" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>`,
+  'アン': `<svg viewBox="-50 -50 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="0" cy="-38" r="4" fill="#C9A96E"/><path d="M -22 -12 Q -26 4, -18 18 Q -6 26, 8 22 Q 20 16, 22 2 Q 22 -12, 10 -18 Q -2 -20, -14 -16" stroke="#C9A96E" stroke-width="5.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M -10 8 Q 0 12, 10 8" stroke="#C9A96E" stroke-width="3" fill="none" stroke-linecap="round"/><circle cx="0" cy="-4" r="2" fill="#C9A96E"/></svg>`,
+  'サク': `<svg viewBox="-50 -50 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M -4 -42 Q 0 -36, 4 -42" stroke="#C9A96E" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M -20 -10 Q -26 6, -18 18 Q -4 26, 10 20 Q 20 12, 20 0 Q 18 -14, 6 -20 Q -8 -22, -18 -14" stroke="#C9A96E" stroke-width="5.5" fill="none" stroke-linecap="round"/><path d="M -2 -12 Q 2 -4, 0 4" stroke="#C9A96E" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M 18 -8 Q 24 -12, 26 -6" stroke="#C9A96E" stroke-width="2.5" fill="none" stroke-linecap="round"/><circle cx="32" cy="-2" r="3" fill="#C9A96E"/><circle cx="32" cy="12" r="3" fill="#C9A96E"/></svg>`,
+  'バン': `<svg viewBox="-50 -50 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="0" cy="-38" r="4" fill="#C9A96E"/><path d="M -18 -20 Q -26 -8, -22 10 Q -15 26, -2 26 Q 12 24, 18 10 Q 22 -5, 14 -18 Q 6 -26, -6 -24" stroke="#C9A96E" stroke-width="5.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M 18 8 Q 28 14, 32 8" stroke="#C9A96E" stroke-width="3.5" fill="none" stroke-linecap="round"/><circle cx="-6" cy="-24" r="2" fill="#C9A96E"/></svg>`,
+  'カーン': `<svg viewBox="-50 -50 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="0" cy="-38" r="4" fill="#C9A96E"/><path d="M -16 -20 Q -22 -8, -20 8 Q -16 22, -4 24 Q 10 22, 16 10 Q 22 -4, 18 -16 Q 12 -22, 0 -22" stroke="#C9A96E" stroke-width="5.5" fill="none" stroke-linecap="round"/><path d="M 14 -10 Q 22 -10, 26 -2" stroke="#C9A96E" stroke-width="4" fill="none" stroke-linecap="round"/><path d="M 0 -8 Q 6 -2, 2 6 Q 0 10, -2 8" stroke="#C9A96E" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M -10 14 Q 0 18, 10 14" stroke="#C9A96E" stroke-width="3" fill="none" stroke-linecap="round"/></svg>`
 };
 
 // ご縁日データ（日別）
@@ -1125,6 +1338,25 @@ ${text}
     document.getElementById('koboshiResponse').classList.add('active');
     localStorage.setItem('tomoshi_koboshi_date', today.toDateString());
   }
+}
+
+// 守護仏詳細
+function openGuardianDetail() {
+  const birth = localStorage.getItem('tomoshi_birth') || '';
+  if (!birth) return;
+  const birthYear = new Date(birth).getFullYear();
+  const eto = getEto(birthYear);
+  const guardian = GUARDIAN[eto] || GUARDIAN['未'];
+  const svg = TOMOSHIRUSHI_SVG[guardian.bonji] || '';
+  document.getElementById('guardianDetailBonji').innerHTML = svg;
+  document.getElementById('guardianDetailBonjiSub').textContent = 'ボンちゃん ・ ' + guardian.bonji;
+  document.getElementById('guardianDetailName').textContent = guardian.name;
+  document.getElementById('guardianDetailMeaning').textContent = guardian.meaning;
+  document.getElementById('guardianDetailOverlay').classList.add('active');
+}
+
+function closeGuardianDetail() {
+  document.getElementById('guardianDetailOverlay').classList.remove('active');
 }
 
 // 初期化

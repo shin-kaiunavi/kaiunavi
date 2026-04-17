@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <title>ともしるし・カーン（不動明王）</title>
+  <desc>酉年の守護仏を宿したボンちゃん</desc>
+  <g transform="translate(100, 100)">
+    <circle cx="0" cy="0" r="80" fill="#FDF8F0" stroke="#E8D5B0" stroke-width="1.2"/>
+    <circle cx="0" cy="-49" r="5" fill="#C9A96E"/>
+    <path d="M -20 -26 Q -28 -10, -26 10 Q -20 28, -5 31 Q 13 28, 20 13 Q 28 -5, 23 -20 Q 15 -28, 0 -28" stroke="#C9A96E" stroke-width="7" fill="none" stroke-linecap="round"/>
+    <path d="M 18 -13 Q 28 -13, 33 -3" stroke="#C9A96E" stroke-width="5" fill="none" stroke-linecap="round"/>
+    <path d="M 0 -10 Q 8 -3, 3 8 Q 0 13, -3 10" stroke="#C9A96E" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <path d="M -13 18 Q 0 23, 13 18" stroke="#C9A96E" stroke-width="4" fill="none" stroke-linecap="round"/>
+  </g>
+</svg>
