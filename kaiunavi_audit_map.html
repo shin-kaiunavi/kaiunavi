@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>開運ナビ 全セクション設計図・検証リスト</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@200;300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{
+    background:#1a1508;
+    color:#f0e8d0;
+    font-family:'Noto Serif JP',serif;
+    padding:30px 20px 60px;
+    line-height:1.8;
+  }
+  .container{max-width:900px;margin:0 auto;}
+  .header{text-align:center;margin-bottom:40px;padding-bottom:20px;border-bottom:1px solid rgba(201,169,110,0.3);}
+  h1{font-size:24px;font-weight:400;letter-spacing:0.25em;color:#c9a96e;margin-bottom:8px;}
+  .sub{font-size:11px;color:#9e9088;letter-spacing:0.2em;}
+  .urgent-alert{
+    background:linear-gradient(135deg,#5c1515,#3c0a0a);
+    border:2px solid #ff4444;
+    border-radius:12px;
+    padding:20px 24px;
+    margin-bottom:30px;
+    box-shadow:0 0 30px rgba(255,68,68,0.3);
+  }
+  .urgent-alert .title{font-size:14px;color:#ffaaaa;letter-spacing:0.2em;margin-bottom:10px;font-weight:700;}
+  .urgent-alert .body{font-size:13px;color:#ffe0e0;line-height:2;}
+  
+  h2{
+    font-size:16px;
+    font-weight:500;
+    letter-spacing:0.25em;
+    color:#c9a96e;
+    margin-top:40px;
+    margin-bottom:20px;
+    padding-left:14px;
+    border-left:4px solid #c9a96e;
+  }
+  
+  .section-card{
+    background:rgba(26,21,8,0.7);
+    border:1px solid rgba(201,169,110,0.25);
+    border-radius:14px;
+    padding:20px 24px;
+    margin-bottom:16px;
+    transition:all 0.3s;
+  }
+  .section-card.priority-high{border-color:#ff6b6b;background:linear-gradient(135deg,rgba(50,10,10,0.7),rgba(26,21,8,0.7));}
+  .section-card.priority-mid{border-color:#ffc656;}
+  .section-card.verified{border-color:#66cc77;}
+  
+  .section-header{display:flex;align-items:center;gap:12px;margin-bottom:12px;}
+  .section-num{
+    font-size:20px;
+    font-weight:700;
+    color:#c9a96e;
+    letter-spacing:0.1em;
+    min-width:38px;
+  }
+  .section-title{
+    font-size:15px;
+    font-weight:500;
+    letter-spacing:0.15em;
+    color:#e8d8b0;
+    flex:1;
+  }
+  .status-badge{
+    font-size:10px;
+    padding:4px 12px;
+    border-radius:12px;
+    letter-spacing:0.1em;
+    font-weight:500;
+  }
+  .status-bug{background:#661818;color:#ffaaaa;border:1px solid #ff6b6b;}
+  .status-verify{background:#665518;color:#ffe0aa;border:1px solid #ffc656;}
+  .status-unknown{background:#303030;color:#aaaaaa;border:1px solid #555;}
+  .status-ok{background:#1a5522;color:#c8ffca;border:1px solid #66cc77;}
+  
+  .detail-grid{
+    display:grid;
+    grid-template-columns:90px 1fr;
+    gap:8px 16px;
+    font-size:12px;
+    margin-top:10px;
+    padding-top:10px;
+    border-top:1px dashed rgba(201,169,110,0.2);
+  }
+  .detail-label{color:#c9a96e;letter-spacing:0.1em;font-weight:500;}
+  .detail-value{color:#d8d0b8;line-height:1.9;}
+  
+  .bug-detail{
+    background:rgba(100,20,20,0.3);
+    border:1px dashed #ff6b6b;
+    border-radius:8px;
+    padding:10px 14px;
+    margin-top:10px;
+    font-size:11px;
+    color:#ffb0b0;
+    line-height:2;
+  }
+  .bug-detail strong{color:#ff6b6b;}
+  .bug-detail code{
+    background:rgba(0,0,0,0.4);
+    color:#ffdd88;
+    padding:2px 6px;
+    border-radius:4px;
+    font-family:monospace;
+    font-size:10px;
+  }
+  
+  .verify-steps{
+    background:rgba(102,85,24,0.2);
+    border:1px dashed #ffc656;
+    border-radius:8px;
+    padding:10px 14px;
+    margin-top:10px;
+    font-size:11px;
+    color:#ffe0aa;
+    line-height:2;
+  }
+  
+  .footer{
+    text-align:center;
+    margin-top:50px;
+    padding-top:30px;
+    border-top:1px dashed rgba(201,169,110,0.2);
+    font-size:11px;
+    color:#9e9088;
+    letter-spacing:0.15em;
+  }
+  
+  .summary-box{
+    background:linear-gradient(135deg,rgba(30,30,20,0.8),rgba(20,20,10,0.8));
+    border:1px solid #c9a96e;
+    border-radius:14px;
+    padding:20px 24px;
+    margin-bottom:30px;
+  }
+  .summary-title{font-size:13px;color:#c9a96e;letter-spacing:0.2em;margin-bottom:14px;font-weight:500;}
+  .count-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
+  .count-item{text-align:center;padding:10px;background:rgba(0,0,0,0.3);border-radius:8px;}
+  .count-num{font-size:22px;font-weight:700;letter-spacing:0.05em;}
+  .count-label{font-size:10px;color:#9e9088;letter-spacing:0.1em;margin-top:4px;}
+  .count-bug .count-num{color:#ff6b6b;}
+  .count-verify .count-num{color:#ffc656;}
+  .count-unknown .count-num{color:#999;}
+  .count-ok .count-num{color:#66cc77;}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <div class="header">
+    <h1>開 運 ナ ビ 全 セ ク シ ョ ン 設 計 図</h1>
+    <p class="sub">検 証 リ ス ト ・ 2 0 2 6 . 4 . 1 9</p>
+  </div>
+
+  <!-- 緊急アラート -->
+  <div class="urgent-alert">
+    <div class="title">🚨 検 証 発 見 ： 重 大 バ グ 2 件</div>
+    <div class="body">
+      ① <strong>六星占術の命数計算が完全に間違い</strong><br>
+      しんちゃんの生年月日 1979/6/1 で「金星人」と判定（正解：天王星人）<br>
+      原因：<code>meisuu = (birthYear - 1900) % 60</code> という単純計算。<br>
+      本家の六星占術は生年+月+日+補正値による複雑な計算が必要。<br><br>
+      ② <strong>吉日カレンダーの開運日判定が間違い</strong><br>
+      2026/4 の一粒万倍日「最強吉日」が 4/11 に。正解は 4/20（甲子+一粒万倍）。<br>
+      2026/5 の天赦日・吉日判定もズレている可能性大。
+    </div>
+  </div>
+
+  <!-- サマリー -->
+  <div class="summary-box">
+    <div class="summary-title">◆ 検 証 状 況 サ マ リ ー</div>
+    <div class="count-grid">
+      <div class="count-item count-bug">
+        <div class="count-num">2</div>
+        <div class="count-label">バグ確定</div>
+      </div>
+      <div class="count-item count-verify">
+        <div class="count-num">8</div>
+        <div class="count-label">要検証</div>
+      </div>
+      <div class="count-item count-unknown">
+        <div class="count-num">4</div>
+        <div class="count-label">未確認</div>
+      </div>
+      <div class="count-item count-ok">
+        <div class="count-num">0</div>
+        <div class="count-label">検証済</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 基準点 -->
+  <h2>🔑 基 準 点 ・ 共 通 デ ー タ</h2>
+
+  <div class="section-card priority-mid">
+    <div class="section-header">
+      <div class="section-num">A</div>
+      <div class="section-title">生 年 月 日 入 力 ・ 基 本 情 報</div>
+      <span class="status-badge status-ok">OK</span>
+    </div>
+    <div class="detail-grid">
+      <div class="detail-label">入力</div>
+      <div class="detail-value">姓・名・呼び名・生年月日・性別</div>
+      <div class="detail-label">出力</div>
+      <div class="detail-value">以降すべての計算の基準データ</div>
+    </div>
+  </div>
+
+  <div class="section-card verified">
+    <div class="section-header">
+      <div class="section-num">B</div>
+      <div class="section-title">干 支 計 算 （ 十 二 支 ）</div>
+      <span class="status-badge status-verify">要検証</span>
+    </div>
+    <div class="detail-grid">
+      <div class="detail-label">入力</div>
+      <div class="detail-value">生年</div>
+      <div class="detail-label">計算</div>
+      <div class="detail-value">(year - 1900) % 12 → 子丑寅卯辰巳午未申酉戌亥</div>
+      <div class="detail-label">出力</div>
+      <div class="detail-value">十二支インデックス（0-11）</div>
+    </div>
+    <div class="verify-steps">
+      ✅ しんちゃん 1979年 → 未年（正解） ※干支は早見表と一致<br>
+      ただし 2月3日以前の生まれは前年の干支になる伝統あり。コードが「節分以前は前年」に対応してるか要確認。
+    </div>
+  </div>
+
+  <!-- 各セクション -->
+  <h2>📊 各 セ ク シ ョ ン の ロ ジ ッ ク</h2>
+
+  <div class="section-card priority-high">
+    <div class="section-header">
+      <div class="section-num">1</div>
+      <div class="section-title">守 護 仏 の 加 護</div>
+      <span class="status-badge status-verify">要検証</span>
+    </div>
+    <div class="detail-grid">
+      <div class="detail-label">入力</div>
+      <div class="detail-value">十二支</div>
+      <div class="detail-label">掛け合わせ</div>
+      <div class="detail-value">干支 × 守護仏マスター（8柱）</div>
+      <div class="detail-label">出力</div>
+      <div class="detail-value">守護仏名・梵字・真言・色</div>
+    </div>
+    <div class="verify-steps">
+      ✅ 干支→守護仏対応表：子=千手観音 / 丑寅=虚空蔵 / 卯=文殊 / 辰巳=普賢 / 午=勢至 / 未申=大日如来 / 酉=不動明王 / 戌亥=阿弥陀<br>
+      ⚠️ この対応表が正しいか、コードと突き合わせて確認必要。
+    </div>
+  </div>
+
+  <div class="section-card">
+    <div class="section-header">
+      <div class="section-num">2</div>
+      <div class="section-title">今 日 の メ ッ セ ー ジ （ A I 日 替 わ り ）</div>
+      <span class="status-badge status-unknown">未確認</span>
+    </div>
+    <div class="detail-grid">
+      <div class="detail-label">入力</div>
+      <div class="detail-value">守護仏・名前・曜日・テーマ（朝/昼/夜）</div>
+      <div class="detail-label">掛け合わせ</div>
+      <div class="detail-value">Claude API で生成</div>
+      <div class="detail-label">出力</div>
+      <div class="detail-value">パーソナライズされた一言</div>
+    </div>
+    <div class="verify-steps">
+      APIベースなので計算バグの可能性は低い。プロンプトの内容と結果の妥当性を確認。
+    </div>
+  </div>
+
+  <div class="section-card priority-high">
+    <div class="section-header">
+      <div class="section-num">3</div>
+      <div class="section-title">基 本 命 式 （ 四 柱 推 命 ？ ）</div>
+      <span class="status-badge status-verify">要検証</span>
+    </div>
+    <div class="detail-grid">
+      <div class="detail-label">入力</div>
+      <div class="detail-value">生年月日（+ 出生時刻？）</div>
+      <div class="detail-label">掛け合わせ</div>
+      <div class="detail-value">年柱・月柱・日柱・十干・十二支 × 五行</div>
+      <div class="detail-label">出力</div>
+      <div class="detail-value">命式・通変星・大運</div>
+    </div>
+    <div class="verify-steps">
+      ⚠️ 四柱推命の計算は超複雑（節入り・真太陽時補正・立春起点）。<br>
+      コード内に calcDaun / buildShichuHTML / getYearZhi などが見える。検証必須。
+    </div>
+  </div>
+
+  <div class="section-card priority-high">
+    <div class="section-header">
+      <div class="section-num">4</div>
+      <div class="section-title">運 勢 （ 年 運 ・ 月 運 ）</div>
+      <span class="status-badge status-verify">要検証</span>
+    </div>
+    <div class="detail-grid">
+      <div class="detail-label">入力</div>
+      <div class="detail-value">生年月日・今年の干支</div>
+      <div class="detail-label">掛け合わせ</div>
+      <div class="detail-value">genFortune関数 / seed値ベースの疑似乱数</div>
+      <div class="detail-label">出力</div>
+      <div class="detail-value">全体運・仕事運・金運・恋愛運スコア</div>
+    </div>
+    <div class="bug-detail">
+      <strong>⚠️ 問題点:</strong> コード内の genFortune は <code>(seed+o*17)%58+38</code> で数値を出してる。<br>
+      これは <strong>実際の運勢計算ではなく、seed値ベースの疑似乱数</strong>。<br>
+      つまり「運勢」として表示されてるのは、意味のない数値の可能性あり。
+    </div>
+  </div>
+
+  <div class="section-card priority-high">
+    <div class="section-header">
+      <div class="section-num">5</div>
+      <div class="section-title">今 日 ・ 明 日 の 運 気 ・ 運 気 の 流 れ</div>
+      <span class="status-badge status-verify">要検証</span>
+    </div>
+    <div class="detail-grid">
+      <div class="detail-label">入力</div>
+      <div class="detail-value">生年月日・今日の日付</div>
+      <div class="detail-label">掛け合わせ</div>
+      <div class="detail-value">getUnkiScore関数 + グラフ描画</div>
+      <div class="detail-label">出力</div>
+      <div class="detail-value">運気スコア・グラフ</div>
+    </div>
+    <div class="verify-steps">
+      関数 getUnkiScore の計算根拠を要確認。疑似乱数の可能性あり。
+    </div>
+  </div>
+
+  <div class="section-card priority-high">
+    <div class="section-header">
+      <div class="section-num">6</div>
+      <div class="section-title">吉 日 カ レ ン ダ ー</div>
+      <span class="status-badge status-bug">バグ確定</span>
+    </div>
+    <div class="detail-grid">
+      <div class="detail-label">入力</div>
+      <div class="detail-value">年・月</div>
+      <div class="detail-label">掛け合わせ</div>
+      <div class="detail-value">計算式 or ハードコードされた暦データ</div>
+      <div class="detail-label">出力</div>
+      <div class="detail-value">一粒万倍日・天赦日・大安・寅の日・巳の日</div>
+    </div>
+    <div class="bug-detail">
+      <strong>🚨 確定バグ:</strong> 2026年4月の「最強吉日」が 4/11 に出る。<br>
+      <strong>正解:</strong> 4/20（甲子+一粒万倍=四重以上の大開運日）が最強のはず。<br>
+      <strong>対処:</strong> べんもう住職PDFで記録した 2026年大開運日カレンダー（記憶#16）を正解値として適用。
+    </div>
+  </div>
+
+  <div class="section-card priority-high">
+    <div class="section-header">
+      <div class="section-num">7</div>
+      <div class="section-title">今 年 の 運 気 注 意 （ 大 殺 界 ・ 厄 年 ）</div>
+      <span class="status-badge status-bug">バグ確定</span>
+    </div>
+    <div class="detail-grid">
+      <div class="detail-label">入力</div>
+      <div class="detail-value">生年月日・性別</div>
+      <div class="detail-label">掛け合わせ</div>
+      <div class="detail-value">運命数計算 × 大殺界表</div>
+      <div class="detail-label">出力</div>
+      <div class="detail-value">大殺界判定・厄年判定</div>
+    </div>
+    <div class="bug-detail">
+      <strong>🚨 確定バグ:</strong> しんちゃん 1979/6/1 → 「金星人 命数19」<br>
+      <strong>正解:</strong> 天王星人 命数36<br>
+      <strong>原因コード（1987行目）:</strong><br>
+      <code>meisuu = ((birthYear - 1900) % 60 + 60) % 60;</code><br>
+      単純な割り算。本家の六星占術は<strong>生年・月・日・補正値</strong>の複雑な計算式が必要。<br>
+      <strong>影響:</strong> 大殺界の判定も、全員間違ってる可能性大。
+    </div>
+  </div>
+
+  <div class="section-card priority-high">
+    <div class="section-header">
+      <div class="section-num">8</div>
+      <div class="section-title">吉 方 位 マ ッ プ</div>
+      <span class="status-badge status-verify">要検証</span>
+    </div>
+    <div class="detail-grid">
+      <div class="detail-label">入力</div>
+      <div class="detail-value">生年・今年</div>
+      <div class="detail-label">掛け合わせ</div>
+      <div class="detail-value">九星気学の方位盤</div>
+      <div class="detail-label">出力</div>
+      <div class="detail-value">8方位の吉凶</div>
+    </div>
+    <div class="verify-steps">
+      べんもう住職PDFに記録した 2026年吉方位=西・東北・南西（記憶#14）と突き合わせ必要。<br>
+      九星気学は本命星計算も複雑なので別途検証。
+    </div>
+  </div>
+
+  <div class="section-card">
+    <div class="section-header">
+      <div class="section-num">9</div>
+      <div class="section-title">神 社 ・ お 寺 検 索</div>
+      <span class="status-badge status-ok">OK</span>
+    </div>
+    <div class="detail-grid">
+      <div class="detail-label">入力</div>
+      <div class="detail-value">位置情報・守護仏キーワード</div>
+      <div class="detail-label">掛け合わせ</div>
+      <div class="detail-value">OpenStreetMap API</div>
+      <div class="detail-label">出力</div>
+      <div class="detail-value">近くの神社・寺院</div>
+    </div>
+    <div class="verify-steps">
+      外部APIなので計算バグの心配なし。
+    </div>
+  </div>
+
+  <!-- プレミアム機能 -->
+  <h2>✨ プ レ ミ ア ム 機 能</h2>
+
+  <div class="section-card priority-mid">
+    <div class="section-header">
+      <div class="section-num">P1</div>
+      <div class="section-title">カ バ ラ 数 秘 術</div>
+      <span class="status-badge status-verify">要検証</span>
+    </div>
+    <div class="detail-grid">
+      <div class="detail-label">入力</div>
+      <div class="detail-value">姓・名（カナ）・生年月日</div>
+      <div class="detail-label">掛け合わせ</div>
+      <div class="detail-value">文字→数字変換 + 桁和計算</div>
+      <div class="detail-label">出力</div>
+      <div class="detail-value">運命数・天命数・誕生数（全12種の解説）</div>
+    </div>
+    <div class="verify-steps">
+      関数 calcKabala の計算式が本家カバラ数秘と一致するか要確認。
+    </div>
+  </div>
+
+  <div class="section-card priority-mid">
+    <div class="section-header">
+      <div class="section-num">P2</div>
+      <div class="section-title">姓 名 判 断</div>
+      <span class="status-badge status-verify">要検証</span>
+    </div>
+    <div class="detail-grid">
+      <div class="detail-label">入力</div>
+      <div class="detail-value">姓・名（漢字）</div>
+      <div class="detail-label">掛け合わせ</div>
+      <div class="detail-value">画数データベース × 五格計算</div>
+      <div class="detail-label">出力</div>
+      <div class="detail-value">天格・人格・地格・外格・総格 + 吉凶</div>
+    </div>
+    <div class="verify-steps">
+      関数 calcKaku / getStrokes の画数データベースが正確か要確認。
+    </div>
+  </div>
+
+  <div class="section-card">
+    <div class="section-header">
+      <div class="section-num">P3</div>
+      <div class="section-title">ラ ッ キ ー カ ラ ー</div>
+      <span class="status-badge status-unknown">未確認</span>
+    </div>
+    <div class="detail-grid">
+      <div class="detail-label">入力</div>
+      <div class="detail-value">干支・日付</div>
+      <div class="detail-label">掛け合わせ</div>
+      <div class="detail-value">24色パレット × 日付ローテーション</div>
+      <div class="detail-label">出力</div>
+      <div class="detail-value">7日間のカラーコーディネート</div>
+    </div>
+    <div class="verify-steps">
+      べんもう住職PDFのラッキーカラー（干支別）（記憶#14）と突き合わせ。
+    </div>
+  </div>
+
+  <div class="section-card priority-mid">
+    <div class="section-header">
+      <div class="section-num">P4</div>
+      <div class="section-title">相 性 （ A I 判 定 ・ 男 女 ）</div>
+      <span class="status-badge status-verify">要検証</span>
+    </div>
+    <div class="detail-grid">
+      <div class="detail-label">入力</div>
+      <div class="detail-value">自分と相手の生年月日</div>
+      <div class="detail-label">掛け合わせ</div>
+      <div class="detail-value">干支相性 × 五行 × カバラ × 守護仏ペア</div>
+      <div class="detail-label">出力</div>
+      <div class="detail-value">総合相性スコア・関係性ラベル</div>
+    </div>
+    <div class="verify-steps">
+      複数の判定を組み合わせてるので、基礎となる六星占術や干支計算が間違ってると全体が狂う。
+    </div>
+  </div>
+
+  <!-- その他 -->
+  <h2>⚙️ そ の 他 の 機 能</h2>
+
+  <div class="section-card">
+    <div class="section-header">
+      <div class="section-num">X1</div>
+      <div class="section-title">通 知 設 定</div>
+      <span class="status-badge status-ok">OK</span>
+    </div>
+  </div>
+
+  <div class="section-card">
+    <div class="section-header">
+      <div class="section-num">X2</div>
+      <div class="section-title">六 曜 計 算</div>
+      <span class="status-badge status-verify">要検証</span>
+    </div>
+    <div class="detail-grid">
+      <div class="detail-label">関数</div>
+      <div class="detail-value">calcRokuyo(y,m,d)</div>
+      <div class="detail-label">出力</div>
+      <div class="detail-value">大安・友引・先勝・赤口・先負・仏滅</div>
+    </div>
+    <div class="verify-steps">
+      六曜は旧暦ベース。単純な連番計算だとズレる。複数日で検証必要。
+    </div>
+  </div>
+
+  <!-- 次のステップ -->
+  <h2>🎯 修 正 の 優 先 順 位</h2>
+
+  <div class="section-card priority-high">
+    <div class="section-header">
+      <div class="section-title">最 優 先 ： 六 星 占 術 の 命 数 計 算 ロ ジ ッ ク</div>
+    </div>
+    <div class="detail-grid">
+      <div class="detail-label">作業</div>
+      <div class="detail-value">
+        本家の運命数計算式を調査 → コード書き換え<br>
+        参考：1979/6/1 → 命数36 が正解<br>
+        1900年基準の補正表が必要になりそう
+      </div>
+    </div>
+  </div>
+
+  <div class="section-card priority-high">
+    <div class="section-header">
+      <div class="section-title">優 先 度 高 ： 吉 日 カ レ ン ダ ー の デ ー タ 修 正</div>
+    </div>
+    <div class="detail-grid">
+      <div class="detail-label">作業</div>
+      <div class="detail-value">
+        べんもう住職PDFで記録した 2026年大開運日カレンダー を正解データとして反映<br>
+        ハードコードで書き込む方式が確実
+      </div>
+    </div>
+  </div>
+
+  <div class="section-card priority-mid">
+    <div class="section-header">
+      <div class="section-title">優 先 度 中 ： 運 勢 計 算 ( g e n F o r t u n e )</div>
+    </div>
+    <div class="detail-grid">
+      <div class="detail-label">作業</div>
+      <div class="detail-value">
+        seed値ベースの疑似乱数を廃止し、実際の占術ロジックに置き換え<br>
+        or 「エンタメ目的」と明記する
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <p>開 運 ナ ビ 全 セ ク シ ョ ン 設 計 図</p>
+    <p style="margin-top:8px;">次 回 作 業 開 始 の 羅 針 盤</p>
+  </div>
+
+</div>
+
+</body>
+</html>
