@@ -4327,11 +4327,112 @@ function calcDistance(lat1,lon1,lat2,lon2){var R=6371000;var dLat=(lat2-lat1)*Ma
 function formatDist(m){return m<1000?m+'m':(m/1000).toFixed(1)+'km';}
 function isGuardianMatch(name,deityName){var keywords=DEITY_SHRINE_KEYWORDS[deityName]||[];for(var i=0;i<keywords.length;i++){if(name.indexOf(keywords[i])>=0)return true;}return false;}
 
+// 検索リクエストID（競合する検索を無効化するため）
+var _shrineSearchId = 0;
+
 function searchNearbyShrine(deityName){
   var resultEl=document.getElementById('shrineResult');if(!resultEl)return;
   resultEl.innerHTML='<div class="shrine-loading"><div class="ai-loading-dot"></div><div class="ai-loading-dot"></div><div class="ai-loading-dot"></div><span>現在地を取得中...</span></div>';
   if(!navigator.geolocation){resultEl.innerHTML='<div class="shrine-error">⚠️ このブラウザは位置情報に対応していません。</div>';return;}
-  navigator.geolocation.getCurrentPosition(function(pos){var lat=pos.coords.latitude,lon=pos.coords.longitude;resultEl.innerHTML='<div class="shrine-loading"><div class="ai-loading-dot"></div><div class="ai-loading-dot"></div><div class="ai-loading-dot"></div><span>神社・お寺を検索中...</span></div>';fetchShrines(lat,lon,deityName,resultEl);},function(err){var msg=err.code===1?'位置情報へのアクセスが拒否されました。':err.code===2?'位置情報を取得できませんでした。':'位置情報の取得がタイムアウトしました。';resultEl.innerHTML='<div class="shrine-error">⚠️ '+msg+'</div>';},{timeout:10000,enableHighAccuracy:false});
+  navigator.geolocation.getCurrentPosition(function(pos){
+    var lat=pos.coords.latitude, lon=pos.coords.longitude;
+    var searchId = ++_shrineSearchId;
+
+    // 【新戦略】まず確実なフォールバックDBを即表示（待ち時間ゼロ）
+    // 「近所を探索中」バナー付きで表示し、Overpass成功時は差し替える
+    try{
+      var fallbackPlaces = SHRINE_FALLBACK_DB.map(function(s){
+        return {
+          lat: s.lat, lon: s.lon,
+          tags: {'name': s.name, 'religion': s.religion, 'addr:prefecture': s.pref},
+          _fallback: true
+        };
+      });
+      renderShrineResults(fallbackPlaces, lat, lon, deityName, resultEl, {
+        radius: null, fallback: true, searchingBackground: true
+      });
+    }catch(e){
+      console.error('Initial fallback render error:', e);
+      resultEl.innerHTML = '<div class="shrine-error">⚠️ 表示エラー：'+e.message+'</div>';
+    }
+
+    // 背景でOverpassを試す（成功すれば上書き）
+    fetchShrinesBackground(lat, lon, deityName, resultEl, searchId);
+  }, function(err){
+    var msg=err.code===1?'位置情報へのアクセスが拒否されました。':err.code===2?'位置情報を取得できませんでした。':'位置情報の取得がタイムアウトしました。';
+    resultEl.innerHTML='<div class="shrine-error">⚠️ '+msg+'</div>';
+  }, {timeout:10000, enableHighAccuracy:false});
+}
+
+// Overpassを背景で試す（失敗してもフォールバックが既に表示されている）
+function fetchShrinesBackground(lat, lon, deityName, resultEl, searchId){
+  var radiusEl = document.getElementById('shrineRadius');
+  var radius = radiusEl ? parseInt(radiusEl.value)*1000 : 5000;
+
+  var endpoints = [
+    'https://overpass-api.de/api/interpreter',
+    'https://lz4.overpass-api.de/api/interpreter',
+    'https://z.overpass-api.de/api/interpreter',
+    'https://overpass.kumi.systems/api/interpreter'
+  ];
+
+  var query = '[out:json][timeout:20];('
+    +'nwr["amenity"="place_of_worship"]["religion"~"shinto|buddhist"](around:'+radius+','+lat+','+lon+');'
+    +');out center 50;';
+
+  function tryOne(idx){
+    // 新しい検索が始まっていたら中断
+    if(searchId !== _shrineSearchId){ console.log('Stale search cancelled'); return; }
+    if(idx >= endpoints.length){
+      // 全エンドポイント失敗 → フォールバックのバナーを「全国案内」に更新
+      console.log('Background Overpass all failed, fallback remains');
+      var banner = document.getElementById('shrineBgStatus');
+      if(banner){
+        banner.innerHTML = '🏯 今回は全国の主要社をご案内しています';
+        banner.style.background = 'rgba(155,109,191,.08)';
+        banner.style.borderColor = 'rgba(155,109,191,.3)';
+        banner.style.color = '#c8a8e8';
+      }
+      return;
+    }
+
+    var url = endpoints[idx] + '?data=' + encodeURIComponent(query);
+    console.log('Background Overpass attempt '+(idx+1)+'/'+endpoints.length);
+
+    fetchWithTimeout(url, 3000).then(function(res){
+      if(searchId !== _shrineSearchId) throw new Error('stale');
+      if(!res.ok) throw new Error('HTTP '+res.status);
+      return res.json();
+    }).then(function(data){
+      if(searchId !== _shrineSearchId) return;
+      if(!data) return;
+      var elements = (data.elements||[]).map(function(el){
+        if(!el.lat && el.center){
+          return Object.assign({},el,{lat:el.center.lat,lon:el.center.lon});
+        }
+        return el;
+      }).filter(function(el){return el.lat;});
+
+      if(elements.length > 0){
+        // Overpass成功 → フォールバック表示を置き換える
+        console.log('Background Overpass succeeded with '+elements.length+' results, replacing fallback');
+        try{
+          renderShrineResults(elements, lat, lon, deityName, resultEl, {
+            radius: radius, fallback: false
+          });
+        }catch(e){
+          console.error('Render error on Overpass success:', e);
+        }
+      } else {
+        tryOne(idx + 1);
+      }
+    }).catch(function(err){
+      if(searchId !== _shrineSearchId) return;
+      console.warn('Background endpoint '+(idx+1)+' failed:', err.message||err);
+      tryOne(idx + 1);
+    });
+  }
+  tryOne(0);
 }
 
 // fetch with timeout (iOS Safari対策: AbortControllerに頼らず確実にタイムアウト発火)
@@ -4535,6 +4636,7 @@ function useFallbackDB(lat, lon, deityName, resultEl){
 function renderShrineResults(elements,myLat,myLon,deityName,resultEl,opts){
   opts = opts || {};
   var isFallback = !!opts.fallback;
+  var isSearchingBackground = !!opts.searchingBackground;
 
   if(!elements||elements.length===0){
     resultEl.innerHTML='<div class="shrine-empty">⛩ 指定範囲内に神社・お寺が見つかりませんでした。<br><span style="font-size:10px;">検索範囲を広げてみてください。</span></div>';
@@ -4647,19 +4749,30 @@ function renderShrineResults(elements,myLat,myLon,deityName,resultEl,opts){
     +'<div class="sanpai-count-badge" onclick="openSanpaichoList()">📖 参拝帖 '+(sanpaiCount>0?'('+sanpaiCount+')':'')+' ›</div>'
     +'</div>';
 
-  // フォールバック時の案内
+  // フォールバック時の案内（背景検索中ならその旨を表示）
   var fallbackNoticeHTML = '';
   if(isFallback){
-    fallbackNoticeHTML = '<div class="shrine-fallback-notice">'
-      +'<div style="font-size:28px;margin-bottom:10px;opacity:.6;">🕯️</div>'
-      +'<div style="font-size:12px;color:var(--text);line-height:1.9;margin-bottom:10px;">'
-      +'神社・お寺のデータサーバーが<br>混み合っているようです。'
-      +'</div>'
-      +'<div style="font-size:11px;color:var(--muted);line-height:1.8;">'
-      +'最後の命綱として、<br>全国の主要な社をご案内します。<br>近所で見つからなければ、<br>少し時間をおいてお試しください。'
-      +'</div>'
-      +'<div style="padding:8px 20px;margin-top:14px;background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.25);border-radius:8px;color:var(--gold);font-size:11px;cursor:pointer;display:inline-block;" onclick="searchNearbyShrine(\''+deityName+'\')">↺ もう一度試す</div>'
-      +'</div>';
+    if(isSearchingBackground){
+      // 検索中：「全国リストを仮表示、近所を探しています」バナー
+      fallbackNoticeHTML = '<div id="shrineBgStatus" style="background:rgba(201,168,76,.06);border:1px solid rgba(201,168,76,.3);border-radius:10px;padding:10px 14px;margin-bottom:14px;text-align:center;font-size:11px;color:var(--gold);letter-spacing:.08em;line-height:1.7;">'
+        +'<span class="ai-loading-dot" style="display:inline-block;vertical-align:middle;margin-right:4px;"></span>'
+        +'<span class="ai-loading-dot" style="display:inline-block;vertical-align:middle;margin-right:4px;"></span>'
+        +'<span class="ai-loading-dot" style="display:inline-block;vertical-align:middle;margin-right:8px;"></span>'
+        +'近所の社を探索中...（全国リストを仮表示）'
+        +'</div>';
+    } else {
+      // 完全失敗時：命綱として案内
+      fallbackNoticeHTML = '<div id="shrineBgStatus" class="shrine-fallback-notice">'
+        +'<div style="font-size:28px;margin-bottom:10px;opacity:.6;">🕯️</div>'
+        +'<div style="font-size:12px;color:var(--text);line-height:1.9;margin-bottom:10px;">'
+        +'今回は全国の主要社をご案内しています'
+        +'</div>'
+        +'<div style="font-size:11px;color:var(--muted);line-height:1.8;">'
+        +'近所の社をお探しの場合は、<br>時間をおいて再度お試しください。'
+        +'</div>'
+        +'<div style="padding:8px 20px;margin-top:14px;background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.25);border-radius:8px;color:var(--gold);font-size:11px;cursor:pointer;display:inline-block;" onclick="searchNearbyShrine(\''+deityName+'\')">↺ もう一度試す</div>'
+        +'</div>';
+    }
   }
 
   // 【今日の出会い】HTMLセクション
