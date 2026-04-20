@@ -4334,31 +4334,52 @@ function searchNearbyShrine(deityName){
   navigator.geolocation.getCurrentPosition(function(pos){var lat=pos.coords.latitude,lon=pos.coords.longitude;resultEl.innerHTML='<div class="shrine-loading"><div class="ai-loading-dot"></div><div class="ai-loading-dot"></div><div class="ai-loading-dot"></div><span>神社・お寺を検索中...</span></div>';fetchShrines(lat,lon,deityName,resultEl);},function(err){var msg=err.code===1?'位置情報へのアクセスが拒否されました。':err.code===2?'位置情報を取得できませんでした。':'位置情報の取得がタイムアウトしました。';resultEl.innerHTML='<div class="shrine-error">⚠️ '+msg+'</div>';},{timeout:10000,enableHighAccuracy:false});
 }
 
-// fetch with timeout (iOS Safari対策: タイムアウトなしだと永久に待ち続ける)
+// fetch with timeout (iOS Safari対策: AbortControllerに頼らず確実にタイムアウト発火)
+// Promise.race方式: 内部のfetchが永久ペンディングでも、指定ms後に必ずrejectする
 function fetchWithTimeout(url, timeoutMs){
-  // AbortControllerが使えない超古いブラウザ向けフォールバック
-  if(typeof AbortController === 'undefined'){
-    return new Promise(function(resolve, reject){
-      var done = false;
-      var timer = setTimeout(function(){
-        if(!done){ done = true; reject(new Error('Timeout after '+timeoutMs+'ms')); }
-      }, timeoutMs);
-      fetch(url).then(function(res){
-        if(!done){ done = true; clearTimeout(timer); resolve(res); }
+  var settled = false;
+  return new Promise(function(resolve, reject){
+    var timer = setTimeout(function(){
+      if(settled) return;
+      settled = true;
+      reject(new Error('Timeout after '+timeoutMs+'ms'));
+    }, timeoutMs);
+    // AbortControllerも併用（効けばなお良い、効かなくてもタイマーが救う）
+    var opts = {};
+    try{
+      if(typeof AbortController !== 'undefined'){
+        var ctrl = new AbortController();
+        opts.signal = ctrl.signal;
+        // タイマー発火時にabortもかける
+        var origTimer = timer;
+        clearTimeout(timer);
+        timer = setTimeout(function(){
+          if(settled) return;
+          settled = true;
+          try{ ctrl.abort(); }catch(e){}
+          reject(new Error('Timeout after '+timeoutMs+'ms'));
+        }, timeoutMs);
+      }
+    }catch(e){}
+
+    try{
+      fetch(url, opts).then(function(res){
+        if(settled) return;
+        settled = true;
+        clearTimeout(timer);
+        resolve(res);
       }).catch(function(err){
-        if(!done){ done = true; clearTimeout(timer); reject(err); }
+        if(settled) return;
+        settled = true;
+        clearTimeout(timer);
+        reject(err);
       });
-    });
-  }
-  var controller = new AbortController();
-  var timeoutId = setTimeout(function(){ controller.abort(); }, timeoutMs);
-  return fetch(url, {signal: controller.signal}).then(function(res){
-    clearTimeout(timeoutId);
-    return res;
-  }).catch(function(err){
-    clearTimeout(timeoutId);
-    if(err.name === 'AbortError'){ throw new Error('Timeout after '+timeoutMs+'ms'); }
-    throw err;
+    }catch(e){
+      if(settled) return;
+      settled = true;
+      clearTimeout(timer);
+      reject(e);
+    }
   });
 }
 
@@ -4381,6 +4402,33 @@ function fetchShrines(lat,lon,deityName,resultEl){
     'https://overpass.kumi.systems/api/interpreter'
   ];
 
+  // 【最重要】完了ガード：どこかで既に完了したらこれ以上動かない
+  // グローバルセーフティタイマー：何があっても20秒経ったら強制フォールバック
+  var finished = false;
+  var globalSafetyTimer = setTimeout(function(){
+    if(finished) return;
+    finished = true;
+    console.log('★ Global safety timeout (20s) fired, forcing fallback DB');
+    useFallbackDB(lat, lon, deityName, resultEl);
+  }, 20000);
+
+  function completeWithResults(elements, radius){
+    if(finished) return;
+    finished = true;
+    clearTimeout(globalSafetyTimer);
+    renderShrineResults(elements, lat, lon, deityName, resultEl, {
+      radius: radius, fallback: false
+    });
+  }
+  function completeWithFallback(){
+    if(finished) return;
+    finished = true;
+    clearTimeout(globalSafetyTimer);
+    useFallbackDB(lat, lon, deityName, resultEl);
+  }
+  // このfetchShrines呼び出しスコープ内でグローバルに参照できるようにする
+  window._shrineSearchFinished = function(){ return finished; };
+
   function buildQuery(radius){
     return '[out:json][timeout:20];('
       +'nwr["amenity"="place_of_worship"]["religion"~"shinto|buddhist"](around:'+radius+','+lat+','+lon+');'
@@ -4398,10 +4446,11 @@ function fetchShrines(lat,lon,deityName,resultEl){
 
   // 1つの半径で4エンドポイント全部試す
   function tryRadius(tierIdx){
+    if(finished) return; // 既に完了していれば何もしない
     if(tierIdx >= tiers.length){
       // 全ティア全エンドポイント全滅 → フォールバックDB起動
       console.log('All tiers exhausted, using fallback DB');
-      useFallbackDB(lat, lon, deityName, resultEl);
+      completeWithFallback();
       return;
     }
 
@@ -4416,6 +4465,7 @@ function fetchShrines(lat,lon,deityName,resultEl){
     }
 
     function tryEndpoint(epIdx){
+      if(finished) return; // 既に完了していれば何もしない
       if(epIdx >= endpoints.length){
         // このティアの全エンドポイントが失敗 → 次のティアへ
         console.log('Tier '+radius+'m: all endpoints failed, moving to next tier');
@@ -4438,26 +4488,25 @@ function fetchShrines(lat,lon,deityName,resultEl){
         +'<div style="padding:8px 18px;background:rgba(201,168,76,.06);border:1px solid rgba(201,168,76,.25);border-radius:8px;color:var(--gold);font-size:11px;cursor:pointer;display:inline-block;" onclick="useFallbackDB('+lat+','+lon+',\''+deityName+'\',document.getElementById(\'shrineResult\'))">🕯 全国の主要社を見る</div>'
         +'</div>';
 
-      // 5秒タイムアウト（iOS Safari対策: タイムアウトなしだと永久に待つ）
-      fetchWithTimeout(url, 5000).then(function(res){
+      // 4秒タイムアウト（グローバル20秒以内に収まるように）
+      fetchWithTimeout(url, 4000).then(function(res){
+        if(finished) return; // 既に完了していれば破棄
         if(!res.ok) throw new Error('HTTP '+res.status);
         return res.json();
       }).then(function(data){
+        if(finished) return;
+        if(!data) return; // res.okがfalseだった場合のため
         var elements = normalizeElements(data);
         console.log('Got '+elements.length+' results at tier '+radius+'m');
 
         if(elements.length > 0){
-          // 成功
-          renderShrineResults(elements, lat, lon, deityName, resultEl, {
-            radius: radius,
-            fallback: false
-          });
+          completeWithResults(elements, radius);
         } else {
-          // 0件 → このティアでは見つからなかった、次のティアへ
           console.log('Tier '+radius+'m: zero results, trying wider radius');
           tryRadius(tierIdx + 1);
         }
       }).catch(function(err){
+        if(finished) return;
         console.warn('Tier '+radius+'m endpoint '+(epIdx+1)+' failed:', err.message||err);
         tryEndpoint(epIdx + 1);
       });
