@@ -233,6 +233,43 @@ input::placeholder{color:var(--muted);font-size:16px;}
 .shrine-error{text-align:center;padding:20px;color:var(--muted);font-size:12px;line-height:1.8;}
 .shrine-radius-note{font-size:10px;color:var(--muted);text-align:center;margin-top:10px;letter-spacing:.1em;}
 .shrine-empty{text-align:center;padding:24px 16px;color:var(--muted);font-size:12px;line-height:1.8;}
+/* 参拝帖 styles */
+.sanpai-btn{display:inline-flex;align-items:center;gap:5px;margin-top:6px;margin-right:6px;padding:5px 11px;font-size:10px;color:var(--gold-light);background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.35);border-radius:14px;cursor:pointer;letter-spacing:.05em;transition:background .2s,border-color .2s;text-decoration:none;}
+.sanpai-btn:active{background:rgba(201,168,76,.18);border-color:var(--gold);}
+.sanpai-btn.recorded{background:rgba(106,177,135,.1);border-color:rgba(106,177,135,.4);color:#6ab187;}
+.sanpai-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;gap:10px;}
+.sanpai-count-badge{font-size:10px;padding:4px 10px;background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.3);border-radius:16px;color:var(--gold);cursor:pointer;display:inline-flex;align-items:center;gap:5px;transition:background .2s;}
+.sanpai-count-badge:active{background:rgba(201,168,76,.2);}
+.sanpai-entry{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:10px;position:relative;}
+.sanpai-entry-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px;gap:8px;}
+.sanpai-entry-date{font-size:10px;color:var(--gold);letter-spacing:.15em;margin-bottom:4px;font-family:var(--serif);}
+.sanpai-entry-name{font-family:var(--serif);font-size:15px;font-weight:800;color:var(--gold-light);line-height:1.4;}
+.sanpai-entry-meta{font-size:10px;color:var(--muted);margin-top:5px;line-height:1.6;}
+.sanpai-entry-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px;}
+.sanpai-entry-tag{font-size:9px;padding:2px 8px;background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.25);border-radius:10px;color:var(--gold);letter-spacing:.05em;}
+.sanpai-entry-msg{font-size:11px;color:var(--text);line-height:1.9;padding:10px 12px;background:rgba(0,0,0,.2);border-left:2px solid rgba(201,168,76,.4);border-radius:6px;margin-top:10px;font-style:italic;}
+.sanpai-entry-actions{display:flex;gap:8px;margin-top:10px;}
+.sanpai-entry-action{flex:1;font-size:10px;padding:7px;text-align:center;border-radius:8px;cursor:pointer;text-decoration:none;transition:background .2s;}
+.sanpai-entry-action.map{background:rgba(91,155,213,.08);border:1px solid rgba(91,155,213,.3);color:var(--blue);}
+.sanpai-entry-action.map:active{background:rgba(91,155,213,.18);}
+.sanpai-entry-action.delete{background:rgba(192,57,43,.06);border:1px solid rgba(192,57,43,.25);color:#c97060;}
+.sanpai-entry-action.delete:active{background:rgba(192,57,43,.15);}
+.sanpai-empty{text-align:center;padding:40px 20px;color:var(--muted);}
+.sanpai-empty-icon{font-size:48px;opacity:.25;margin-bottom:14px;}
+.sanpai-empty-text{font-size:12px;line-height:1.9;}
+.sanpai-record-modal-body{padding:0 20px 20px;}
+.sanpai-record-info{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:14px;}
+.sanpai-record-label{font-size:10px;color:var(--gold);letter-spacing:.2em;margin-bottom:6px;}
+.sanpai-record-name{font-family:var(--serif);font-size:17px;font-weight:800;color:var(--gold-light);margin-bottom:6px;}
+.sanpai-record-sub{font-size:11px;color:var(--muted);line-height:1.7;}
+.sanpai-textarea{width:100%;min-height:90px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px 14px;color:var(--text);font-family:'Noto Serif JP',serif;font-size:14px;outline:none;resize:vertical;line-height:1.8;}
+.sanpai-textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,168,76,.15);}
+.sanpai-save-btn{width:100%;background:linear-gradient(135deg,#f0d080,var(--gold),#a07830);border:none;border-radius:12px;padding:14px;color:#0d0b08;font-family:var(--serif);font-size:14px;font-weight:800;letter-spacing:.15em;cursor:pointer;margin-top:12px;box-shadow:0 4px 16px rgba(201,168,76,.25);}
+.sanpai-save-btn:active{opacity:.85;transform:scale(.99);}
+.shrine-quiet-badge{font-size:9px;padding:2px 8px;background:rgba(155,109,191,.08);border:1px solid rgba(155,109,191,.25);border-radius:10px;color:#c8a8e8;letter-spacing:.05em;display:inline-block;margin-top:5px;}
+.shrine-famous-badge{font-size:9px;padding:2px 8px;background:rgba(91,155,213,.08);border:1px solid rgba(91,155,213,.25);border-radius:10px;color:var(--blue);letter-spacing:.05em;display:inline-block;margin-top:5px;}
+.shrine-fallback-notice{background:rgba(201,168,76,.04);border:1px solid rgba(201,168,76,.2);border-radius:12px;padding:14px 16px;margin-bottom:14px;text-align:center;}
+.shrine-tier-msg{font-size:10px;color:var(--muted);text-align:center;padding:8px;letter-spacing:.1em;}
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:100;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s;}
 .modal-overlay.open{opacity:1;pointer-events:all;}
 .modal-sheet{background:var(--surface);border-radius:20px 20px 0 0;width:100%;max-width:500px;transform:translateY(100%);transition:transform .3s ease;display:flex;flex-direction:column;max-height:88vh;}
@@ -4173,8 +4210,24 @@ function buildShrineUI(deityName) {
     +'<span>📍</span><span>現在地で神社・お寺を検索</span>'
     +'</button>'
     +'<div style="font-size:10px;color:var(--muted);margin-top:8px;text-align:center;">位置情報の許可が必要です</div>'
+    +'</div>';
+
+  // 参拝帖アクセス（検索前からいつでも開ける）
+  var sanpaiList = getSanpaicho();
+  var sanpaiCount = sanpaiList.length;
+  html += '<div onclick="openSanpaichoList()" style="background:linear-gradient(135deg,rgba(201,168,76,.06),rgba(201,168,76,.02));border:1px solid rgba(201,168,76,.3);border-radius:14px;padding:16px;margin-bottom:14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:12px;">'
+    +'<div style="display:flex;align-items:center;gap:12px;">'
+    +'<span style="font-size:28px;">📖</span>'
+    +'<div>'
+    +'<div style="font-size:9px;letter-spacing:.3em;color:var(--gold);margin-bottom:2px;">SANPAICHO</div>'
+    +'<div style="font-family:var(--serif);font-size:15px;font-weight:800;color:var(--gold-light);">参 拝 帖</div>'
+    +'<div style="font-size:10px;color:var(--muted);margin-top:3px;">'+(sanpaiCount>0?'これまで結んだご縁 · '+sanpaiCount+'件':'訪れた社を記録していきましょう')+'</div>'
     +'</div>'
-    +'<div id="shrineResult"></div>';
+    +'</div>'
+    +'<div style="font-size:24px;color:var(--gold);opacity:.6;">›</div>'
+    +'</div>';
+
+  html += '<div id="shrineResult"></div>';
 
   return html;
 }
@@ -4280,69 +4333,124 @@ function searchNearbyShrine(deityName){
 
 function fetchShrines(lat,lon,deityName,resultEl){
   var radiusEl = document.getElementById('shrineRadius');
-  var radius = radiusEl ? parseInt(radiusEl.value)*1000 : 3000;
-  
-  // 極限までシンプル化したクエリ（GETで送るのでコンパクトに）
-  var query='[out:json][timeout:20];('
-    +'nwr["amenity"="place_of_worship"]["religion"~"shinto|buddhist"](around:'+radius+','+lat+','+lon+');'
-    +');out center 40;';
-  
-  // CORS対応の公式エンドポイント（GETで使える）
+  var userRadius = radiusEl ? parseInt(radiusEl.value)*1000 : 5000;
+
+  // 半径ティア：ユーザー指定から開始し、足りなければ段階的に拡大
+  // 小さな社を優先する哲学：まずは近場から探す
+  var tiers = [];
+  if(userRadius <= 1000){ tiers = [1000, 3000, 5000, 10000]; }
+  else if(userRadius <= 3000){ tiers = [3000, 5000, 10000]; }
+  else if(userRadius <= 5000){ tiers = [5000, 8000, 12000]; }
+  else { tiers = [userRadius, userRadius*1.5, userRadius*2]; }
+
   var endpoints = [
     'https://overpass-api.de/api/interpreter',
     'https://lz4.overpass-api.de/api/interpreter',
     'https://z.overpass-api.de/api/interpreter',
     'https://overpass.kumi.systems/api/interpreter'
   ];
-  
-  function tryEndpoint(idx){
-    if(idx >= endpoints.length){
-      // 全滅の場合 - 優しいメッセージ
-      resultEl.innerHTML='<div style="text-align:center;padding:24px 16px;background:rgba(201,168,76,.04);border:1px solid rgba(201,168,76,.15);border-radius:12px;">'
-        +'<div style="font-size:34px;margin-bottom:12px;opacity:.7;">🕯️</div>'
-        +'<div style="font-size:13px;color:var(--text);line-height:1.9;margin-bottom:14px;">今、神社・お寺のデータサーバーが<br>少し混み合っているようです。</div>'
-        +'<div style="font-size:11px;color:var(--muted);line-height:1.8;margin-bottom:16px;">感謝の心があれば、いつでもどこでも、<br>手を合わせることはできます。<br>少し時間をおいて、また開いてみてください。</div>'
-        +'<div style="padding:10px 22px;background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.3);border-radius:8px;color:var(--gold);font-size:12px;cursor:pointer;display:inline-block;" onclick="searchNearbyShrine(\''+deityName+'\')">↺ もう一度試す</div>'
-        +'</div>';
+
+  function buildQuery(radius){
+    return '[out:json][timeout:20];('
+      +'nwr["amenity"="place_of_worship"]["religion"~"shinto|buddhist"](around:'+radius+','+lat+','+lon+');'
+      +');out center 50;';
+  }
+
+  function normalizeElements(data){
+    return (data.elements||[]).map(function(el){
+      if(!el.lat && el.center){
+        return Object.assign({},el,{lat:el.center.lat,lon:el.center.lon});
+      }
+      return el;
+    }).filter(function(el){return el.lat;});
+  }
+
+  // 1つの半径で4エンドポイント全部試す
+  function tryRadius(tierIdx){
+    if(tierIdx >= tiers.length){
+      // 全ティア全エンドポイント全滅 → フォールバックDB起動
+      console.log('All tiers exhausted, using fallback DB');
+      useFallbackDB(lat, lon, deityName, resultEl);
       return;
     }
-    
-    console.log('Trying endpoint '+(idx+1)+'/'+endpoints.length);
-    
-    // GETでリクエスト（?data=... 形式）: iOS Safariで最も互換性が高い
-    // preflight不要、ヘッダー不要、最もシンプル
-    var url = endpoints[idx] + '?data=' + encodeURIComponent(query);
-    
-    fetch(url).then(function(res){
-      if(!res.ok) throw new Error('HTTP '+res.status);
-      return res.json();
-    }).then(function(data){
-      var elements = (data.elements||[]).map(function(el){
-        // way/relationのcenter座標を正規化
-        if(!el.lat && el.center){
-          return Object.assign({},el,{lat:el.center.lat,lon:el.center.lon});
-        }
-        return el;
-      }).filter(function(el){return el.lat;});
-      
-      console.log('Got '+elements.length+' results from endpoint '+(idx+1));
-      
-      if(elements.length > 0){
-        renderShrineResults(elements, lat, lon, deityName, resultEl);
-      } else {
-        // 結果0件の場合も次のエンドポイントを試す
-        tryEndpoint(idx+1);
+
+    var radius = tiers[tierIdx];
+    var tierLabel = radius >= 1000 ? (radius/1000)+'km' : radius+'m';
+
+    // ティア変更時はローディング表示を更新
+    if(tierIdx > 0){
+      resultEl.innerHTML = '<div class="shrine-loading">'
+        +'<div class="ai-loading-dot"></div><div class="ai-loading-dot"></div><div class="ai-loading-dot"></div>'
+        +'<span>半径を'+tierLabel+'に広げて再検索中...</span></div>';
+    }
+
+    function tryEndpoint(epIdx){
+      if(epIdx >= endpoints.length){
+        // このティアの全エンドポイントが失敗 → 次のティアへ
+        console.log('Tier '+radius+'m: all endpoints failed, moving to next tier');
+        tryRadius(tierIdx + 1);
+        return;
       }
-    }).catch(function(err){
-      console.warn('Endpoint '+(idx+1)+' failed:', err.message||err);
-      tryEndpoint(idx+1);
-    });
+
+      console.log('Tier '+radius+'m, endpoint '+(epIdx+1)+'/'+endpoints.length);
+      var url = endpoints[epIdx] + '?data=' + encodeURIComponent(buildQuery(radius));
+
+      fetch(url).then(function(res){
+        if(!res.ok) throw new Error('HTTP '+res.status);
+        return res.json();
+      }).then(function(data){
+        var elements = normalizeElements(data);
+        console.log('Got '+elements.length+' results at tier '+radius+'m');
+
+        if(elements.length > 0){
+          // 成功
+          renderShrineResults(elements, lat, lon, deityName, resultEl, {
+            radius: radius,
+            fallback: false
+          });
+        } else {
+          // 0件 → このティアでは見つからなかった、次のティアへ
+          console.log('Tier '+radius+'m: zero results, trying wider radius');
+          tryRadius(tierIdx + 1);
+        }
+      }).catch(function(err){
+        console.warn('Tier '+radius+'m endpoint '+(epIdx+1)+' failed:', err.message||err);
+        tryEndpoint(epIdx + 1);
+      });
+    }
+    tryEndpoint(0);
   }
-  tryEndpoint(0);
+  tryRadius(0);
 }
 
-function renderShrineResults(elements,myLat,myLon,deityName,resultEl){
-  if(!elements||elements.length===0){resultEl.innerHTML='<div class="shrine-empty">⛩ 指定範囲内に神社・お寺が見つかりませんでした。<br><span style="font-size:10px;">検索範囲を広げてみてください。</span></div>';return;}
+// フォールバックDB：全滅時の最後の命綱
+function useFallbackDB(lat, lon, deityName, resultEl){
+  var results = SHRINE_FALLBACK_DB.map(function(s){
+    return {
+      lat: s.lat,
+      lon: s.lon,
+      tags: {
+        'name': s.name,
+        'religion': s.religion,
+        'addr:prefecture': s.pref
+      },
+      _fallback: true
+    };
+  });
+  renderShrineResults(results, lat, lon, deityName, resultEl, {
+    radius: null,
+    fallback: true
+  });
+}
+
+function renderShrineResults(elements,myLat,myLon,deityName,resultEl,opts){
+  opts = opts || {};
+  var isFallback = !!opts.fallback;
+
+  if(!elements||elements.length===0){
+    resultEl.innerHTML='<div class="shrine-empty">⛩ 指定範囲内に神社・お寺が見つかりませんでした。<br><span style="font-size:10px;">検索範囲を広げてみてください。</span></div>';
+    return;
+  }
 
   var now = new Date();
   var y = now.getFullYear();
@@ -4365,6 +4473,10 @@ function renderShrineResults(elements,myLat,myLon,deityName,resultEl){
     if(eihouDiff>180)eihouDiff=360-eihouDiff;
     var isEihou = eihouDiff<=45;
 
+    // 観光地/著名度検出
+    var isFamous = detectShrineFame(tags);
+    var nameUnknown = (name==='名称不明');
+
     places.push({
       name:name, lat:el.lat, lon:el.lon, dist:dist,
       isShrine:religion==='shinto'||tags['historic']==='wayside_shrine',
@@ -4372,23 +4484,25 @@ function renderShrineResults(elements,myLat,myLon,deityName,resultEl){
       match:isGuardianMatch(name,deityName),
       isEihou:isEihou,
       eihouDiff:eihouDiff,
-      nameUnknown:(name==='名称不明')
+      nameUnknown:nameUnknown,
+      isFamous:isFamous,
+      isQuiet:(!isFamous && !nameUnknown)
     });
   }
 
   // 【今日の出会い】近所の静かな社を1つピックアップ
-  // 条件: 守護仏ゆかりでも恵方でもない「名もなき」社・最も近いもの
-  // 名称不明は除外（名前のある社を優先）
+  // 条件：名前があり、観光地でなく、守護仏ゆかり/恵方でもない
   var todaysGem = null;
-  var hiddenGems = places.filter(function(p){
-    return !p.match && !p.isEihou && !p.nameUnknown;
-  });
-  if(hiddenGems.length > 0){
-    hiddenGems.sort(function(a,b){return a.dist-b.dist;});
-    todaysGem = hiddenGems[0];
+  if(!isFallback){
+    var hiddenGems = places.filter(function(p){
+      return !p.match && !p.isEihou && !p.nameUnknown && !p.isFamous;
+    });
+    if(hiddenGems.length > 0){
+      hiddenGems.sort(function(a,b){return a.dist-b.dist;});
+      todaysGem = hiddenGems[0];
+    }
   }
-  
-  // メッセージのバリエーション（日付ベースで日替わり）
+
   var gemMessages = [
     '誰かが手を合わせることを、きっと待っています。',
     '静けさの中で、何かに気づけるかもしれません。',
@@ -4402,24 +4516,69 @@ function renderShrineResults(elements,myLat,myLon,deityName,resultEl){
   var seed = y*10000 + (now.getMonth()+1)*100 + now.getDate();
   var gemMsg = gemMessages[seed % gemMessages.length];
 
-  // ソート: 守護仏ゆかり > 恵方 > 距離
+  // 【新ソートロジック】小さな社を優先する哲学
+  // 1. 名称不明を最下部
+  // 2. 静かな社（観光地でない）を上位
+  // 3. その中で守護仏ゆかり・恵方を優先
+  // 4. 同格は距離順
   places.sort(function(a,b){
-    if(a.match&&!b.match) return -1;
-    if(!a.match&&b.match) return 1;
-    if(a.isEihou&&!b.isEihou) return -1;
-    if(!a.isEihou&&b.isEihou) return 1;
+    // 名称不明は最後
+    if(a.nameUnknown && !b.nameUnknown) return 1;
+    if(!a.nameUnknown && b.nameUnknown) return -1;
+    // 観光地でない（静かな社）を優先
+    if(a.isQuiet && !b.isQuiet) return -1;
+    if(!a.isQuiet && b.isQuiet) return 1;
+    // 同じグループ内で守護仏ゆかりを優先
+    if(a.match && !b.match) return -1;
+    if(!a.match && b.match) return 1;
+    // 恵方を優先
+    if(a.isEihou && !b.isEihou) return -1;
+    if(!a.isEihou && b.isEihou) return 1;
+    // 最後は距離順
     return a.dist-b.dist;
   });
-  places = places.slice(0,12);
+
+  // フォールバック時は近いもの上位8件
+  if(isFallback){
+    places = places.slice(0,8);
+  } else {
+    places = places.slice(0,15);
+  }
 
   var matchCount = places.filter(function(p){return p.match;}).length;
   var eihouCount = places.filter(function(p){return p.isEihou;}).length;
+  var quietCount = places.filter(function(p){return p.isQuiet;}).length;
 
-  // 【今日の出会い】HTMLセクション（最上部）
+  // 参拝帖件数
+  var sanpaiList = getSanpaicho();
+  var sanpaiCount = sanpaiList.length;
+
+  // ヘッダー：参拝帖アクセスボタン
+  var sanpaiHeaderHTML = '<div class="sanpai-header">'
+    +'<div class="sanpai-count-badge" onclick="openSanpaichoList()">📖 参拝帖 '+(sanpaiCount>0?'('+sanpaiCount+')':'')+' ›</div>'
+    +'</div>';
+
+  // フォールバック時の案内
+  var fallbackNoticeHTML = '';
+  if(isFallback){
+    fallbackNoticeHTML = '<div class="shrine-fallback-notice">'
+      +'<div style="font-size:28px;margin-bottom:10px;opacity:.6;">🕯️</div>'
+      +'<div style="font-size:12px;color:var(--text);line-height:1.9;margin-bottom:10px;">'
+      +'神社・お寺のデータサーバーが<br>混み合っているようです。'
+      +'</div>'
+      +'<div style="font-size:11px;color:var(--muted);line-height:1.8;">'
+      +'最後の命綱として、<br>全国の主要な社をご案内します。<br>近所で見つからなければ、<br>少し時間をおいてお試しください。'
+      +'</div>'
+      +'<div style="padding:8px 20px;margin-top:14px;background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.25);border-radius:8px;color:var(--gold);font-size:11px;cursor:pointer;display:inline-block;" onclick="searchNearbyShrine(\''+deityName+'\')">↺ もう一度試す</div>'
+      +'</div>';
+  }
+
+  // 【今日の出会い】HTMLセクション
   var gemHTML = '';
   if(todaysGem){
     var gemIcon = todaysGem.isTemple?'🏯':'⛩';
     var gemMapUrl = 'https://www.google.com/maps/search/?api=1&query='+todaysGem.lat+','+todaysGem.lon;
+    var gemRecorded = isAlreadyRecorded(todaysGem.lat, todaysGem.lon);
     gemHTML = '<div style="background:linear-gradient(135deg,rgba(201,168,76,.08) 0%,rgba(201,168,76,.02) 100%);border:1px solid rgba(201,168,76,.35);border-radius:14px;padding:18px;margin-bottom:20px;position:relative;overflow:hidden;">'
       +'<div style="position:absolute;top:-20px;right:-20px;font-size:80px;opacity:.04;">🕯️</div>'
       +'<div style="font-size:9px;letter-spacing:.35em;color:var(--gold);margin-bottom:10px;position:relative;">🕯️ 今日、あなたの近くのこの社へ</div>'
@@ -4427,51 +4586,425 @@ function renderShrineResults(elements,myLat,myLon,deityName,resultEl){
       +'<div style="font-size:36px;">'+gemIcon+'</div>'
       +'<div style="flex:1;">'
       +'<div style="font-size:17px;font-weight:700;color:var(--text);margin-bottom:4px;">'+todaysGem.name+'</div>'
-      +'<div style="font-size:11px;color:var(--muted);">📍 '+formatDist(todaysGem.dist)+' · '+(todaysGem.isTemple?'お寺':'神社')+'</div>'
+      +'<div style="font-size:11px;color:var(--muted);">📍 '+formatDist(todaysGem.dist)+' · '+(todaysGem.isTemple?'お寺':'神社')+' · 🕯 静かな社</div>'
       +'</div>'
       +'</div>'
       +'<div style="font-size:12px;color:var(--text);line-height:1.9;padding:10px 14px;background:rgba(0,0,0,.15);border-left:2px solid rgba(201,168,76,.5);border-radius:6px;margin-bottom:12px;position:relative;">'+gemMsg+'</div>'
-      +'<a href="'+gemMapUrl+'" target="_blank" rel="noopener" style="display:block;text-align:center;padding:10px;background:rgba(201,168,76,.12);border:1px solid rgba(201,168,76,.3);border-radius:8px;color:var(--gold);font-size:12px;text-decoration:none;position:relative;">🗺 道順を見る</a>'
+      +'<div style="display:flex;gap:8px;position:relative;">'
+      +'<a href="'+gemMapUrl+'" target="_blank" rel="noopener" style="flex:1;display:block;text-align:center;padding:10px;background:rgba(201,168,76,.12);border:1px solid rgba(201,168,76,.3);border-radius:8px;color:var(--gold);font-size:12px;text-decoration:none;">🗺 道順を見る</a>'
+      +'<div class="sanpai-btn '+(gemRecorded?'recorded':'')+'" data-sanpai-lat="'+todaysGem.lat+'" data-sanpai-lon="'+todaysGem.lon+'" onclick="handleSanpaiClick(this,'+places.indexOf(todaysGem)+')" style="flex:1;justify-content:center;padding:10px;font-size:12px;">'+(gemRecorded?'✓ 記録済み':'✍ 参拝帖に記録')+'</div>'
+      +'</div>'
       +'</div>';
   }
 
   // ヘッダーバッジ
   var headerHTML = '<div style="margin-bottom:14px;">';
-  if(matchCount>0||eihouCount>0){
-    headerHTML += '<div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;">';
-    if(matchCount>0) headerHTML += '<div style="padding:5px 12px;background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.3);border-radius:20px;font-size:10px;color:var(--gold);">🙏 守護仏ゆかり '+matchCount+'件</div>';
-    if(eihouCount>0) headerHTML += '<div style="padding:5px 12px;background:rgba(106,177,135,.08);border:1px solid rgba(106,177,135,.3);border-radius:20px;font-size:10px;color:#6ab187;">🧭 恵方（'+eihou+'）'+eihouCount+'件</div>';
-    headerHTML += '</div>';
+  if(!isFallback){
+    var badges = [];
+    if(quietCount>0) badges.push('<div style="padding:5px 12px;background:rgba(155,109,191,.08);border:1px solid rgba(155,109,191,.3);border-radius:20px;font-size:10px;color:#c8a8e8;">🕯 静かな社 '+quietCount+'件</div>');
+    if(matchCount>0) badges.push('<div style="padding:5px 12px;background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.3);border-radius:20px;font-size:10px;color:var(--gold);">🙏 守護仏ゆかり '+matchCount+'件</div>');
+    if(eihouCount>0) badges.push('<div style="padding:5px 12px;background:rgba(106,177,135,.08);border:1px solid rgba(106,177,135,.3);border-radius:20px;font-size:10px;color:#6ab187;">🧭 恵方（'+eihou+'）'+eihouCount+'件</div>');
+    if(badges.length>0){
+      headerHTML += '<div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;">'+badges.join('')+'</div>';
+    }
+    var radiusLabel = opts.radius ? (opts.radius>=1000 ? (opts.radius/1000)+'km' : opts.radius+'m') : '5km';
+    headerHTML += '<div style="font-size:10px;color:var(--muted);">現在地から'+radiusLabel+'以内 · 計'+places.length+'件</div>';
+  } else {
+    headerHTML += '<div style="font-size:10px;color:var(--muted);text-align:center;">全国の主要な社 · 近い順 '+places.length+'件</div>';
   }
-  headerHTML += '<div style="font-size:10px;color:var(--muted);">現在地から5km以内 · 計'+places.length+'件</div>';
   headerHTML += '</div>';
 
-  var listHTML = places.map(function(p){
+  // 参拝帖アクセスのためにplacesをwindowに保存
+  window._currentShrinePlaces = places;
+
+  var listHTML = places.map(function(p,idx){
     var icon = p.isTemple?'🏯':'⛩';
     var typeLabel = p.isTemple?'お寺':'神社';
     var typeClass = p.isTemple?'temple-tag':'shrine-tag';
     var badges = '';
     if(p.match) badges += '<span style="font-size:10px;padding:3px 10px;background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.3);border-radius:20px;color:var(--gold);margin-right:6px;">🙏 守護仏ゆかり</span>';
-    if(p.isEihou) badges += '<span style="font-size:10px;padding:3px 10px;background:rgba(106,177,135,.08);border:1px solid rgba(106,177,135,.3);border-radius:20px;color:#6ab187;">🧭 恵方（'+eihou+'）</span>';
+    if(p.isEihou) badges += '<span style="font-size:10px;padding:3px 10px;background:rgba(106,177,135,.08);border:1px solid rgba(106,177,135,.3);border-radius:20px;color:#6ab187;margin-right:6px;">🧭 恵方（'+eihou+'）</span>';
+    if(p.isQuiet && !isFallback) badges += '<span class="shrine-quiet-badge">🕯 静かな社</span>';
+    if(p.isFamous) badges += '<span class="shrine-famous-badge">📘 有名社</span>';
+
     var googleMapUrl='https://www.google.com/maps/search/?api=1&query='+p.lat+','+p.lon;
+    var recorded = isAlreadyRecorded(p.lat, p.lon);
+
     return '<div class="shrine-item'+(p.match?' guardian-match':'')+'" style="'+(p.isEihou&&!p.match?'border-color:rgba(106,177,135,.4);background:rgba(106,177,135,.03);':'')+'">'
       +'<div class="shrine-icon">'+icon+'</div>'
       +'<div class="shrine-info">'
       +'<div class="shrine-name">'+p.name+'</div>'
       +'<div class="shrine-meta"><span class="shrine-type '+typeClass+'">'+typeLabel+'</span><span class="shrine-dist">📍 '+formatDist(p.dist)+'</span></div>'
       +(badges?'<div style="margin-top:5px;">'+badges+'</div>':'')
-      +'<a class="shrine-map-link" href="'+googleMapUrl+'" target="_blank" rel="noopener">🗺 Googleマップで開く</a>'
+      +'<div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;">'
+      +'<a class="sanpai-btn" href="'+googleMapUrl+'" target="_blank" rel="noopener" style="color:var(--blue);background:rgba(91,155,213,.08);border-color:rgba(91,155,213,.3);">🗺 地図</a>'
+      +'<div class="sanpai-btn '+(recorded?'recorded':'')+'" data-sanpai-lat="'+p.lat+'" data-sanpai-lon="'+p.lon+'" onclick="handleSanpaiClick(this,'+idx+')">'+(recorded?'✓ 記録済み':'✍ 参拝帖に記録')+'</div>'
+      +'</div>'
       +'</div>'
       +'</div>';
   }).join('');
 
-  resultEl.innerHTML = gemHTML + headerHTML
+  resultEl.innerHTML = sanpaiHeaderHTML + fallbackNoticeHTML + gemHTML + headerHTML
     +'<div class="shrine-list">'+listHTML+'</div>'
     +'<div style="text-align:center;margin-top:14px;">'
     +'<div style="font-size:10px;color:var(--gold-dim);cursor:pointer;padding:8px;" onclick="searchNearbyShrine(\''+deityName+'\')">↺ 再検索</div>'
     +'</div>';
 }
 
+// 参拝帖記録ボタンのクリックハンドラ
+function handleSanpaiClick(btn, placeIdx){
+  var places = window._currentShrinePlaces || [];
+  var place = places[placeIdx];
+  if(!place){ console.warn('place not found', placeIdx); return; }
+  if(btn.classList.contains('recorded')){
+    // 既に記録済みなら参拝帖を開く
+    openSanpaichoList();
+    return;
+  }
+  openSanpaiRecordModal(place);
+}
+
+
+
+// ================================================================
+// フォールバックDB：全滅時の命綱（主役ではない）
+// 主要社のみ・座標は高信頼のものを厳選
+// ================================================================
+var SHRINE_FALLBACK_DB = [
+  // 北海道・東北
+  {name:'北海道神宮',         lat:43.0542, lon:141.3073, religion:'shinto',  pref:'北海道'},
+  {name:'岩木山神社',         lat:40.6286, lon:140.3123, religion:'shinto',  pref:'青森'},
+  {name:'駒形神社',           lat:39.1407, lon:141.2063, religion:'shinto',  pref:'岩手'},
+  {name:'鹽竈神社',           lat:38.3222, lon:141.0259, religion:'shinto',  pref:'宮城'},
+  {name:'鳥海山大物忌神社',   lat:39.0965, lon:139.9116, religion:'shinto',  pref:'秋田'},
+  {name:'出羽三山神社',       lat:38.5598, lon:139.9811, religion:'shinto',  pref:'山形'},
+  {name:'伊佐須美神社',       lat:37.4488, lon:139.8369, religion:'shinto',  pref:'福島'},
+  // 関東
+  {name:'鹿島神宮',           lat:35.9693, lon:140.6318, religion:'shinto',  pref:'茨城'},
+  {name:'宇都宮二荒山神社',   lat:36.5588, lon:139.8836, religion:'shinto',  pref:'栃木'},
+  {name:'日光東照宮',         lat:36.7580, lon:139.5989, religion:'shinto',  pref:'栃木'},
+  {name:'一之宮貫前神社',     lat:36.2425, lon:138.8756, religion:'shinto',  pref:'群馬'},
+  {name:'氷川神社（大宮）',   lat:35.9107, lon:139.6303, religion:'shinto',  pref:'埼玉'},
+  {name:'香取神宮',           lat:35.8814, lon:140.5256, religion:'shinto',  pref:'千葉'},
+  {name:'安房神社',           lat:34.9139, lon:139.8336, religion:'shinto',  pref:'千葉'},
+  {name:'明治神宮',           lat:35.6764, lon:139.6993, religion:'shinto',  pref:'東京'},
+  {name:'大國魂神社',         lat:35.6684, lon:139.4790, religion:'shinto',  pref:'東京'},
+  {name:'浅草寺',             lat:35.7148, lon:139.7967, religion:'buddhist',pref:'東京'},
+  {name:'神田明神',           lat:35.7021, lon:139.7681, religion:'shinto',  pref:'東京'},
+  {name:'靖国神社',           lat:35.6946, lon:139.7434, religion:'shinto',  pref:'東京'},
+  {name:'東京大神宮',         lat:35.6999, lon:139.7466, religion:'shinto',  pref:'東京'},
+  {name:'寒川神社',           lat:35.3772, lon:139.3888, religion:'shinto',  pref:'神奈川'},
+  {name:'鶴岡八幡宮',         lat:35.3258, lon:139.5562, religion:'shinto',  pref:'神奈川'},
+  // 中部
+  {name:'彌彦神社',           lat:37.7065, lon:138.8290, religion:'shinto',  pref:'新潟'},
+  {name:'雄山神社',           lat:36.5735, lon:137.4253, religion:'shinto',  pref:'富山'},
+  {name:'白山比咩神社',       lat:36.4806, lon:136.6334, religion:'shinto',  pref:'石川'},
+  {name:'氣多大社',           lat:36.9364, lon:136.7742, religion:'shinto',  pref:'石川'},
+  {name:'氣比神宮',           lat:35.6547, lon:136.0664, religion:'shinto',  pref:'福井'},
+  {name:'富士山本宮浅間大社', lat:35.2254, lon:138.6105, religion:'shinto',  pref:'静岡'},
+  {name:'小國神社',           lat:34.8234, lon:137.9145, religion:'shinto',  pref:'静岡'},
+  {name:'諏訪大社（上社本宮）',lat:35.9975, lon:138.1200, religion:'shinto',  pref:'長野'},
+  {name:'浅間神社（甲斐）',   lat:35.6547, lon:138.7298, religion:'shinto',  pref:'山梨'},
+  {name:'南宮大社',           lat:35.3672, lon:136.5131, religion:'shinto',  pref:'岐阜'},
+  {name:'熱田神宮',           lat:35.1278, lon:136.9089, religion:'shinto',  pref:'愛知'},
+  {name:'真清田神社',         lat:35.3064, lon:136.8063, religion:'shinto',  pref:'愛知'},
+  // 近畿
+  {name:'伊勢神宮（内宮）',   lat:34.4548, lon:136.7256, religion:'shinto',  pref:'三重'},
+  {name:'椿大神社',           lat:34.9408, lon:136.4636, religion:'shinto',  pref:'三重'},
+  {name:'多賀大社',           lat:35.2233, lon:136.2984, religion:'shinto',  pref:'滋賀'},
+  {name:'建部大社',           lat:35.0116, lon:135.9055, religion:'shinto',  pref:'滋賀'},
+  {name:'伏見稲荷大社',       lat:34.9671, lon:135.7727, religion:'shinto',  pref:'京都'},
+  {name:'八坂神社',           lat:35.0037, lon:135.7781, religion:'shinto',  pref:'京都'},
+  {name:'平安神宮',           lat:35.0157, lon:135.7833, religion:'shinto',  pref:'京都'},
+  {name:'賀茂別雷神社（上賀茂）',lat:35.0604, lon:135.7528, religion:'shinto',pref:'京都'},
+  {name:'住吉大社',           lat:34.6124, lon:135.4935, religion:'shinto',  pref:'大阪'},
+  {name:'枚岡神社',           lat:34.6739, lon:135.6411, religion:'shinto',  pref:'大阪'},
+  {name:'生田神社',           lat:34.6958, lon:135.1937, religion:'shinto',  pref:'兵庫'},
+  {name:'伊弉諾神宮',         lat:34.4577, lon:134.8613, religion:'shinto',  pref:'兵庫'},
+  {name:'大神神社',           lat:34.5288, lon:135.8527, religion:'shinto',  pref:'奈良'},
+  {name:'春日大社',           lat:34.6814, lon:135.8483, religion:'shinto',  pref:'奈良'},
+  {name:'熊野本宮大社',       lat:33.8404, lon:135.7730, religion:'shinto',  pref:'和歌山'},
+  {name:'日前神宮・國懸神宮', lat:34.2361, lon:135.2103, religion:'shinto',  pref:'和歌山'},
+  // 中国・四国
+  {name:'出雲大社',           lat:35.4022, lon:132.6854, religion:'shinto',  pref:'島根'},
+  {name:'厳島神社',           lat:34.2959, lon:132.3196, religion:'shinto',  pref:'広島'},
+  {name:'吉備津神社',         lat:34.6710, lon:133.8522, religion:'shinto',  pref:'岡山'},
+  {name:'宇倍神社',           lat:35.5011, lon:134.2614, religion:'shinto',  pref:'鳥取'},
+  {name:'住吉神社（下関）',   lat:33.9967, lon:130.9500, religion:'shinto',  pref:'山口'},
+  {name:'金刀比羅宮',         lat:34.1849, lon:133.8144, religion:'shinto',  pref:'香川'},
+  {name:'大麻比古神社',       lat:34.1853, lon:134.4897, religion:'shinto',  pref:'徳島'},
+  {name:'大山祇神社',         lat:34.2451, lon:133.0027, religion:'shinto',  pref:'愛媛'},
+  {name:'土佐神社',           lat:33.5947, lon:133.5723, religion:'shinto',  pref:'高知'},
+  // 九州・沖縄
+  {name:'太宰府天満宮',       lat:33.5218, lon:130.5350, religion:'shinto',  pref:'福岡'},
+  {name:'筥崎宮',             lat:33.6526, lon:130.4253, religion:'shinto',  pref:'福岡'},
+  {name:'宗像大社（辺津宮）', lat:33.8313, lon:130.5154, religion:'shinto',  pref:'福岡'},
+  {name:'與止日女神社',       lat:33.3136, lon:130.2417, religion:'shinto',  pref:'佐賀'},
+  {name:'阿蘇神社',           lat:32.9515, lon:131.1140, religion:'shinto',  pref:'熊本'},
+  {name:'宇佐神宮',           lat:33.5261, lon:131.3745, religion:'shinto',  pref:'大分'},
+  {name:'都農神社',           lat:32.2575, lon:131.5678, religion:'shinto',  pref:'宮崎'},
+  {name:'霧島神宮',           lat:31.8585, lon:130.8709, religion:'shinto',  pref:'鹿児島'},
+  {name:'鹿児島神宮',         lat:31.7444, lon:130.7519, religion:'shinto',  pref:'鹿児島'},
+  {name:'波上宮',             lat:26.2178, lon:127.6651, religion:'shinto',  pref:'沖縄'}
+];
+
+// ================================================================
+// 参拝帖（さんぱいちょう）localStorage管理
+// キー：kaiun_sanpaicho_v1（将来ともしに移植しやすい命名）
+// ================================================================
+var SANPAICHO_KEY = 'kaiun_sanpaicho_v1';
+function getSanpaicho(){
+  try{
+    var saved = localStorage.getItem(SANPAICHO_KEY);
+    if(saved) return JSON.parse(saved);
+  }catch(e){}
+  return [];
+}
+function saveSanpaicho(list){
+  try{ localStorage.setItem(SANPAICHO_KEY, JSON.stringify(list)); return true; }catch(e){ return false; }
+}
+function isAlreadyRecorded(lat, lon){
+  var list = getSanpaicho();
+  for(var i=0;i<list.length;i++){
+    if(Math.abs(list[i].lat-lat)<0.0003 && Math.abs(list[i].lon-lon)<0.0003) return true;
+  }
+  return false;
+}
+function generateSanpaiId(){
+  return 'sp_' + Date.now() + '_' + Math.random().toString(36).slice(2,8);
+}
+
+// 参拝帖記録モーダルを開く
+function openSanpaiRecordModal(shrineData){
+  try{
+    var now = new Date();
+    var y = now.getFullYear(), m = now.getMonth()+1, d = now.getDate();
+    var li = getLuckyInfo(y, m, d);
+    var r = calcRokuyo(y, m, d);
+    var badDays = getBadDays(y, m, d);
+    var tags = [];
+    li.tags.forEach(function(t){ tags.push({name:t.name, type:'lucky'}); });
+    badDays.forEach(function(b){ tags.push({name:b.name, type:'bad'}); });
+    if(r && r.name) tags.push({name:r.name, type:'rokuyo'});
+
+    // 守護仏の縁日判定
+    var enDays = {'千手観音菩薩':18,'虚空蔵菩薩':13,'文殊菩薩':25,'普賢菩薩':1,'勢至菩薩':23,'大日如来':28,'不動明王':28,'阿弥陀如来':15};
+    var s = _state || {};
+    var deity = DEITIES[s.juunishi] || {name:''};
+    var isEnday = (enDays[deity.name] === d);
+    if(isEnday) tags.push({name:deity.name+'縁日', type:'special'});
+
+    var dateStr = y+'年'+m+'月'+d+'日';
+    var icon = shrineData.isTemple ? '🏯' : '⛩';
+    var typeLabel = shrineData.isTemple ? 'お寺' : '神社';
+
+    var modalHtml = ''
+      +'<div class="modal-header" style="padding-bottom:10px;">'
+      +'  <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">'
+      +'    <span style="font-size:28px;">'+icon+'</span>'
+      +'    <div>'
+      +'      <div style="font-size:9px;letter-spacing:.35em;color:var(--gold);margin-bottom:2px;">参拝帖に記録</div>'
+      +'      <div style="font-family:var(--serif);font-size:15px;font-weight:800;color:var(--gold-light);line-height:1.4;">'+(shrineData.name||'名称不明')+'</div>'
+      +'    </div>'
+      +'  </div>'
+      +'  <div class="modal-close" onclick="closeSanpaiModal()">×</div>'
+      +'</div>'
+      +'<div class="sanpai-record-modal-body">'
+      +'  <div class="sanpai-record-info">'
+      +'    <div class="sanpai-record-label">記 録 さ れ る 情 報</div>'
+      +'    <div class="sanpai-record-sub" style="margin-top:8px;">'
+      +'      📅 '+dateStr+'<br>'
+      +'      🏷 '+typeLabel+(shrineData.dist?' · '+formatDist(shrineData.dist)+'先':'')+'<br>'
+      +'      '+(tags.length>0 ? '✨ '+tags.map(function(t){return t.name;}).join(' · ') : '📿 平常の日')
+      +'    </div>'
+      +'  </div>'
+      +'  <div style="font-size:11px;color:var(--gold);letter-spacing:.15em;margin-bottom:8px;">✍ 感謝の一言（任意）</div>'
+      +'  <textarea class="sanpai-textarea" id="sanpaiMessageInput" placeholder="心に残ったこと、感じたことを書き残せます..."></textarea>'
+      +'  <button class="sanpai-save-btn" onclick="saveSanpaiEntry()">参 拝 帖 に 記 録 す る</button>'
+      +'  <div style="font-size:10px;color:var(--muted);text-align:center;margin-top:12px;line-height:1.8;">このデータはこの端末のみに保存されます</div>'
+      +'</div>';
+
+    // 一時的にshrineDataを保存
+    window._sanpaiPending = {
+      shrine: shrineData,
+      tags: tags,
+      date: dateStr,
+      timestamp: now.getTime(),
+      deity: deity.name,
+      rokuyo: r.name,
+      isEnday: isEnday
+    };
+
+    var overlay = document.getElementById('modalOverlay');
+    var sheet = overlay.querySelector('.modal-sheet');
+    sheet.innerHTML = modalHtml;
+    overlay.classList.add('open');
+    history.pushState({modal:'sanpai'},'');
+  }catch(e){
+    console.error('openSanpaiRecordModal error:', e);
+    alert('記録画面を開けませんでした：'+e.message);
+  }
+}
+
+// 参拝帖エントリ保存
+function saveSanpaiEntry(){
+  try{
+    var pending = window._sanpaiPending;
+    if(!pending){ alert('記録情報が見つかりません'); return; }
+    var msgEl = document.getElementById('sanpaiMessageInput');
+    var message = msgEl ? msgEl.value.trim() : '';
+
+    var list = getSanpaicho();
+    var entry = {
+      id: generateSanpaiId(),
+      timestamp: pending.timestamp,
+      date: pending.date,
+      name: pending.shrine.name || '名称不明',
+      lat: pending.shrine.lat,
+      lon: pending.shrine.lon,
+      religion: pending.shrine.isTemple ? 'buddhist' : 'shinto',
+      isTemple: !!pending.shrine.isTemple,
+      deity: pending.deity,
+      rokuyo: pending.rokuyo,
+      tags: pending.tags,
+      isEnday: pending.isEnday,
+      message: message
+    };
+    list.unshift(entry); // 新しい順
+    if(saveSanpaiCho_save(list)){
+      closeSanpaiModal();
+      // 成功フィードバック
+      showSanpaiToast('🕯 参拝を記録しました');
+      // シーン更新
+      var btn = document.querySelector('[data-sanpai-lat="'+pending.shrine.lat+'"][data-sanpai-lon="'+pending.shrine.lon+'"]');
+      if(btn){
+        btn.classList.add('recorded');
+        btn.innerHTML = '✓ 記録済み';
+      }
+      window._sanpaiPending = null;
+    } else {
+      alert('保存に失敗しました。ストレージ容量をご確認ください。');
+    }
+  }catch(e){
+    console.error('saveSanpaiEntry error:', e);
+    alert('保存エラー：'+e.message);
+  }
+}
+// saveSanpaichoのエイリアス（上書き防止用の別名）
+function saveSanpaiCho_save(list){ return saveSanpaicho(list); }
+
+// トースト表示
+function showSanpaiToast(msg){
+  var t = document.createElement('div');
+  t.textContent = msg;
+  t.style.cssText = 'position:fixed;bottom:60px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#c9a84c,#a07830);color:#0d0b08;padding:12px 24px;border-radius:24px;font-family:var(--serif);font-size:13px;font-weight:800;letter-spacing:.1em;box-shadow:0 6px 24px rgba(0,0,0,.5);z-index:1000;opacity:0;transition:opacity .3s;';
+  document.body.appendChild(t);
+  setTimeout(function(){ t.style.opacity='1'; }, 10);
+  setTimeout(function(){ t.style.opacity='0'; }, 2200);
+  setTimeout(function(){ t.remove(); }, 2600);
+}
+
+// 参拝帖モーダルを閉じる
+function closeSanpaiModal(){
+  var overlay = document.getElementById('modalOverlay');
+  if(overlay) overlay.classList.remove('open');
+}
+
+// 参拝帖一覧を開く
+function openSanpaichoList(){
+  try{
+    var list = getSanpaicho();
+    var count = list.length;
+    var bodyHtml = '';
+
+    if(count === 0){
+      bodyHtml = '<div class="sanpai-empty">'
+        +'<div class="sanpai-empty-icon">📖</div>'
+        +'<div class="sanpai-empty-text">まだ参拝の記録はありません。<br><br>社を訪れたら、<br>「✍ 参拝帖に記録」ボタンから<br>ご縁を残していきましょう。</div>'
+        +'</div>';
+    } else {
+      bodyHtml = '<div style="font-size:11px;color:var(--muted);text-align:center;margin-bottom:14px;letter-spacing:.1em;">これまで結んだご縁 · '+count+'件</div>';
+      bodyHtml += list.map(function(e){
+        var icon = e.isTemple ? '🏯' : '⛩';
+        var mapUrl = 'https://www.google.com/maps/search/?api=1&query='+e.lat+','+e.lon;
+        var tagsHtml = '';
+        if(e.tags && e.tags.length>0){
+          tagsHtml = '<div class="sanpai-entry-tags">'+e.tags.map(function(t){
+            return '<span class="sanpai-entry-tag">'+t.name+'</span>';
+          }).join('')+'</div>';
+        }
+        var msgHtml = e.message ? '<div class="sanpai-entry-msg">'+escapeHtmlSimple(e.message)+'</div>' : '';
+        return '<div class="sanpai-entry">'
+          +'<div class="sanpai-entry-header">'
+          +'  <div style="flex:1;min-width:0;">'
+          +'    <div class="sanpai-entry-date">'+e.date+'</div>'
+          +'    <div class="sanpai-entry-name">'+icon+' '+e.name+'</div>'
+          +'  </div>'
+          +'</div>'
+          +tagsHtml
+          +msgHtml
+          +'<div class="sanpai-entry-actions">'
+          +'  <a class="sanpai-entry-action map" href="'+mapUrl+'" target="_blank" rel="noopener">🗺 地図で見る</a>'
+          +'  <div class="sanpai-entry-action delete" onclick="deleteSanpaiEntry(\''+e.id+'\')">🗑 削除</div>'
+          +'</div>'
+          +'</div>';
+      }).join('');
+    }
+
+    var modalHtml = ''
+      +'<div class="modal-header" style="padding-bottom:14px;">'
+      +'  <div style="display:flex;align-items:center;gap:10px;">'
+      +'    <span style="font-size:26px;">📖</span>'
+      +'    <div>'
+      +'      <div style="font-size:9px;letter-spacing:.35em;color:var(--gold);margin-bottom:2px;">SANPAICHO</div>'
+      +'      <div style="font-family:var(--serif);font-size:18px;font-weight:800;color:var(--gold-light);">参 拝 帖</div>'
+      +'    </div>'
+      +'  </div>'
+      +'  <div class="modal-close" onclick="closeSanpaiModal()">×</div>'
+      +'</div>'
+      +'<div class="modal-body" style="padding:0 20px 20px;overflow-y:auto;">'+bodyHtml+'</div>';
+
+    var overlay = document.getElementById('modalOverlay');
+    var sheet = overlay.querySelector('.modal-sheet');
+    sheet.innerHTML = modalHtml;
+    overlay.classList.add('open');
+    history.pushState({modal:'sanpaicho'},'');
+  }catch(e){
+    console.error('openSanpaichoList error:', e);
+    alert('参拝帖を開けませんでした：'+e.message);
+  }
+}
+
+// 参拝帖エントリ削除
+function deleteSanpaiEntry(id){
+  if(!confirm('この参拝の記録を削除しますか？')) return;
+  try{
+    var list = getSanpaicho();
+    list = list.filter(function(e){ return e.id !== id; });
+    saveSanpaicho(list);
+    openSanpaichoList(); // 再描画
+  }catch(e){
+    console.error('deleteSanpaiEntry error:', e);
+  }
+}
+
+// シンプルHTMLエスケープ
+function escapeHtmlSimple(str){
+  if(!str) return '';
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;').replace(/\n/g,'<br>');
+}
+
+// ================================================================
+// 観光地検出：tagsから著名度を判定
+// ================================================================
+function detectShrineFame(tags){
+  if(!tags) return false;
+  if(tags['wikipedia'] || tags['wikidata']) return true;
+  if(tags['tourism']) return true;
+  if(tags['heritage']) return true;
+  if(tags['historic'] === 'monument') return true;
+  return false;
+}
 
 
 // ================================================================
