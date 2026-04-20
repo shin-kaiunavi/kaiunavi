@@ -4387,13 +4387,8 @@ function fetchShrines(lat,lon,deityName,resultEl){
   var radiusEl = document.getElementById('shrineRadius');
   var userRadius = radiusEl ? parseInt(radiusEl.value)*1000 : 5000;
 
-  // 半径ティア：ユーザー指定から開始し、足りなければ段階的に拡大
-  // 小さな社を優先する哲学：まずは近場から探す
-  var tiers = [];
-  if(userRadius <= 1000){ tiers = [1000, 3000, 5000, 10000]; }
-  else if(userRadius <= 3000){ tiers = [3000, 5000, 10000]; }
-  else if(userRadius <= 5000){ tiers = [5000, 8000, 12000]; }
-  else { tiers = [userRadius, userRadius*1.5, userRadius*2]; }
+  // シンプル化：ユーザー指定半径の1ティアのみ。拡大はユーザーが手動で再検索可能
+  var tiers = [userRadius];
 
   var endpoints = [
     'https://overpass-api.de/api/interpreter',
@@ -4402,20 +4397,30 @@ function fetchShrines(lat,lon,deityName,resultEl){
     'https://overpass.kumi.systems/api/interpreter'
   ];
 
-  // 【最重要】完了ガード：どこかで既に完了したらこれ以上動かない
-  // グローバルセーフティタイマー：何があっても20秒経ったら強制フォールバック
+  // 【最重要】完了ガード
+  // グローバルセーフティタイマー：何があっても10秒経ったら強制フォールバック
   var finished = false;
+  var searchStartTime = Date.now();
   var globalSafetyTimer = setTimeout(function(){
     if(finished) return;
     finished = true;
-    console.log('★ Global safety timeout (20s) fired, forcing fallback DB');
+    console.log('★ Global safety timeout (10s) fired, forcing fallback DB');
     useFallbackDB(lat, lon, deityName, resultEl);
-  }, 20000);
+  }, 10000);
+
+  // 経過時間表示タイマー（ユーザーに「進んでる」を見せる）
+  var elapsedTimer = setInterval(function(){
+    if(finished){ clearInterval(elapsedTimer); return; }
+    var elapsed = Math.round((Date.now() - searchStartTime) / 1000);
+    var elapsedEl = document.getElementById('shrineElapsed');
+    if(elapsedEl) elapsedEl.textContent = elapsed+'秒経過';
+  }, 500);
 
   function completeWithResults(elements, radius){
     if(finished) return;
     finished = true;
     clearTimeout(globalSafetyTimer);
+    clearInterval(elapsedTimer);
     renderShrineResults(elements, lat, lon, deityName, resultEl, {
       radius: radius, fallback: false
     });
@@ -4424,10 +4429,9 @@ function fetchShrines(lat,lon,deityName,resultEl){
     if(finished) return;
     finished = true;
     clearTimeout(globalSafetyTimer);
+    clearInterval(elapsedTimer);
     useFallbackDB(lat, lon, deityName, resultEl);
   }
-  // このfetchShrines呼び出しスコープ内でグローバルに参照できるようにする
-  window._shrineSearchFinished = function(){ return finished; };
 
   function buildQuery(radius){
     return '[out:json][timeout:20];('
@@ -4446,9 +4450,8 @@ function fetchShrines(lat,lon,deityName,resultEl){
 
   // 1つの半径で4エンドポイント全部試す
   function tryRadius(tierIdx){
-    if(finished) return; // 既に完了していれば何もしない
+    if(finished) return;
     if(tierIdx >= tiers.length){
-      // 全ティア全エンドポイント全滅 → フォールバックDB起動
       console.log('All tiers exhausted, using fallback DB');
       completeWithFallback();
       return;
@@ -4457,17 +4460,9 @@ function fetchShrines(lat,lon,deityName,resultEl){
     var radius = tiers[tierIdx];
     var tierLabel = radius >= 1000 ? (radius/1000)+'km' : radius+'m';
 
-    // ティア変更時はローディング表示を更新
-    if(tierIdx > 0){
-      resultEl.innerHTML = '<div class="shrine-loading">'
-        +'<div class="ai-loading-dot"></div><div class="ai-loading-dot"></div><div class="ai-loading-dot"></div>'
-        +'<span>半径を'+tierLabel+'に広げて再検索中...</span></div>';
-    }
-
     function tryEndpoint(epIdx){
-      if(finished) return; // 既に完了していれば何もしない
+      if(finished) return;
       if(epIdx >= endpoints.length){
-        // このティアの全エンドポイントが失敗 → 次のティアへ
         console.log('Tier '+radius+'m: all endpoints failed, moving to next tier');
         tryRadius(tierIdx + 1);
         return;
@@ -4476,33 +4471,34 @@ function fetchShrines(lat,lon,deityName,resultEl){
       console.log('Tier '+radius+'m, endpoint '+(epIdx+1)+'/'+endpoints.length);
       var url = endpoints[epIdx] + '?data=' + encodeURIComponent(buildQuery(radius));
 
-      // ローディング表示を進捗込みに更新（ユーザーに「動いてる」を見せる）
+      // ローディング表示（経過時間＋フォールバックボタン強調）
       var totalSteps = endpoints.length * tiers.length;
       var currentStep = tierIdx * endpoints.length + epIdx + 1;
       resultEl.innerHTML = '<div class="shrine-loading">'
         +'<div class="ai-loading-dot"></div><div class="ai-loading-dot"></div><div class="ai-loading-dot"></div>'
         +'<span>神社・お寺を検索中... ('+currentStep+'/'+totalSteps+')</span>'
         +'</div>'
-        +'<div style="text-align:center;margin-top:16px;">'
-        +'<div style="font-size:10px;color:var(--muted);margin-bottom:8px;letter-spacing:.1em;">半径'+tierLabel+'で探しています</div>'
-        +'<div style="padding:8px 18px;background:rgba(201,168,76,.06);border:1px solid rgba(201,168,76,.25);border-radius:8px;color:var(--gold);font-size:11px;cursor:pointer;display:inline-block;" onclick="useFallbackDB('+lat+','+lon+',\''+deityName+'\',document.getElementById(\'shrineResult\'))">🕯 全国の主要社を見る</div>'
+        +'<div style="text-align:center;margin-top:10px;font-size:10px;color:var(--muted);letter-spacing:.1em;">半径'+tierLabel+' · <span id="shrineElapsed">0秒経過</span></div>'
+        +'<div style="text-align:center;margin-top:20px;padding:14px;background:linear-gradient(135deg,rgba(201,168,76,.08),rgba(201,168,76,.03));border:1px solid rgba(201,168,76,.35);border-radius:12px;">'
+        +'<div style="font-size:11px;color:var(--text);line-height:1.8;margin-bottom:10px;">検索に時間がかかっています</div>'
+        +'<div style="padding:10px 20px;background:linear-gradient(135deg,var(--gold),#a07830);color:#0d0b08;border-radius:8px;font-family:var(--serif);font-size:13px;font-weight:800;letter-spacing:.15em;cursor:pointer;display:inline-block;" onclick="useFallbackDB('+lat+','+lon+',\''+deityName+'\',document.getElementById(\'shrineResult\'))">🕯 全国の主要社を見る</div>'
         +'</div>';
 
-      // 4秒タイムアウト（グローバル20秒以内に収まるように）
-      fetchWithTimeout(url, 4000).then(function(res){
-        if(finished) return; // 既に完了していれば破棄
+      // 3秒タイムアウト（10秒のグローバル安全網以内に4エンドポイント試せる）
+      fetchWithTimeout(url, 3000).then(function(res){
+        if(finished) return;
         if(!res.ok) throw new Error('HTTP '+res.status);
         return res.json();
       }).then(function(data){
         if(finished) return;
-        if(!data) return; // res.okがfalseだった場合のため
+        if(!data) return;
         var elements = normalizeElements(data);
         console.log('Got '+elements.length+' results at tier '+radius+'m');
 
         if(elements.length > 0){
           completeWithResults(elements, radius);
         } else {
-          console.log('Tier '+radius+'m: zero results, trying wider radius');
+          console.log('Tier '+radius+'m: zero results');
           tryRadius(tierIdx + 1);
         }
       }).catch(function(err){
