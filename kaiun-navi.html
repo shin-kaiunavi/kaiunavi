@@ -4646,7 +4646,7 @@ function renderShrineResults(elements,myLat,myLon,deityName,resultEl,opts){
   var now = new Date();
   var y = now.getFullYear();
   var eihou = getEihou(y);
-  var eihouDeg = EIHOU_DEG[eihou] || 157.5;
+  var eihouDeg = EIHOU_DEG_MAP[eihou] || 157.5;
 
   var places = [];
   for(var i=0;i<elements.length;i++){
