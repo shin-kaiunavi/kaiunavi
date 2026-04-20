@@ -4281,58 +4281,94 @@ function searchNearbyShrine(deityName){
 function fetchShrines(lat,lon,deityName,resultEl){
   var radiusEl = document.getElementById('shrineRadius');
   var radius = radiusEl ? parseInt(radiusEl.value)*1000 : 3000;
-  // node + way + relation で大きな寺社も取得（out centerで中心座標取得）
-  var query='[out:json][timeout:25];('
-    +'node["amenity"="place_of_worship"]["religion"~"^(shinto|buddhist)$"](around:'+radius+','+lat+','+lon+');'
-    +'way["amenity"="place_of_worship"]["religion"~"^(shinto|buddhist)$"](around:'+radius+','+lat+','+lon+');'
-    +'relation["amenity"="place_of_worship"]["religion"~"^(shinto|buddhist)$"](around:'+radius+','+lat+','+lon+');'
-    +'node["historic"="wayside_shrine"](around:'+radius+','+lat+','+lon+');'
-    +');out center 50;';
   
-  // CORS対応確認済みのエンドポイントのみ
+  // シンプルなクエリ（node中心、wayはセンター座標で軽く）
+  var querySimple='[out:json][timeout:20];('
+    +'node["amenity"="place_of_worship"]["religion"="shinto"](around:'+radius+','+lat+','+lon+');'
+    +'node["amenity"="place_of_worship"]["religion"="buddhist"](around:'+radius+','+lat+','+lon+');'
+    +'node["historic"="wayside_shrine"](around:'+radius+','+lat+','+lon+');'
+    +');out body 40;';
+  
+  // way/relation用の補完クエリ（別リクエスト、失敗しても無視）
+  var queryWayRel='[out:json][timeout:20];('
+    +'way["amenity"="place_of_worship"]["religion"~"shinto|buddhist"](around:'+radius+','+lat+','+lon+');'
+    +'relation["amenity"="place_of_worship"]["religion"~"shinto|buddhist"](around:'+radius+','+lat+','+lon+');'
+    +');out center 20;';
+  
+  // CORS対応の公式エンドポイント（安定性順）
   var endpoints = [
     'https://overpass-api.de/api/interpreter',
     'https://lz4.overpass-api.de/api/interpreter',
     'https://z.overpass-api.de/api/interpreter',
-    'https://overpass.kumi.systems/api/interpreter',
-    'https://overpass.openstreetmap.fr/api/interpreter'
+    'https://overpass.kumi.systems/api/interpreter'
   ];
+  
+  function fetchWithTimeout(url, query, timeoutMs){
+    return new Promise(function(resolve, reject){
+      var controller = new AbortController();
+      var tid = setTimeout(function(){controller.abort(); reject(new Error('timeout'));}, timeoutMs);
+      fetch(url, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        body: 'data=' + encodeURIComponent(query),
+        signal: controller.signal
+      }).then(function(res){
+        clearTimeout(tid);
+        if(!res.ok) throw new Error('HTTP '+res.status);
+        return res.json();
+      }).then(resolve).catch(function(err){clearTimeout(tid); reject(err);});
+    });
+  }
   
   function tryEndpoint(idx){
     if(idx >= endpoints.length){
       // 全滅の場合 - 優しいメッセージ
-      resultEl.innerHTML='<div style="text-align:center;padding:20px 16px;background:rgba(201,168,76,.04);border:1px solid rgba(201,168,76,.15);border-radius:12px;">'
-        +'<div style="font-size:30px;margin-bottom:10px;opacity:.7;">🕯️</div>'
-        +'<div style="font-size:13px;color:var(--text);line-height:1.9;margin-bottom:12px;">今、神社・お寺のデータサーバーが<br>少し混み合っているようです。</div>'
-        +'<div style="font-size:11px;color:var(--muted);line-height:1.8;margin-bottom:14px;">感謝の心があれば、いつでもどこでも、<br>手を合わせることはできます。<br>少し時間をおいて、また開いてみてください。</div>'
-        +'<div style="padding:10px 20px;background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.3);border-radius:8px;color:var(--gold);font-size:12px;cursor:pointer;display:inline-block;" onclick="searchNearbyShrine(\''+deityName+'\')">↺ もう一度試す</div>'
+      resultEl.innerHTML='<div style="text-align:center;padding:24px 16px;background:rgba(201,168,76,.04);border:1px solid rgba(201,168,76,.15);border-radius:12px;">'
+        +'<div style="font-size:34px;margin-bottom:12px;opacity:.7;">🕯️</div>'
+        +'<div style="font-size:13px;color:var(--text);line-height:1.9;margin-bottom:14px;">今、神社・お寺のデータサーバーが<br>少し混み合っているようです。</div>'
+        +'<div style="font-size:11px;color:var(--muted);line-height:1.8;margin-bottom:16px;">感謝の心があれば、いつでもどこでも、<br>手を合わせることはできます。<br>少し時間をおいて、また開いてみてください。</div>'
+        +'<div style="padding:10px 22px;background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.3);border-radius:8px;color:var(--gold);font-size:12px;cursor:pointer;display:inline-block;" onclick="searchNearbyShrine(\''+deityName+'\')">↺ もう一度試す</div>'
         +'</div>';
       return;
     }
-    // タイムアウト付きfetch (30秒)
-    var controller = new AbortController();
-    var timeoutId = setTimeout(function(){controller.abort();}, 30000);
-    fetch(endpoints[idx], {
-      method: 'POST',
-      headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-      body: 'data=' + encodeURIComponent(query),
-      signal: controller.signal
-    }).then(function(res){
-      clearTimeout(timeoutId);
-      if(!res.ok) throw new Error('HTTP '+res.status);
-      return res.json();
-    }).then(function(data){
-      // way/relationのcenter座標をlat/lonに正規化
-      var elements = (data.elements||[]).map(function(el){
-        if(!el.lat && el.center){
-          return Object.assign({},el,{lat:el.center.lat,lon:el.center.lon});
-        }
-        return el;
-      });
-      renderShrineResults(elements,lat,lon,deityName,resultEl);
+    
+    console.log('Trying endpoint '+(idx+1)+'/'+endpoints.length+': '+endpoints[idx]);
+    
+    // まずシンプルクエリ（node中心）
+    fetchWithTimeout(endpoints[idx], querySimple, 25000).then(function(data){
+      var elements = data.elements||[];
+      console.log('Got '+elements.length+' nodes from '+endpoints[idx]);
+      
+      // 成功したら結果表示、way/relationは裏で追加取得
+      if(elements.length > 0){
+        renderShrineResults(elements, lat, lon, deityName, resultEl);
+        
+        // way/relation を追加で取ってみる（失敗しても無視）
+        fetchWithTimeout(endpoints[idx], queryWayRel, 20000).then(function(data2){
+          var extra = (data2.elements||[]).map(function(el){
+            if(!el.lat && el.center) return Object.assign({},el,{lat:el.center.lat,lon:el.center.lon});
+            return el;
+          }).filter(function(el){return el.lat;});
+          if(extra.length > 0){
+            console.log('Got '+extra.length+' additional way/relation');
+            // 重複排除して再レンダリング
+            var combined = elements.concat(extra);
+            var seen = {};
+            var unique = combined.filter(function(el){
+              var key = Math.round(el.lat*1000)+'_'+Math.round(el.lon*1000);
+              if(seen[key]) return false;
+              seen[key] = true;
+              return true;
+            });
+            renderShrineResults(unique, lat, lon, deityName, resultEl);
+          }
+        }).catch(function(){/* way/relation失敗は無視 */});
+      } else {
+        // 結果0件でも次のエンドポイント試してみる
+        tryEndpoint(idx+1);
+      }
     }).catch(function(err){
-      clearTimeout(timeoutId);
-      console.warn('Overpass endpoint '+(idx+1)+' ('+endpoints[idx]+') failed:', err.message||err);
+      console.warn('Endpoint '+(idx+1)+' failed:', err.message||err);
       tryEndpoint(idx+1);
     });
   }
