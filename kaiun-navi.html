@@ -48,6 +48,11 @@ input::placeholder{color:var(--muted);font-size:16px;}
 .hero-back{position:absolute;top:20px;left:16px;font-size:11px;color:var(--muted);cursor:pointer;letter-spacing:.1em;padding:6px 12px;border:1px solid var(--border);border-radius:20px;}
 .hero-name{font-family:var(--serif);font-size:26px;font-weight:800;color:var(--gold-light);margin-bottom:4px;}
 .hero-sub{font-size:12px;color:var(--muted);letter-spacing:.12em;}
+.risshun-notice{display:inline-flex;align-items:center;gap:6px;margin-top:10px;padding:7px 14px;background:linear-gradient(135deg,rgba(232,143,160,.08),rgba(201,168,76,.04));border:1px solid rgba(232,143,160,.3);border-radius:18px;cursor:pointer;font-size:10px;color:rgba(232,180,190,.9);letter-spacing:.05em;line-height:1.5;transition:background .2s,border-color .2s;}
+.risshun-notice:active{background:linear-gradient(135deg,rgba(232,143,160,.18),rgba(201,168,76,.08));border-color:rgba(232,143,160,.5);}
+.risshun-notice-icon{font-size:12px;flex-shrink:0;}
+.risshun-notice-text{flex:1;font-family:'Noto Serif JP',serif;}
+.risshun-notice-arrow{color:rgba(232,143,160,.6);font-size:14px;flex-shrink:0;}
 .deity-box{margin:22px auto 0;display:inline-block;background:var(--surface);border:1px solid var(--gold);border-radius:18px;padding:18px 32px;position:relative;cursor:pointer;transition:background .2s;}
 .deity-box:active{background:var(--surface2);}
 .deity-box::before{content:'守護仏';position:absolute;top:-9px;left:50%;transform:translateX(-50%);background:var(--bg);padding:0 10px;font-size:9px;letter-spacing:.35em;color:var(--gold);}
@@ -2528,6 +2533,29 @@ function openModal(type){
   else if(type==='kanshi'){title=s.kanshi;sub='干 支';var kIdx=s.kIdx||0;var g=GOGYO[kIdx];body='<strong>'+KAN_R[kIdx]+'('+KAN_E[kIdx]+')</strong><div class="modal-divider"></div><strong>五行:'+g+'</strong><br>'+GOGYO_DESC[g]+'<div class="modal-divider"></div>干支は十干('+KAN_R[kIdx]+')と十二支('+JUNISHI_R[JUNISHI.indexOf(s.juunishi)]+')の組み合わせ。60年で一巡します。';}
   else if(type==='nenchu'){title=s.kanshi;sub='四柱推命 ｜ 年柱';var kIdx2=s.kIdx||0;body='年柱は生まれた年の干支。あなたの<strong>人生の根幹・先祖からの影響・社会的な個性</strong>を表します。<div class="modal-divider"></div>年柱「'+s.kanshi+'」は、'+KAN_E[kIdx2]+'の気を持ちます。'+GOGYO_DESC[GOGYO[kIdx2]];}
   else if(type==='getchu'){title=s.getchu;sub='四柱推命 ｜ 月柱';body='月柱は生まれた月の干支。あなたの<strong>仕事運・対人関係・才能と個性</strong>を表します。<div class="modal-divider"></div>四柱推命では年柱・月柱・日柱・時柱の4つを組み合わせて鑑定します。';}
+  else if(type==='risshun'){
+    var risshunJIdx = ((s.byZodiac-1900)%12+12)%12;
+    var risshunJuunishi = JUNISHI[risshunJIdx];
+    var risshunJuunishiR = JUNISHI_R[risshunJIdx];
+    title='立 春 と 暦 の 節 目';
+    sub='こ よ み の お 話';
+    body='<strong>'+s.by+'年'+s.bm+'月'+s.bday+'日</strong>のお生まれは、'
+      +'暦の上では<strong>'+s.byZodiac+'年（'+risshunJuunishi+'年・'+risshunJuunishiR+')</strong>扱いになります。'
+      +'<div class="modal-divider"></div>'
+      +'<strong>どうして？</strong><br>'
+      +'古来、日本の暦では「<strong>立春</strong>（2月3日または4日）」が一年の始まりとされてきました。'
+      +'節分の翌日、春が立ち上がる日。ここで十二支が切り替わります。'
+      +'<div class="modal-divider"></div>'
+      +'<strong>戸籍と暦のちがい</strong><br>'
+      +'カレンダー上は'+s.by+'年（'+JUNISHI[((s.by-1900)%12+12)%12]+'年）生まれ。'
+      +'でも暦の上では、立春前のあなたは<strong>前年の気</strong>を持って生まれた方。'
+      +'この鑑定では、本来の守護仏・九星・運命を正しくお伝えするため、暦のルールに従っています。'
+      +'<div class="modal-divider"></div>'
+      +'<span style="font-size:11px;color:var(--muted);line-height:1.9;">'
+      +'立春前生まれの方は、<strong>冬の終わりに蓄えた静かな力</strong>を持つとされます。'
+      +'春を待つ種のように、内に秘めた芽吹きの時期。'
+      +'どうか、ご自身の本当のリズムを大切にお過ごしください。</span>';
+  }
   document.getElementById('modalTitle').textContent=title;
   document.getElementById('modalSub').textContent=sub;
   document.getElementById('modalBody').innerHTML=body;
@@ -3088,7 +3116,20 @@ function _doCalculate(){
     var deity=DEITIES[juunishi]||{name:'大日如来',mantra:'おん あびらうんけん ばざらだとばん',desc:'宇宙の真理を体現する仏様。',merit:'開運全般にご利益があります。'};
     var fortune=genFortune(by,bm,bday);
     document.getElementById('resultName').textContent=last+' '+first+' 様';
-    document.getElementById('resultSub').textContent=by+'年'+bm+'月'+bday+'日生まれ　'+juunishi+'年('+JUNISHI_R[jIdx]+')';
+    var isBeforeRisshun = (byZodiac !== by);
+    var subText = by+'年'+bm+'月'+bday+'日生まれ　'+juunishi+'年('+JUNISHI_R[jIdx]+')';
+    var subEl = document.getElementById('resultSub');
+    if(isBeforeRisshun){
+      // 立春前生まれの注記（タップで詳細モーダル）
+      subEl.innerHTML = subText
+        +'<div class="risshun-notice" onclick="openModal(\'risshun\')">'
+        +'<span class="risshun-notice-icon">🌸</span>'
+        +'<span class="risshun-notice-text">※立春前のため、暦の上では前年（'+byZodiac+'年）扱い</span>'
+        +'<span class="risshun-notice-arrow">›</span>'
+        +'</div>';
+    } else {
+      subEl.textContent = subText;
+    }
     document.getElementById('deityName').textContent=deity.name;
     document.getElementById('deityMantra').textContent='真言:'+deity.mantra;
     document.getElementById('juunishi').textContent=juunishi;
