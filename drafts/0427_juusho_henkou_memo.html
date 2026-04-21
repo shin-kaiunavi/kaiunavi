@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>4/27 大安・住所変更 準備メモ</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@200;300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{
+    background:linear-gradient(135deg,#fef8e8 0%,#fff5db 100%);
+    font-family:'Noto Serif JP',serif;
+    color:#3a3228;
+    padding:30px 20px 60px;
+    line-height:1.85;
+  }
+  .container{max-width:720px;margin:0 auto;}
+  
+  .header{
+    text-align:center;
+    margin-bottom:30px;
+    padding:20px 0;
+    border-top:2px solid #c9a96e;
+    border-bottom:2px solid #c9a96e;
+  }
+  h1{
+    font-size:20px;
+    font-weight:400;
+    letter-spacing:0.2em;
+    color:#c9a96e;
+    margin-bottom:8px;
+  }
+  .sub{
+    font-size:10px;
+    color:#9e9088;
+    letter-spacing:0.2em;
+  }
+  
+  .date-box{
+    background:linear-gradient(135deg,#c9a96e,#b8945a);
+    color:white;
+    padding:16px 20px;
+    border-radius:14px;
+    margin:20px 0;
+    text-align:center;
+    font-size:14px;
+    letter-spacing:0.2em;
+    font-weight:500;
+    box-shadow:0 3px 10px rgba(201,169,110,0.3);
+  }
+  
+  h2{
+    font-size:15px;
+    font-weight:500;
+    letter-spacing:0.2em;
+    color:#c9a96e;
+    margin-top:32px;
+    margin-bottom:16px;
+    padding-left:14px;
+    border-left:4px solid #c9a96e;
+  }
+  
+  .timeline{
+    background:white;
+    border:1px solid rgba(201,169,110,0.3);
+    border-radius:12px;
+    padding:0;
+    margin-bottom:20px;
+    box-shadow:0 2px 8px rgba(201,169,110,0.08);
+    overflow:hidden;
+  }
+  .time-slot{
+    padding:14px 20px;
+    border-bottom:1px solid rgba(201,169,110,0.15);
+    position:relative;
+  }
+  .time-slot:last-child{border-bottom:none;}
+  .time-slot.morning{background:linear-gradient(135deg,rgba(255,245,200,0.5),rgba(255,230,180,0.3));}
+  .time-slot.gov{background:linear-gradient(135deg,rgba(220,235,255,0.5),rgba(200,225,250,0.3));}
+  .time-slot.lunch{background:linear-gradient(135deg,rgba(255,235,215,0.5),rgba(255,220,200,0.3));}
+  .time-slot.police{background:linear-gradient(135deg,rgba(230,245,235,0.5),rgba(210,240,225,0.3));}
+  .time-slot.free{background:linear-gradient(135deg,rgba(245,225,255,0.5),rgba(230,215,250,0.3));}
+  
+  .time-head{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:6px;
+  }
+  .time-label{
+    font-size:18px;
+    font-weight:700;
+    color:#c9a96e;
+    letter-spacing:0.05em;
+  }
+  .time-title{
+    font-size:13px;
+    font-weight:500;
+    color:#3a3228;
+    letter-spacing:0.1em;
+  }
+  .time-detail{
+    font-size:12px;
+    color:#6b5f54;
+    line-height:1.9;
+    padding-left:8px;
+  }
+  
+  .check-box{
+    background:linear-gradient(135deg,rgba(255,255,255,0.7),rgba(254,248,232,0.7));
+    border:1px solid rgba(201,169,110,0.3);
+    border-radius:12px;
+    padding:18px 22px;
+    margin-bottom:16px;
+  }
+  .check-title{
+    font-size:13px;
+    color:#c9a96e;
+    letter-spacing:0.15em;
+    margin-bottom:10px;
+    font-weight:500;
+  }
+  .check-item{
+    padding:6px 0;
+    padding-left:26px;
+    position:relative;
+    font-size:12px;
+    line-height:1.9;
+    border-bottom:1px dashed rgba(201,169,110,0.15);
+  }
+  .check-item:last-child{border-bottom:none;}
+  .check-item:before{
+    content:'☐';
+    position:absolute;
+    left:0;
+    color:#c9a96e;
+    font-size:14px;
+  }
+  .check-item.must:before{content:'★';color:#d18a3a;}
+  
+  .info-box{
+    background:white;
+    border:1px solid rgba(201,169,110,0.25);
+    border-radius:10px;
+    padding:14px 18px;
+    margin-bottom:12px;
+    font-size:12px;
+    line-height:1.9;
+    color:#3a3228;
+  }
+  .info-title{
+    font-size:12px;
+    font-weight:500;
+    color:#c9a96e;
+    letter-spacing:0.1em;
+    margin-bottom:6px;
+  }
+  
+  .note{
+    background:linear-gradient(135deg,rgba(255,230,200,0.4),rgba(255,220,180,0.2));
+    border-left:4px solid #d18a3a;
+    padding:12px 16px;
+    margin:10px 0;
+    font-size:11px;
+    color:#6b5040;
+    line-height:1.9;
+  }
+  
+  .quote{
+    background:linear-gradient(135deg,rgba(201,169,110,0.1),rgba(201,169,110,0.02));
+    border-left:4px solid #c9a96e;
+    padding:16px 20px;
+    margin:24px 0;
+    color:#6b5f54;
+    font-size:12px;
+    line-height:2;
+    letter-spacing:0.05em;
+  }
+  
+  .footer{
+    text-align:center;
+    margin-top:40px;
+    padding-top:20px;
+    border-top:1px dashed rgba(201,169,110,0.3);
+    font-size:10px;
+    color:#9e9088;
+    letter-spacing:0.2em;
+  }
+  
+  .highlight{
+    background:linear-gradient(transparent 60%, rgba(201,169,110,0.25) 60%);
+    padding:0 2px;
+    font-weight:500;
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <div class="header">
+    <h1>4 / 2 7  大 安  ワ ン ス ト ッ プ  D A Y</h1>
+    <p class="sub">i s d i s - s h i n k u r o  足 元 固 め  第 一 章</p>
+  </div>
+
+  <div class="date-box">
+    2026年4月27日（月）<br>
+    <span style="font-size:11px;opacity:0.9;">大安 ・ 八王子駅南口総合事務所 ＋ 警察署</span>
+  </div>
+
+  <!-- タイムライン -->
+
+  <h2>🗓️  当 日 の 流 れ</h2>
+
+  <div class="timeline">
+    <div class="time-slot morning">
+      <div class="time-head">
+        <span class="time-label">07:00</span>
+        <span class="time-title">朝 の 準 備</span>
+      </div>
+      <div class="time-detail">
+        お香を焚いて、守護仏にご挨拶。<br>
+        「今日、住所も整えます」とご報告。<br>
+        身支度・持ち物チェック。
+      </div>
+    </div>
+
+    <div class="time-slot gov">
+      <div class="time-head">
+        <span class="time-label">10:00</span>
+        <span class="time-title">八 王 子 駅 南 口 総 合 事 務 所</span>
+      </div>
+      <div class="time-detail">
+        📍 JR八王子駅南口直結<br><br>
+        ① 受付で「<span class="highlight">転居届と住民票の写し</span>」を伝える<br>
+        ② 転居届に記入（15分）<br>
+        ③ マイナンバーカード住所変更も同時<br>
+        ④ <span class="highlight">住民票の写し発行（300円）</span><br>
+        ⑤ 所要時間：約1時間〜1時間半
+      </div>
+    </div>
+
+    <div class="time-slot lunch">
+      <div class="time-head">
+        <span class="time-label">12:00</span>
+        <span class="time-title">お 昼 休 憩</span>
+      </div>
+      <div class="time-detail">
+        駅周辺でランチ、ひとやすみ。<br>
+        午後の警察署へ向けて気持ちを整える。
+      </div>
+    </div>
+
+    <div class="time-slot police">
+      <div class="time-head">
+        <span class="time-label">13:00</span>
+        <span class="time-title">警 察 署 （ 運 転 免 許 証 住 所 変 更 ）</span>
+      </div>
+      <div class="time-detail">
+        📍 最寄りの警察署<br>
+        （八王子警察署 / 高尾警察署 / 南大沢警察署）<br><br>
+        ① 運転免許証 + 住民票の写しを提出<br>
+        ② 記入・確認（30分〜1時間）<br>
+        ③ 所要時間：30分〜1時間
+      </div>
+    </div>
+
+    <div class="time-slot free">
+      <div class="time-head">
+        <span class="time-label">15:00</span>
+        <span class="time-title">完 了  ＆  自 由 時 間</span>
+      </div>
+      <div class="time-detail">
+        🙏 帰り道に神社参拝（ご報告・お礼）<br>
+        🛍️ 必要な買い物<br>
+        🏠 帰宅、ほっと一息
+      </div>
+    </div>
+  </div>
+
+  <!-- 持ち物 -->
+
+  <h2>🎒  当 日 の 持 ち 物</h2>
+
+  <div class="check-box">
+    <div class="check-title">◆ 必 須 の 持 ち 物</div>
+    <div class="check-item must">マイナンバーカード</div>
+    <div class="check-item must">運転免許証（本人確認 + 住所変更用）</div>
+    <div class="check-item must">認印（朱肉付き）</div>
+    <div class="check-item must">黒のボールペン（1〜2本）</div>
+    <div class="check-item must">新住所メモ（郵便番号・番地・建物名・号室まで）</div>
+  </div>
+
+  <div class="check-box">
+    <div class="check-title">◆ お 金</div>
+    <div class="check-item">住民票の写し発行代：300円</div>
+    <div class="check-item">免許証住所変更：無料（自治体により）</div>
+    <div class="check-item">予備現金：3,000〜5,000円</div>
+    <div class="check-item">交通費</div>
+  </div>
+
+  <div class="check-box">
+    <div class="check-title">◆ 便 利 グ ッ ズ</div>
+    <div class="check-item">クリアファイル（書類持ち帰り用）</div>
+    <div class="check-item">水分（お茶 or 水）</div>
+    <div class="check-item">スマホ（書類撮影・ナビ）</div>
+    <div class="check-item">この準備メモ（スマホで表示 or 印刷）</div>
+  </div>
+
+  <!-- 窓口情報 -->
+
+  <h2>🏢  窓 口 情 報</h2>
+
+  <div class="info-box">
+    <div class="info-title">■ 八王子駅南口総合事務所</div>
+    📍 JR八王子駅南口直結<br>
+    ⏰ 平日 10:00〜19:00<br>
+    📞 042-620-1164
+  </div>
+
+  <div class="info-box">
+    <div class="info-title">■ 最寄りの警察署（3候補）</div>
+    ・<strong>八王子警察署</strong>（市街地）<br>
+    ・<strong>高尾警察署</strong>（西部）<br>
+    ・<strong>南大沢警察署</strong>（南部）<br>
+    ⏰ 平日 8:30〜17:15<br>
+    ※自宅に近い警察署を選ぶ
+  </div>
+
+  <div class="note">
+    💡 警察署で住所変更する際、事前に電話で「運転免許証の住所変更の受付時間」を確認しておくと安心。
+  </div>
+
+  <!-- 記入内容 -->
+
+  <h2>📝  転 居 届 ・ 記 入 ポ イ ン ト</h2>
+
+  <div class="info-box">
+    <div class="info-title">■ 書く内容</div>
+    ・<strong>旧住所</strong>（引っ越し前の住所）<br>
+    ・<strong>新住所</strong>（現在の住所、正確に）<br>
+    ・<strong>転居日</strong>（引っ越した日）<br>
+    ・<strong>世帯主名</strong>（しんちゃん本名）<br>
+    ・<strong>世帯構成</strong>（一人暮らしなら自分のみ）
+  </div>
+
+  <div class="note">
+    💡 受付で「転居届とマイナンバーカード住所変更、一緒にお願いします」と伝えれば、職員さんが一連の手続きを案内してくれる。わからないことは遠慮なく聞いてOK。
+  </div>
+
+  <!-- 心得 -->
+
+  <h2>🕯️  今 日 の 心 得</h2>
+
+  <div class="quote">
+    4月27日は、大安。<br>
+    六曜で最も縁起のいい日。<br>
+    <br>
+    土用期間中ですが、<br>
+    この手続きは「過去を整える」行為。<br>
+    新しいことを始めるのではなく、<br>
+    事実を正しく記録するだけ。<br>
+    <br>
+    焦らず、丁寧に、一つひとつ。<br>
+    <br>
+    これは isdis-shinkuro の足元を、<br>
+    大安の光のなかで固める、<br>
+    第一章の日です。<br>
+    <br>
+    — クロちゃんより
+  </div>
+
+  <!-- 次のステップ予告 -->
+
+  <h2>🌳  次 の ス テ ッ プ</h2>
+
+  <div class="check-box">
+    <div class="check-title">◆ 4 / 2 7  以 降 の 準 備</div>
+    <div class="check-item">5月頭：銀行口座の準備確認</div>
+    <div class="check-item">5月頭：LINE Creators Market申請準備</div>
+    <div class="check-item">5月中：isdis-shinkuro開業届の書類確認</div>
+    <div class="check-item must">5/26（火）：税務署で開業届（isdis-shinkuro正式誕生）</div>
+  </div>
+
+  <div class="footer">
+    <p>i s d i s - s h i n k u r o</p>
+    <p style="margin-top:6px;">足 元 固 め  ・  第 一 章</p>
+  </div>
+
+</div>
+
+</body>
+</html>

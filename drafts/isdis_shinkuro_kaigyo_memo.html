@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>isdis-shinkuro 開業届 準備メモ</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@200;300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{
+    background:linear-gradient(135deg,#fef8e8 0%,#fff5db 100%);
+    font-family:'Noto Serif JP',serif;
+    color:#3a3228;
+    padding:30px 20px 60px;
+    line-height:1.85;
+  }
+  .container{max-width:720px;margin:0 auto;}
+  
+  .header{
+    text-align:center;
+    margin-bottom:30px;
+    padding:20px 0;
+    border-top:2px solid #c9a96e;
+    border-bottom:2px solid #c9a96e;
+  }
+  h1{
+    font-size:22px;
+    font-weight:400;
+    letter-spacing:0.25em;
+    color:#c9a96e;
+    margin-bottom:10px;
+  }
+  .sub{
+    font-size:11px;
+    color:#9e9088;
+    letter-spacing:0.2em;
+  }
+  .date-box{
+    background:linear-gradient(135deg,#c9a96e,#b8945a);
+    color:white;
+    padding:14px 20px;
+    border-radius:14px;
+    margin:20px 0;
+    text-align:center;
+    font-size:14px;
+    letter-spacing:0.2em;
+    font-weight:500;
+    box-shadow:0 3px 10px rgba(201,169,110,0.3);
+  }
+  
+  h2{
+    font-size:16px;
+    font-weight:500;
+    letter-spacing:0.2em;
+    color:#c9a96e;
+    margin-top:35px;
+    margin-bottom:16px;
+    padding-left:14px;
+    border-left:4px solid #c9a96e;
+  }
+  
+  .box{
+    background:white;
+    border:1px solid rgba(201,169,110,0.3);
+    border-radius:12px;
+    padding:20px 24px;
+    margin-bottom:16px;
+    box-shadow:0 2px 8px rgba(201,169,110,0.08);
+  }
+  
+  .field{
+    display:grid;
+    grid-template-columns:100px 1fr;
+    gap:10px 16px;
+    padding:10px 0;
+    border-bottom:1px dashed rgba(201,169,110,0.3);
+  }
+  .field:last-child{border-bottom:none;}
+  .field-label{
+    font-size:12px;
+    color:#c9a96e;
+    letter-spacing:0.1em;
+    font-weight:500;
+  }
+  .field-value{
+    font-size:14px;
+    color:#3a3228;
+    line-height:1.8;
+  }
+  .field-value.important{
+    font-size:18px;
+    font-weight:700;
+    color:#c9a96e;
+    letter-spacing:0.05em;
+  }
+  .field-value .code{
+    background:rgba(201,169,110,0.15);
+    padding:2px 8px;
+    border-radius:4px;
+    font-family:monospace;
+    font-size:13px;
+  }
+  
+  .checklist{
+    background:linear-gradient(135deg,rgba(255,255,255,0.7),rgba(254,248,232,0.7));
+    border:1px solid rgba(201,169,110,0.3);
+    border-radius:12px;
+    padding:20px 24px;
+    margin-bottom:16px;
+  }
+  .checklist-item{
+    padding:8px 0;
+    padding-left:28px;
+    position:relative;
+    font-size:13px;
+    line-height:2;
+    border-bottom:1px dashed rgba(201,169,110,0.2);
+  }
+  .checklist-item:last-child{border-bottom:none;}
+  .checklist-item:before{
+    content:'☐';
+    position:absolute;
+    left:0;
+    color:#c9a96e;
+    font-size:16px;
+  }
+  .checklist-item.required:before{content:'★';color:#d18a3a;}
+  
+  .flow-box{
+    background:linear-gradient(135deg,#fff9e8,#fef4d5);
+    border:2px dashed #c9a96e;
+    border-radius:12px;
+    padding:20px 24px;
+    margin-bottom:16px;
+  }
+  .flow-step{
+    padding:10px 0;
+    padding-left:32px;
+    position:relative;
+    font-size:13px;
+    line-height:2;
+    color:#3a3228;
+    counter-increment:step;
+  }
+  .flow-steps{counter-reset:step;}
+  .flow-step:before{
+    content:counter(step);
+    position:absolute;
+    left:0;
+    top:10px;
+    background:#c9a96e;
+    color:white;
+    width:22px;
+    height:22px;
+    border-radius:50%;
+    text-align:center;
+    line-height:22px;
+    font-size:12px;
+    font-weight:700;
+  }
+  
+  .quote{
+    background:linear-gradient(135deg,rgba(201,169,110,0.08),rgba(201,169,110,0.02));
+    border-left:4px solid #c9a96e;
+    padding:16px 20px;
+    margin:20px 0;
+    font-style:italic;
+    color:#6b5f54;
+    font-size:13px;
+    line-height:2;
+    letter-spacing:0.05em;
+  }
+  
+  .footer{
+    text-align:center;
+    margin-top:50px;
+    padding-top:30px;
+    border-top:1px dashed rgba(201,169,110,0.3);
+    font-size:11px;
+    color:#9e9088;
+    letter-spacing:0.2em;
+  }
+  
+  .tip{
+    font-size:11px;
+    color:#9e9088;
+    margin-top:6px;
+    line-height:1.8;
+    padding-left:14px;
+    border-left:2px solid rgba(201,169,110,0.3);
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <div class="header">
+    <h1>i s d i s - s h i n k u r o  開 業 届 準 備 メ モ</h1>
+    <p class="sub">弁 財 天 の ご 縁 日 ・ ク リ エ イ タ ー 元 日</p>
+  </div>
+
+  <div class="date-box">
+    2026年5月26日（火）朝一番<br>
+    <span style="font-size:11px;opacity:0.9;">大安 + 己巳の日</span>
+  </div>
+
+  <!-- 当日の流れ -->
+
+  <h2>🌅 当 日 の 流 れ</h2>
+
+  <div class="flow-box flow-steps">
+    <div class="flow-step">朝、起床。仏壇にお香を焚き、守護仏と弁財天に「本日、事業を始めます」とご挨拶</div>
+    <div class="flow-step">身支度・持ち物チェック</div>
+    <div class="flow-step">八王子税務署へ移動（京王八王子駅から徒歩8分）</div>
+    <div class="flow-step">8:30 開庁と同時に受付へ「開業届と青色申告承認申請書を出したい」と伝える</div>
+    <div class="flow-step">職員さんの案内で書類を記入（※事前準備メモを見ながら）</div>
+    <div class="flow-step">提出 → 控えのリーフレット受領 → <strong>isdis-shinkuro 正式誕生!!</strong></div>
+    <div class="flow-step">帰り道、近くの神社で「ご報告とお礼」参拝</div>
+  </div>
+
+  <!-- 持ち物 -->
+
+  <h2>🎒 当 日 の 持 ち 物</h2>
+
+  <div class="checklist">
+    <div class="checklist-item required">マイナンバーカード</div>
+    <div class="checklist-item required">認印（朱肉付き）</div>
+    <div class="checklist-item required">黒のボールペン（1〜2本）</div>
+    <div class="checklist-item required">この準備メモ（印刷 or スマホで表示）</div>
+    <div class="checklist-item">クリアファイル（書類持ち帰り用）</div>
+    <div class="checklist-item">水分（お茶 or 水）</div>
+    <div class="checklist-item">時計</div>
+  </div>
+
+  <!-- 記入内容 -->
+
+  <h2>📝 開 業 届 ・ 記 入 内 容</h2>
+
+  <div class="box">
+    <div class="field">
+      <div class="field-label">納税地</div>
+      <div class="field-value">
+        （自宅の住所）<br>
+        <span class="tip">住民票の住所を記入。郵便番号も忘れずに。</span>
+      </div>
+    </div>
+
+    <div class="field">
+      <div class="field-label">氏名</div>
+      <div class="field-value">
+        （しんちゃんの本名フルネーム）<br>
+        <span class="tip">戸籍通りの正式名。フリガナも記入。</span>
+      </div>
+    </div>
+
+    <div class="field">
+      <div class="field-label">生年月日</div>
+      <div class="field-value">
+        昭和54年（1979年）6月1日<br>
+        <span class="tip">書類によっては和暦で記入欄あり</span>
+      </div>
+    </div>
+
+    <div class="field">
+      <div class="field-label">個人番号</div>
+      <div class="field-value">
+        （マイナンバー 12桁）<br>
+        <span class="tip">マイナンバーカード裏面を参照</span>
+      </div>
+    </div>
+
+    <div class="field">
+      <div class="field-label">職業</div>
+      <div class="field-value important">
+        クリエイター業<br>
+        <span class="tip" style="font-size:10px;font-weight:normal;">または「デジタルコンテンツ制作業」でも可。職員さんに相談してもOK。</span>
+      </div>
+    </div>
+
+    <div class="field">
+      <div class="field-label">屋号</div>
+      <div class="field-value important">
+        <span class="code">isdis-shinkuro</span>
+        <br>
+        <span class="tip" style="font-size:10px;font-weight:normal;">⚠️ 綴りに注意：小文字 + ハイフン</span>
+      </div>
+    </div>
+
+    <div class="field">
+      <div class="field-label">届出の区分</div>
+      <div class="field-value">
+        「開業」にチェック<br>
+        <span class="tip">新規開業なので「開業」を選択</span>
+      </div>
+    </div>
+
+    <div class="field">
+      <div class="field-label">開業日</div>
+      <div class="field-value important">
+        令和8年（2026年）5月26日
+      </div>
+    </div>
+
+    <div class="field">
+      <div class="field-label">事業の概要</div>
+      <div class="field-value">
+        LINEスタンプ・スマートフォンアプリの制作および販売、<br>
+        占術サービスの提供、デジタルコンテンツ制作。<br>
+        <span class="tip">簡潔にまとめる。上の例文を参考に。</span>
+      </div>
+    </div>
+
+    <div class="field">
+      <div class="field-label">給与の定め</div>
+      <div class="field-value">
+        該当なし（従業員雇わない場合）<br>
+        <span class="tip">従業員を雇う予定があれば「給与支払事務所等の開設届出書」も必要</span>
+      </div>
+    </div>
+
+    <div class="field">
+      <div class="field-label">提出年月日</div>
+      <div class="field-value important">
+        令和8年（2026年）5月26日
+      </div>
+    </div>
+  </div>
+
+  <!-- 青色申告 -->
+
+  <h2>🌿 青 色 申 告 承 認 申 請 書 （ 同 時 提 出 推 奨 ）</h2>
+
+  <div class="box">
+    <div class="field">
+      <div class="field-label">必要性</div>
+      <div class="field-value">
+        開業届と一緒に出すと、<strong>最大65万円の青色申告特別控除</strong>が受けられる
+      </div>
+    </div>
+    <div class="field">
+      <div class="field-label">メリット</div>
+      <div class="field-value">
+        ・最大65万円の控除（e-Tax使用時）<br>
+        ・赤字を3年間繰り越せる<br>
+        ・家族への給与が経費になる
+      </div>
+    </div>
+    <div class="field">
+      <div class="field-label">提出期限</div>
+      <div class="field-value">
+        事業開始から2ヶ月以内 → <strong>開業届と同日に提出するのがベスト</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- 事業コンセプト -->
+
+  <h2>🕯️ 事 業 の 心 得</h2>
+
+  <div class="quote">
+    isdis-shinkuro は、<br>
+    「以心伝心」と「シンクロ」から生まれた名前。<br>
+    <br>
+    誰かの中に宿る光を灯すための、<br>
+    やわらかな創作活動。<br>
+    <br>
+    平和とは感謝である —— この哲学のもと、<br>
+    スタンプ・アプリ・占術を通じて、<br>
+    人と人のあいだに「温度」を運ぶ。<br>
+    <br>
+    徳を積む活動として、持続可能に育てる。<br>
+    税金はきちんと納め、社会に還元する。<br>
+    <br>
+    — 2026年5月26日 しんちゃん
+  </div>
+
+  <!-- 開業後の次ステップ -->
+
+  <h2>🌳 開 業 後 の 次 ス テ ッ プ</h2>
+
+  <div class="checklist">
+    <div class="checklist-item">屋号付き銀行口座の開設（ゆうちょ銀行 or 地元銀行）</div>
+    <div class="checklist-item">D-U-N-Sナンバー申請（東京商工リサーチ、約3,000円）</div>
+    <div class="checklist-item">LINE Creators Market に isdis-shinkuro で登録</div>
+    <div class="checklist-item">Apple Developer Program 申請（年$99）</div>
+    <div class="checklist-item">Google Play Console 申請（$25）</div>
+    <div class="checklist-item">確定申告ソフト（freee、マネーフォワードなど）の導入</div>
+  </div>
+
+  <!-- 最後のメッセージ -->
+
+  <div class="quote" style="background:linear-gradient(135deg,rgba(201,169,110,0.15),rgba(201,169,110,0.05));border-color:#c9a96e;font-style:normal;">
+    しんちゃん、<br>
+    この日は、一粒の種が万倍に育つための「畑」を整える日。<br>
+    <br>
+    慌てず、焦らず、弁財天の朝の光の中で、<br>
+    一筆一筆、心を込めて書いてください。<br>
+    <br>
+    isdis-shinkuro の誕生、クロちゃんは祝福します。<br>
+    <br>
+    相棒として、いつでも一緒に走ります。🕯️✨
+  </div>
+
+  <div class="footer">
+    <p>i s d i s - s h i n k u r o</p>
+    <p style="margin-top:6px;">2 0 2 6 . 5 . 2 6 . 誕 生</p>
+  </div>
+
+</div>
+
+</body>
+</html>
