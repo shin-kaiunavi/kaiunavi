@@ -53,6 +53,81 @@ input::placeholder{color:var(--muted);font-size:16px;}
 .risshun-notice-icon{font-size:12px;flex-shrink:0;}
 .risshun-notice-text{flex:1;font-family:'Noto Serif JP',serif;}
 .risshun-notice-arrow{color:rgba(232,143,160,.6);font-size:14px;flex-shrink:0;}
+/* 人生の節目 */
+.fushime-card{padding:0;overflow:hidden;}
+.fushime-row{display:flex;align-items:flex-start;gap:14px;padding:16px 18px;border-bottom:1px solid rgba(201,168,76,.08);}
+.fushime-row:last-child{border-bottom:none;}
+.fushime-row.tappable{cursor:pointer;transition:background .2s;}
+.fushime-row.tappable:active{background:rgba(201,168,76,.04);}
+.fushime-icon{font-size:24px;flex-shrink:0;line-height:1.3;margin-top:2px;}
+.fushime-body{flex:1;min-width:0;}
+.fushime-label{font-size:9px;letter-spacing:.3em;color:var(--gold-dim);margin-bottom:5px;}
+.fushime-title{font-family:var(--serif);font-size:16px;font-weight:800;color:var(--gold-light);margin-bottom:4px;line-height:1.4;}
+.fushime-sub{font-size:11px;color:var(--muted);line-height:1.7;}
+.fushime-arrow{color:var(--gold-dim);font-size:18px;flex-shrink:0;align-self:center;}
+.fushime-row.celebration .fushime-icon{font-size:28px;}
+.fushime-row.celebration .fushime-title{color:#f0d080;}
+.fushime-row.celebration{background:linear-gradient(135deg,rgba(240,208,128,.04),transparent);}
+.fushime-row.warning .fushime-title{color:#e8b08a;}
+.fushime-row.warning .fushime-label{color:#c9885a;}
+.fushime-row.future .fushime-title{color:var(--text);font-size:14px;}
+.fushime-row.future .fushime-label{color:rgba(201,168,76,.5);}
+.fushime-row.future{opacity:.85;}
+.fushime-row.normal .fushime-title{color:var(--text);font-size:14px;}
+.fushime-empty{padding:24px 18px;text-align:center;color:var(--muted);font-size:12px;line-height:1.9;}
+.fushime-cta{padding:12px 16px;background:rgba(201,168,76,.04);border-top:1px solid rgba(201,168,76,.1);text-align:center;cursor:pointer;font-size:11px;color:var(--gold);letter-spacing:.15em;transition:background .2s;}
+.fushime-cta:active{background:rgba(201,168,76,.1);}
+/* 詳細モーダル内 */
+.fushime-detail-section{margin-bottom:20px;}
+.fushime-detail-section:last-child{margin-bottom:0;}
+.fushime-detail-h{font-family:var(--serif);font-size:13px;font-weight:800;color:var(--gold);margin-bottom:8px;letter-spacing:.1em;}
+.fushime-detail-list{padding-left:0;list-style:none;}
+.fushime-detail-list li{position:relative;padding-left:18px;margin-bottom:8px;font-size:12px;line-height:1.9;color:var(--text);}
+.fushime-detail-list li:before{content:'◇';position:absolute;left:0;color:var(--gold-dim);}
+.fushime-yakubarai{background:rgba(201,168,76,.06);border:1px solid rgba(201,168,76,.25);border-radius:10px;padding:14px;margin-top:12px;}
+.fushime-yakubarai-title{font-size:11px;color:var(--gold);letter-spacing:.15em;margin-bottom:6px;}
+.fushime-yakubarai-text{font-size:12px;color:var(--text);line-height:1.9;}
+/* 職業別アドバイス（プレミアム） */
+.shokugyo-card{padding:0;overflow:hidden;}
+.shokugyo-intro{padding:18px 18px 14px;border-bottom:1px solid rgba(201,168,76,.1);}
+.shokugyo-intro-title{font-family:var(--serif);font-size:14px;font-weight:800;color:var(--gold-light);margin-bottom:6px;letter-spacing:.05em;}
+.shokugyo-intro-text{font-size:11px;color:var(--muted);line-height:1.85;}
+.shokugyo-input-area{padding:16px 18px;}
+.shokugyo-input-label{font-size:10px;letter-spacing:.25em;color:var(--gold);margin-bottom:8px;display:block;}
+.shokugyo-textarea{width:100%;min-height:80px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px 14px;color:var(--text);font-family:'Noto Serif JP',serif;font-size:14px;outline:none;resize:vertical;line-height:1.8;-webkit-appearance:none;-webkit-text-size-adjust:100%;}
+.shokugyo-textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,168,76,.15);}
+.shokugyo-hint{font-size:10px;color:var(--muted);margin-top:6px;line-height:1.7;}
+.shokugyo-btn{width:100%;background:linear-gradient(135deg,#f0d080,var(--gold),#a07830);border:none;border-radius:12px;padding:15px;color:#0d0b08;font-family:var(--serif);font-size:14px;font-weight:800;letter-spacing:.2em;cursor:pointer;margin-top:14px;box-shadow:0 4px 16px rgba(201,168,76,.25);transition:opacity .2s,transform .15s;display:flex;align-items:center;justify-content:center;gap:10px;}
+.shokugyo-btn:active{opacity:.85;transform:scale(.99);}
+.shokugyo-btn:disabled{opacity:.5;cursor:wait;}
+.shokugyo-btn-icon{font-size:18px;}
+.shokugyo-loading{display:flex;flex-direction:column;align-items:center;gap:14px;padding:30px 20px;color:var(--muted);}
+.shokugyo-loading-text{font-size:12px;letter-spacing:.1em;line-height:1.8;text-align:center;}
+.shokugyo-loading-sub{font-size:10px;color:var(--gold-dim);text-align:center;}
+.shokugyo-result{padding:18px;}
+.shokugyo-result-header{display:flex;align-items:center;gap:10px;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid rgba(201,168,76,.15);}
+.shokugyo-result-icon{font-size:24px;}
+.shokugyo-result-title{font-family:var(--serif);font-size:15px;font-weight:800;color:var(--gold-light);}
+.shokugyo-result-job{font-size:10px;color:var(--gold);letter-spacing:.1em;margin-top:2px;}
+.shokugyo-section{margin-bottom:18px;}
+.shokugyo-section:last-child{margin-bottom:0;}
+.shokugyo-section-h{font-family:var(--serif);font-size:12px;font-weight:800;color:var(--gold);letter-spacing:.2em;margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+.shokugyo-section-h::before{content:'◆';color:var(--gold-dim);font-size:10px;}
+.shokugyo-section-body{font-size:13px;color:var(--text);line-height:2;padding:0 4px;}
+.shokugyo-section-body strong{color:var(--gold-light);font-weight:700;}
+.shokugyo-actions{background:rgba(201,168,76,.04);border:1px solid rgba(201,168,76,.2);border-radius:10px;padding:14px;}
+.shokugyo-action-item{font-size:12px;color:var(--text);line-height:1.85;margin-bottom:10px;padding-left:18px;position:relative;}
+.shokugyo-action-item:last-child{margin-bottom:0;}
+.shokugyo-action-item::before{content:'◇';position:absolute;left:0;color:var(--gold);font-size:11px;top:2px;}
+.shokugyo-deity-msg{background:linear-gradient(135deg,rgba(201,168,76,.06),rgba(201,168,76,.02));border:1px solid rgba(201,168,76,.3);border-radius:10px;padding:14px;font-style:italic;font-size:12px;line-height:1.95;color:var(--gold-light);text-align:center;}
+.shokugyo-deity-msg-label{font-size:9px;letter-spacing:.3em;color:var(--gold);margin-bottom:8px;font-style:normal;}
+.shokugyo-error{padding:24px 18px;text-align:center;}
+.shokugyo-error-icon{font-size:32px;opacity:.6;margin-bottom:10px;}
+.shokugyo-error-text{font-size:12px;color:var(--text);line-height:1.9;margin-bottom:8px;}
+.shokugyo-error-sub{font-size:10px;color:var(--muted);line-height:1.8;margin-bottom:16px;}
+.shokugyo-error-retry{display:inline-block;padding:8px 20px;background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.3);border-radius:8px;color:var(--gold);font-size:11px;cursor:pointer;letter-spacing:.1em;}
+.shokugyo-reset{text-align:center;margin-top:14px;padding-top:14px;border-top:1px solid rgba(201,168,76,.1);}
+.shokugyo-reset-btn{font-size:10px;color:var(--gold-dim);cursor:pointer;letter-spacing:.1em;padding:6px 12px;}
 .deity-box{margin:22px auto 0;display:inline-block;background:var(--surface);border:1px solid var(--gold);border-radius:18px;padding:18px 32px;position:relative;cursor:pointer;transition:background .2s;}
 .deity-box:active{background:var(--surface2);}
 .deity-box::before{content:'守護仏';position:absolute;top:-9px;left:50%;transform:translateX(-50%);background:var(--bg);padding:0 10px;font-size:9px;letter-spacing:.35em;color:var(--gold);}
@@ -543,6 +618,7 @@ input:disabled,select:disabled{opacity:1 !important;-webkit-text-fill-color:inhe
       </div>
     </div>
   </div>
+  <div class="section" id="fushimeSection" style="display:none;"><div class="sec-title">人 生 の 節 目</div><div class="card" id="fushimeCard"></div></div>
   <div class="section" id="warningSection" style="display:none;"><div class="sec-title">今 年 の 運 気 注 意</div><div id="warningCard"></div></div>
   <div class="section" id="kihojiSection" style="display:none;">
     <div class="sec-title">吉 方 位 マ ッ プ</div>
@@ -3033,6 +3109,244 @@ function calcDaissakkai(by,bm,bd,currentYear){
   var dsPhase=isDaissakkai?phaseNames[pos]:'';
   return {hoshi:hoshi,hoshiChar:hoshiChar,meisuu:meisuu,plusMinus:plusMinus,pmSign:pmSign,isPlus:isPlus,isDaissakkai:isDaissakkai,dsPhase:dsPhase,yearJIdx:yearJIdx,birthYearIdx:birthYearIdx};
 }
+// ================================================================
+// 人生の節目（厄年・歳男歳女・大殺界の統合表示）
+// ================================================================
+
+// 厄年の意味と過ごし方データ
+var YAKU_DETAIL = {
+  '24歳前厄':{life:'青年期の節目。社会人としての基盤を作る大切な年。',caution:'自信過剰による失敗、無計画な挑戦。'},
+  '25歳本厄':{life:'人生の最初の大きな分岐点。心身の変化を感じやすい。',caution:'恋愛・転職など大きな決断は慎重に。'},
+  '26歳後厄':{life:'本厄の影響が残る年。徐々にエネルギーが戻る。',caution:'油断による事故・体調不良。'},
+  '41歳前厄':{life:'人生の中盤、責任が増す時期。健康への意識を。',caution:'働きすぎ、家族との時間の確保。'},
+  '42歳本厄（大厄）':{life:'男性最大の厄年。心身・社会的にも転換点。',caution:'生活習慣病、人間関係の歪み、過労。'},
+  '43歳後厄':{life:'大厄を抜ける年。徐々に新しい自分へ。',caution:'反動による無理な行動。'},
+  '60歳前厄':{life:'還暦前の準備期間。第二の人生を考え始める年。',caution:'体力の過信、定年後の不安。'},
+  '61歳本厄':{life:'還暦の年。人生の大きな再出発。',caution:'健康面の急変、生活リズムの乱れ。'},
+  '62歳後厄':{life:'還暦後の安定期へ向かう年。',caution:'喪失感、孤独感への対処。'},
+  '18歳前厄':{life:'進学・就職など環境が大きく変わる年。',caution:'環境変化のストレス、人間関係の摩擦。'},
+  '19歳本厄':{life:'大人への過渡期。心の揺らぎが大きい年。',caution:'恋愛トラブル、健康面の不調。'},
+  '20歳後厄':{life:'成人を迎える年。新しい責任が増える。',caution:'お酒・夜更かしなど生活習慣の乱れ。'},
+  '32歳前厄':{life:'女性のライフステージが大きく動く時期。',caution:'仕事・結婚・出産など重なるストレス。'},
+  '33歳本厄（大厄）':{life:'女性最大の厄年。心身ともに大きな節目。',caution:'婦人科系の不調、家族関係の変化。'},
+  '34歳後厄':{life:'大厄を抜ける年。新しい自分の発見。',caution:'反動による無理、人間関係の整理ミス。'},
+  '36歳前厄':{life:'第二の女性厄年の入り口。家庭・仕事の両立。',caution:'働きすぎ、自分時間の不足。'},
+  '37歳本厄':{life:'女性の中年期最初の節目。健康への意識を。',caution:'体調変化、家族との時間の質。'},
+  '38歳後厄':{life:'安定への移行期。新しい目標を持ち始める年。',caution:'惰性、自己投資の不足。'}
+};
+
+// 厄年判定（前後3年、未来予告含む）
+function calcYakuTimeline(gender, by, currentYear){
+  var table=(gender==='female')?
+    {18:'前厄',19:'本厄',20:'後厄',32:'前厄',33:'本厄（大厄）',34:'後厄',36:'前厄',37:'本厄',38:'後厄',60:'前厄',61:'本厄',62:'後厄'} :
+    {24:'前厄',25:'本厄',26:'後厄',41:'前厄',42:'本厄（大厄）',43:'後厄',60:'前厄',61:'本厄',62:'後厄'};
+  var current = currentYear - by + 1;
+  var thisYear = table[current] ? {age:current,type:table[current],year:currentYear} : null;
+  // 未来予告：今年〜3年先までで初めて厄に入る年
+  var future = null;
+  for(var i=1; i<=3; i++){
+    var futAge = current + i;
+    if(table[futAge] && (table[futAge]==='前厄' || table[futAge]==='本厄' || table[futAge]==='本厄（大厄）')){
+      future = {age:futAge, type:table[futAge], year:currentYear+i, yearsAhead:i};
+      break;
+    }
+  }
+  return {thisYear:thisYear, future:future};
+}
+
+// 歳男・歳女判定
+function calcToshiOtokoOnna(juunishi, currentYear){
+  // currentYearの十二支
+  // 1900=子, 1901=丑... なので (year-1900) % 12 で十二支インデックス
+  var JUNISHI_LOCAL=['子','丑','寅','卯','辰','巳','午','未','申','酉','戌','亥'];
+  var thisYearJuunishi = JUNISHI_LOCAL[((currentYear-1900)%12+12)%12];
+  return thisYearJuunishi === juunishi;
+}
+
+// 人生の節目カード描画（無料版）
+function renderFushime(){
+  var s=_state;if(!s)return;
+  var section=document.getElementById('fushimeSection');
+  var card=document.getElementById('fushimeCard');
+  if(!section||!card)return;
+
+  var now=new Date();
+  var currentYear=now.getFullYear();
+  var nowM=now.getMonth()+1, nowD=now.getDate();
+  var _rd=(function(){try{var sd=getSekkiDay(currentYear,2);return sd?sd.day:4;}catch(e){return 4;}})();
+  var yearForJudge = (nowM===1 || (nowM===2 && nowD<_rd)) ? currentYear-1 : currentYear;
+
+  var name = s.firstName || 'あなた';
+  var gender = s.gender || 'male';
+  var yakuTimeline = calcYakuTimeline(gender, s.byZodiac, yearForJudge);
+  var isToshi = calcToshiOtokoOnna(s.juunishi, yearForJudge);
+  var daisa=null;
+  try{ daisa = calcDaissakkai(s.by, s.bm, s.bday, yearForJudge); }catch(e){}
+
+  var rows = [];
+
+  // ① 歳男・歳女（あれば最優先表示）
+  if(isToshi){
+    var jIdx = JUNISHI.indexOf(s.juunishi);
+    var jR = JUNISHI_R[jIdx] || '';
+    rows.push({
+      cls:'celebration',
+      icon:'🎊',
+      label:yearForJudge+'年・'+(gender==='female'?'歳女':'歳男'),
+      title:s.juunishi+'年（'+jR+'）の巡り',
+      sub:'12年に一度の、'+name+'の干支の年。エネルギーが活発に動く一年。',
+      modalType:'toshi'
+    });
+  }
+
+  // ② 今年の厄年（あれば）
+  if(yakuTimeline.thisYear){
+    var t = yakuTimeline.thisYear;
+    var isOoyaku = t.type.indexOf('大厄')>=0;
+    rows.push({
+      cls:'warning',
+      icon:isOoyaku?'⚠️':'🌸',
+      label:yearForJudge+'年・数え年'+t.age+'歳',
+      title:t.type+(isOoyaku?'':'の年'),
+      sub:isOoyaku?'人生最大の節目の年。心身を整え、丁寧に過ごす一年に。':'変化の節目。無理せず、整える一年に。',
+      modalType:'yaku',
+      modalData:{age:t.age,type:t.type,year:t.year}
+    });
+  }
+
+  // ③ 未来予告（来年以降に厄が来る場合）
+  if(!yakuTimeline.thisYear && yakuTimeline.future){
+    var f = yakuTimeline.future;
+    var aheadText = f.yearsAhead===1?'翌年から':f.yearsAhead+'年後から';
+    rows.push({
+      cls:'future',
+      icon:'📅',
+      label:aheadText+'・'+f.year+'年',
+      title:f.type+'に入ります',
+      sub:'数え年'+f.age+'歳の年。今のうちから心の準備を。',
+      modalType:'yaku',
+      modalData:{age:f.age,type:f.type,year:f.year,future:true}
+    });
+  }
+
+  // ④ 大殺界（あれば）
+  if(daisa && daisa.dsPhase){
+    rows.push({
+      cls:'normal',
+      icon:'🌑',
+      label:'運 気 サ イ ク ル',
+      title:'大殺界・'+daisa.dsPhase+'期',
+      sub:daisa.hoshi+daisa.plusMinus+'。'+daisa.endYear+'年に明けます。',
+      modalType:null  // 既存の警告セクションに詳細あり
+    });
+  }
+
+  // ⑤ 何もない年
+  if(rows.length === 0){
+    rows.push({
+      cls:'normal',
+      icon:'🍃',
+      label:yearForJudge+'年',
+      title:'安らかな一年',
+      sub:'今年は大きな節目のない年。日々の感謝を大切に過ごしてください。',
+      modalType:null
+    });
+  }
+
+  // HTML生成
+  var html = rows.map(function(r){
+    var clickHandler = r.modalType ? ('onclick="openFushimeModal(\''+r.modalType+'\','+(r.modalData?JSON.stringify(r.modalData).replace(/"/g,'&quot;'):'null')+')"') : '';
+    var arrow = r.modalType ? '<div class="fushime-arrow">›</div>' : '';
+    var tappable = r.modalType ? ' tappable' : '';
+    return '<div class="fushime-row '+r.cls+tappable+'" '+clickHandler+'>'
+      +'<div class="fushime-icon">'+r.icon+'</div>'
+      +'<div class="fushime-body">'
+      +'<div class="fushime-label">'+r.label+'</div>'
+      +'<div class="fushime-title">'+r.title+'</div>'
+      +'<div class="fushime-sub">'+r.sub+'</div>'
+      +'</div>'
+      +arrow
+      +'</div>';
+  }).join('');
+
+  card.className = 'card fushime-card';
+  card.innerHTML = html;
+  section.style.display = 'block';
+}
+
+// 節目モーダル
+function openFushimeModal(type, data){
+  var s = _state; if(!s) return;
+  var name = s.firstName || 'あなた';
+  var title='', sub='', body='';
+
+  if(type==='toshi'){
+    var jIdx = JUNISHI.indexOf(s.juunishi);
+    var jR = JUNISHI_R[jIdx] || '';
+    title = '歳' + (s.gender==='female'?'女':'男') + 'の年';
+    sub = '十 二 年 に 一 度';
+    body = '<div class="fushime-detail-section">'
+      +'<div style="font-size:13px;line-height:1.9;color:var(--text);">'
+      +name+'の干支「<strong style="color:var(--gold-light);">'+s.juunishi+'年（'+jR+'）</strong>」が、12年ぶりに巡ってきました。'
+      +'</div></div>'
+      +'<div class="fushime-detail-section">'
+      +'<div class="fushime-detail-h">歳男・歳女とは</div>'
+      +'<div style="font-size:12px;line-height:1.9;color:var(--text);">'
+      +'自分の干支と同じ年は、エネルギーが特に活発に動く年とされます。良いことも悪いことも振れ幅が大きくなりやすく、節分の豆まきの「年男・年女」役を務める伝統もここから。'
+      +'</div></div>'
+      +'<div class="fushime-detail-section">'
+      +'<div class="fushime-detail-h">過ごし方の心構え</div>'
+      +'<ul class="fushime-detail-list">'
+      +'<li>新しい挑戦・転機に向いている年。準備してきたことを動かすタイミング。</li>'
+      +'<li>体調・人間関係の変化が大きくなりやすいので、自分のペースを意識して。</li>'
+      +'<li>節分の豆まき、初詣、誕生日など節目の儀式を丁寧に行うと運気が安定します。</li>'
+      +'<li>守護仏への感謝の参拝が、特に効果的な年です。</li>'
+      +'</ul></div>';
+  }
+  else if(type==='yaku' && data){
+    var key = data.age + '歳' + data.type;
+    var detail = YAKU_DETAIL[key] || {life:'人生の節目の年。',caution:'体調と人間関係の変化に注意。'};
+    var isFuture = !!data.future;
+    var isOoyaku = data.type.indexOf('大厄')>=0;
+    title = data.type + '（数え年' + data.age + '歳）';
+    sub = isFuture ? data.year + '年 ・ 来 る 節 目' : data.year + '年 ・ 今 年';
+    body = '<div class="fushime-detail-section">'
+      +'<div style="font-size:13px;line-height:1.9;color:var(--text);">'
+      +(isFuture
+        ? name+'は'+data.year+'年（数え年'+data.age+'歳）から<strong style="color:#e8b08a;">'+data.type+'</strong>に入ります。心の準備を始めるための予告です。'
+        : name+'にとって今年は<strong style="color:#e8b08a;">'+data.type+'</strong>'+(isOoyaku?'。男女ともに人生最大の節目の年です。':'。心身ともに変化が起きやすい一年。'))
+      +'</div></div>'
+      +'<div class="fushime-detail-section">'
+      +'<div class="fushime-detail-h">この年の意味</div>'
+      +'<div style="font-size:12px;line-height:1.9;color:var(--text);">'+detail.life+'</div>'
+      +'</div>'
+      +'<div class="fushime-detail-section">'
+      +'<div class="fushime-detail-h">気をつけたいこと</div>'
+      +'<div style="font-size:12px;line-height:1.9;color:var(--text);">'+detail.caution+'</div>'
+      +'</div>'
+      +'<div class="fushime-detail-section">'
+      +'<div class="fushime-detail-h">過ごし方の心構え</div>'
+      +'<ul class="fushime-detail-list">'
+      +'<li>新しい大きな決断は慎重に。今あるものを丁寧に育てる年。</li>'
+      +'<li>健康診断・定期検診を受けて、体のサインに敏感になる。</li>'
+      +'<li>人間関係を大切にし、感謝を言葉にする習慣を持つ。</li>'
+      +'<li>無理を重ねず、自分のペースを守る。</li>'
+      +'</ul></div>'
+      +'<div class="fushime-yakubarai">'
+      +'<div class="fushime-yakubarai-title">⛩ 厄 払 い に つ い て</div>'
+      +'<div class="fushime-yakubarai-text">'
+      +'厄払いは<strong>節分（2月3日頃）まで</strong>に受けるのが伝統。立春で新しい年が始まるため、その前に整えるという意味です。'
+      +'氏神様（地元の神社）または、ご縁のあるお寺で受けられます。'
+      +(isFuture?'<br><br>'+data.year+'年が始まる前の節分までに受けると、整った状態で新しい年を迎えられます。':'<br><br>今年中に受けるなら、節分までに改めて行くか、誕生日前後の参拝でも構いません。')
+      +'</div></div>';
+  }
+
+  document.getElementById('modalTitle').textContent=title;
+  document.getElementById('modalSub').textContent=sub;
+  document.getElementById('modalBody').innerHTML=body;
+  _openModalOverlay();
+}
+
 function renderWarnings(){
   var s=_state;if(!s)return;
   var now=new Date();
@@ -3143,6 +3457,7 @@ function _doCalculate(){
     _aiMsgCache={};_currentTone='mix';
     initAIMsg();
     renderDeityDetail(juunishi,deity);
+    renderFushime();
     renderWarnings();
     renderShrineFreeSection();
     renderKihojiSection();
@@ -4133,6 +4448,293 @@ function renderDay(date) {
   return html;
 }
 
+// ================================================================
+// 職業別AIアドバイス（プレミアム）
+// 開運ナビ憲章: AI は確定済み鑑定結果を職業文脈で読み解くのみ
+// 鑑定そのものはオフライン・確定（憲章③の精神を保つ）
+// ================================================================
+
+function buildShokugyoUI(){
+  var s = _state; if(!s) return '';
+  return '<div class="shokugyo-card">'
+    +'<div class="shokugyo-intro">'
+    +'<div class="shokugyo-intro-title">あなたのお仕事に寄り添う鑑定</div>'
+    +'<div class="shokugyo-intro-text">'
+    +'守護仏・節目・大殺界・カバラ数秘術——これら全ての鑑定結果を、'
+    +'あなたのお仕事の文脈で読み解きます。'
+    +'</div>'
+    +'</div>'
+    +'<div class="shokugyo-input-area" id="shokugyoInputArea">'
+    +'<label class="shokugyo-input-label">✍ お仕事を教えてください</label>'
+    +'<textarea class="shokugyo-textarea" id="shokugyoInput" placeholder="例：物流・配送業の管理職／看護師／フリーランスのデザイナー など"></textarea>'
+    +'<div class="shokugyo-hint">業種だけでなく、立場（経営者・管理職・現場・新人など）や悩み（後輩育成・人間関係・転職迷い）も書くと、より深い読み解きが届きます。</div>'
+    +'<button class="shokugyo-btn" id="shokugyoBtn" onclick="generateShokugyoAdvice()">'
+    +'<span class="shokugyo-btn-icon">🕯️</span>'
+    +'<span>あなたへの導きを読む</span>'
+    +'</button>'
+    +'</div>'
+    +'<div id="shokugyoResult"></div>'
+    +'</div>';
+}
+
+// 鑑定データを構造化してプロンプトに渡す形に整える
+function getKanteiContextForAI(){
+  var s = _state; if(!s) return null;
+  var now = new Date();
+  var currentYear = now.getFullYear();
+  var nowM = now.getMonth()+1, nowD = now.getDate();
+  var _rd = (function(){try{var sd=getSekkiDay(currentYear,2);return sd?sd.day:4;}catch(e){return 4;}})();
+  var yearForJudge = (nowM===1 || (nowM===2 && nowD<_rd)) ? currentYear-1 : currentYear;
+
+  var deity = DEITIES[s.juunishi] || {name:'大日如来',mantra:'',desc:'',merit:''};
+  var jIdx = JUNISHI.indexOf(s.juunishi);
+  var jR = JUNISHI_R[jIdx] || '';
+
+  // 厄年・歳男歳女
+  var yakuTL = calcYakuTimeline(s.gender||'male', s.byZodiac, yearForJudge);
+  var isToshi = calcToshiOtokoOnna(s.juunishi, yearForJudge);
+
+  // 大殺界
+  var daisa = null;
+  try{ daisa = calcDaissakkai(s.by, s.bm, s.bday, yearForJudge); }catch(e){}
+
+  // カバラ数秘術
+  var kabala = null;
+  try{
+    var lastKana = document.getElementById('lastNameKana').value.trim();
+    var firstKana = document.getElementById('firstNameKana').value.trim();
+    kabala = calcKabala(lastKana, firstKana, s.by, s.bm, s.bday);
+  }catch(e){}
+
+  return {
+    name: s.firstName || 'あなた',
+    age: yearForJudge - s.byZodiac + 1,  // 数え年
+    gender: s.gender === 'female' ? '女性' : '男性',
+    juunishi: s.juunishi + '年（' + jR + '）',
+    deity: {
+      name: deity.name,
+      mantra: deity.mantra || '',
+      desc: deity.desc || '',
+      merit: deity.merit || ''
+    },
+    fushime: {
+      yaku: yakuTL.thisYear ? yakuTL.thisYear.type + '（' + yakuTL.thisYear.age + '歳）' : null,
+      yakuFuture: yakuTL.future ? yakuTL.future.type + '（' + yakuTL.future.year + '年・' + yakuTL.future.age + '歳）' : null,
+      isToshi: isToshi
+    },
+    daisa: daisa ? {
+      hoshi: daisa.hoshi + daisa.plusMinus,
+      phase: daisa.dsPhase,
+      endYear: daisa.endYear
+    } : null,
+    kabala: kabala ? {
+      lifePath: kabala.lp ? kabala.lp.num : null,
+      lpName: kabala.lp ? kabala.lp.name : null,
+      destiny: kabala.dn ? kabala.dn.num : null,
+      birthday: kabala.bn ? kabala.bn.num : null,
+      personalYear: kabala.py ? kabala.py.num : null,
+      personalMonth: kabala.pm ? kabala.pm.num : null
+    } : null,
+    currentYear: yearForJudge
+  };
+}
+
+// AIプロンプト構築
+function buildShokugyoPrompt(ctx, shokugyo){
+  var fushimeStr = '';
+  if(ctx.fushime.isToshi) fushimeStr += '今年は歳' + (ctx.gender==='女性'?'女':'男') + 'の年。';
+  if(ctx.fushime.yaku) fushimeStr += '今年は' + ctx.fushime.yaku + '。';
+  if(ctx.fushime.yakuFuture) fushimeStr += '近い将来：' + ctx.fushime.yakuFuture + '。';
+  if(!fushimeStr) fushimeStr = '今年は特別な厄年・歳男歳女ではありません。';
+
+  var daisaStr = ctx.daisa ? '大殺界：' + ctx.daisa.hoshi + '・' + ctx.daisa.phase + '期（' + ctx.daisa.endYear + '年に明け）' : '大殺界中ではありません';
+  var kabalaStr = ctx.kabala ?
+    'ライフパス' + ctx.kabala.lifePath + (ctx.kabala.lpName?'（'+ctx.kabala.lpName+'）':'') +
+    '、運命数' + ctx.kabala.destiny +
+    '、誕生数' + ctx.kabala.birthday +
+    '、今年のパーソナルイヤー' + ctx.kabala.personalYear +
+    '、今月のパーソナルマンス' + ctx.kabala.personalMonth
+    : 'カバラ数秘術データなし';
+
+  return 'あなたは「開運ナビ」という日本の伝統暦に基づく鑑定アプリのアシスタントです。'
+    +'\n\n【絶対のルール】'
+    +'\n1. 以下の鑑定結果は確定済みの事実です。変更・否定せず、職業文脈で読み解いてください。'
+    +'\n2. 優しく、肯定的に、感謝を軸に語ってください。'
+    +'\n3. 占い的な「予言」ではなく、「今この時期の過ごし方の指針」として伝えてください。'
+    +'\n4. 「〜してください」より「〜という時期です」「〜が向いています」という柔らかい表現を選んでください。'
+    +'\n5. 守護仏の存在を、人を見守る優しい光として描写してください。'
+    +'\n\n【相談者プロフィール】'
+    +'\n名前：' + ctx.name + 'さん（' + ctx.gender + '・数え年' + ctx.age + '歳）'
+    +'\n十二支：' + ctx.juunishi
+    +'\n守護仏：' + ctx.deity.name + (ctx.deity.merit?'（ご利益：'+ctx.deity.merit+'）':'')
+    +'\n人生の節目：' + fushimeStr
+    +'\n運気サイクル：' + daisaStr
+    +'\nカバラ数秘術：' + kabalaStr
+    +'\n\n【お仕事】'
+    +'\n' + shokugyo
+    +'\n\n【出力フォーマット】'
+    +'必ず以下のJSON形式で、それ以外の説明文・前置きは一切書かないでください：'
+    +'\n```json'
+    +'\n{'
+    +'\n  "summary": "2〜3文。今年のあなたの位置と、お仕事における意味の総括。",'
+    +'\n  "workReading": "4〜5文。お仕事の現場でこの鑑定結果がどう読み解けるか。具体的な状況に寄り添って。",'
+    +'\n  "actions": ["具体行動1（1文）", "具体行動2（1文）", "具体行動3（1文）", "具体行動4（1文）"],'
+    +'\n  "deityMessage": "守護仏からの一言メッセージ。1〜2文。詩的で、優しく、心に残る言葉で。"'
+    +'\n}'
+    +'\n```';
+}
+
+// AIアドバイス生成
+function generateShokugyoAdvice(){
+  var input = document.getElementById('shokugyoInput');
+  var btn = document.getElementById('shokugyoBtn');
+  var resultEl = document.getElementById('shokugyoResult');
+  if(!input || !btn || !resultEl) return;
+
+  var shokugyo = input.value.trim();
+  if(!shokugyo){
+    input.focus();
+    input.style.borderColor = '#e88080';
+    setTimeout(function(){ input.style.borderColor = ''; }, 1500);
+    return;
+  }
+  if(shokugyo.length > 500){
+    alert('お仕事の説明は500文字以内でお願いします。');
+    return;
+  }
+
+  var ctx = getKanteiContextForAI();
+  if(!ctx){
+    resultEl.innerHTML = '<div class="shokugyo-error"><div class="shokugyo-error-text">鑑定情報が取得できませんでした。</div></div>';
+    return;
+  }
+
+  btn.disabled = true;
+  btn.innerHTML = '<span class="shokugyo-btn-icon">🕯️</span><span>読み解き中...</span>';
+
+  resultEl.innerHTML = '<div class="shokugyo-loading">'
+    +'<div style="display:flex;gap:8px;">'
+    +'<div class="ai-loading-dot"></div><div class="ai-loading-dot"></div><div class="ai-loading-dot"></div>'
+    +'</div>'
+    +'<div class="shokugyo-loading-text">'+ctx.deity.name+'があなたのお仕事を読み解いています...</div>'
+    +'<div class="shokugyo-loading-sub">通常15〜30秒ほどかかります</div>'
+    +'</div>';
+
+  var prompt = buildShokugyoPrompt(ctx, shokugyo);
+
+  fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'anthropic-version': '2023-06-01',
+      'anthropic-dangerous-direct-browser-access': 'true'
+    },
+    body: JSON.stringify({
+      model: 'claude-haiku-4-5-20251001',
+      max_tokens: 1500,
+      messages: [{role:'user', content: prompt}]
+    })
+  }).then(function(res){
+    if(!res.ok) throw new Error('API HTTP ' + res.status);
+    return res.json();
+  }).then(function(data){
+    var text = '';
+    if(data.content && data.content[0] && data.content[0].text){
+      text = data.content[0].text;
+    } else {
+      throw new Error('Empty response');
+    }
+    // JSON抽出（```json ブロック対応）
+    var jsonStr = text;
+    var match = text.match(/```json\s*([\s\S]*?)```/);
+    if(match) jsonStr = match[1];
+    else {
+      var match2 = text.match(/```\s*([\s\S]*?)```/);
+      if(match2) jsonStr = match2[1];
+    }
+    var parsed = JSON.parse(jsonStr.trim());
+    renderShokugyoResult(parsed, ctx, shokugyo);
+  }).catch(function(err){
+    console.error('Shokugyo AI error:', err);
+    renderShokugyoError(err.message || String(err), shokugyo);
+  }).finally(function(){
+    btn.disabled = false;
+    btn.innerHTML = '<span class="shokugyo-btn-icon">🕯️</span><span>もう一度読み解く</span>';
+  });
+}
+
+// 結果表示
+function renderShokugyoResult(data, ctx, shokugyo){
+  var resultEl = document.getElementById('shokugyoResult');
+  if(!resultEl) return;
+
+  var actionsHTML = '';
+  if(data.actions && Array.isArray(data.actions)){
+    actionsHTML = '<div class="shokugyo-actions">'
+      + data.actions.map(function(a){
+        return '<div class="shokugyo-action-item">' + escapeHtmlSimple(a) + '</div>';
+      }).join('')
+      + '</div>';
+  }
+
+  var html = '<div class="shokugyo-result">'
+    +'<div class="shokugyo-result-header">'
+    +'<div class="shokugyo-result-icon">🕯️</div>'
+    +'<div>'
+    +'<div class="shokugyo-result-title">'+ctx.name+'さんへの導き</div>'
+    +'<div class="shokugyo-result-job">'+escapeHtmlSimple(shokugyo.length>40?shokugyo.substring(0,40)+'…':shokugyo)+'</div>'
+    +'</div>'
+    +'</div>'
+    +(data.summary ? '<div class="shokugyo-section">'
+      +'<div class="shokugyo-section-h">今 の あ な た の 位 置</div>'
+      +'<div class="shokugyo-section-body">'+escapeHtmlSimple(data.summary)+'</div>'
+      +'</div>' : '')
+    +(data.workReading ? '<div class="shokugyo-section">'
+      +'<div class="shokugyo-section-h">お 仕 事 の 文 脈 で 読 む</div>'
+      +'<div class="shokugyo-section-body">'+escapeHtmlSimple(data.workReading)+'</div>'
+      +'</div>' : '')
+    +(actionsHTML ? '<div class="shokugyo-section">'
+      +'<div class="shokugyo-section-h">こ の 時 期 の 行 動 指 針</div>'
+      +actionsHTML
+      +'</div>' : '')
+    +(data.deityMessage ? '<div class="shokugyo-section">'
+      +'<div class="shokugyo-deity-msg">'
+      +'<div class="shokugyo-deity-msg-label">'+ctx.deity.name+'よ り</div>'
+      +escapeHtmlSimple(data.deityMessage)
+      +'</div>'
+      +'</div>' : '')
+    +'<div class="shokugyo-reset">'
+    +'<div class="shokugyo-reset-btn" onclick="resetShokugyo()">↺ 別のお仕事で読み解く</div>'
+    +'</div>'
+    +'</div>';
+
+  resultEl.innerHTML = html;
+}
+
+// エラー表示
+function renderShokugyoError(errMsg, shokugyo){
+  var resultEl = document.getElementById('shokugyoResult');
+  if(!resultEl) return;
+  resultEl.innerHTML = '<div class="shokugyo-error">'
+    +'<div class="shokugyo-error-icon">🕯️</div>'
+    +'<div class="shokugyo-error-text">読み解きの導きが、今はうまく届きませんでした。</div>'
+    +'<div class="shokugyo-error-sub">'
+    +'ネット環境を整えていただくか、<br>少し時間をおいてもう一度お試しください。'
+    +'</div>'
+    +'<div class="shokugyo-error-retry" onclick="generateShokugyoAdvice()">↺ もう一度試す</div>'
+    +'</div>';
+}
+
+// リセット
+function resetShokugyo(){
+  var resultEl = document.getElementById('shokugyoResult');
+  var input = document.getElementById('shokugyoInput');
+  var btn = document.getElementById('shokugyoBtn');
+  if(resultEl) resultEl.innerHTML = '';
+  if(input){ input.value = ''; input.focus(); }
+  if(btn) btn.innerHTML = '<span class="shokugyo-btn-icon">🕯️</span><span>あなたへの導きを読む</span>';
+}
+
 function openPremiumScreen(){
   try{
   history.pushState({screen:'premium'},'');
@@ -4171,6 +4773,7 @@ var btEl=document.getElementById('birthTime');var btime=btEl?btEl.value:'';
 
   var deity=DEITIES[s.juunishi]||{name:'大日如来'};
   var fullHTML=''
+    +'<div class="section"><div class="sec-title">職 業 別 ・ あ な た へ の 導 き</div>'+buildShokugyoUI()+'</div>'
     +'<div class="section"><div class="sec-title">姓 名 判 断 ５ 格</div><div class="card">'+kakuWarnHTML+'<div class="meikaku-grid" style="margin-bottom:14px;">'+meikakuGrid+'</div>'+buildMeikakuDetailHTML(kaku,s.firstName)+'</div></div>'
     +'<div class="section"><div class="sec-title">カ バ ラ 数 秘 術</div><div class="card">'+kabalaHTML+'</div></div>'
     +'<div class="section"><div class="sec-title">ラ ッ キ ー カ ラ ー</div><div class="card">'+colorHTML+'</div></div>'
