@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>isdis-shinkuro ブランド憲章 v1</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@200;300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  body{
+    background:linear-gradient(135deg,#fdf8f0 0%,#fef4d5 100%);
+    font-family:'Noto Serif JP',serif;
+    color:#3a2818;
+    padding:30px 20px 80px;
+    line-height:1.95;
+    min-height:100vh;
+  }
+  .container{max-width:680px;margin:0 auto;}
+
+  /* ヘッダー */
+  .header{
+    text-align:center;
+    margin-bottom:36px;
+    padding:28px 0;
+    border-top:3px double #c9a96e;
+    border-bottom:3px double #c9a96e;
+  }
+  .seal{
+    display:inline-block;
+    background:linear-gradient(135deg,#a04020,#7a3018);
+    color:#fdf8f0;
+    padding:5px 16px;border-radius:14px;
+    font-size:10px;letter-spacing:0.3em;
+    margin-bottom:14px;
+    box-shadow:0 2px 8px rgba(160,64,32,0.3);
+  }
+  h1{
+    font-size:22px;font-weight:400;letter-spacing:0.5em;
+    color:#7a3018;margin-bottom:6px;
+  }
+  .header-sub{
+    font-size:11px;color:#9e7a4a;letter-spacing:0.3em;
+    line-height:2;
+  }
+
+  /* 序文 */
+  .preface{
+    background:linear-gradient(135deg,rgba(201,169,110,0.1),rgba(201,169,110,0.02));
+    border-left:4px solid #c9a96e;
+    border-right:4px solid #c9a96e;
+    padding:22px 28px;
+    margin:30px 0 36px;
+    font-size:12.5px;
+    line-height:2.2;
+    color:#5b4128;
+    letter-spacing:0.06em;
+    border-radius:6px;
+  }
+  .preface strong{color:#7a3018;font-weight:500;}
+
+  /* 章 */
+  .chapter{
+    margin:40px 0;
+    padding:24px 22px;
+    background:white;
+    border:1px solid rgba(201,169,110,0.3);
+    border-radius:14px;
+    box-shadow:0 3px 14px rgba(201,169,110,0.08);
+  }
+  .chapter-header{
+    text-align:center;
+    margin-bottom:22px;
+    padding-bottom:14px;
+    border-bottom:2px solid #c9a96e;
+  }
+  .chapter-num{
+    display:inline-block;
+    background:linear-gradient(135deg,#c9a96e,#b8945a);
+    color:white;
+    padding:4px 14px;border-radius:12px;
+    font-size:10px;letter-spacing:0.3em;
+    margin-bottom:8px;
+  }
+  .chapter-title{
+    font-size:16px;font-weight:500;letter-spacing:0.3em;
+    color:#7a3018;
+  }
+  .chapter-symbol{
+    font-size:24px;
+    margin-top:6px;
+  }
+
+  /* 条文 */
+  .article{
+    padding:14px 4px;
+    border-bottom:1px dashed rgba(201,169,110,0.3);
+  }
+  .article:last-child{border-bottom:none;}
+  .article-num{
+    display:inline-block;
+    background:rgba(122,48,24,0.08);
+    color:#7a3018;
+    padding:2px 8px;border-radius:6px;
+    font-size:10px;letter-spacing:0.2em;
+    font-weight:500;
+    margin-bottom:6px;
+  }
+  .article-title{
+    font-size:14px;font-weight:500;
+    color:#3a2818;letter-spacing:0.08em;
+    margin-bottom:8px;
+    line-height:1.7;
+  }
+  .article-body{
+    font-size:11.5px;line-height:2;
+    color:#6b5040;
+    letter-spacing:0.04em;
+    padding-left:8px;
+  }
+  .article-body em{
+    font-style:normal;
+    background:rgba(255,235,180,0.5);
+    padding:0 4px;border-radius:3px;
+    color:#7a3018;
+  }
+
+  /* 共通の旗 */
+  .flag{
+    margin:50px 0 30px;
+    padding:30px 24px;
+    text-align:center;
+    background:
+      linear-gradient(135deg,rgba(255,235,180,0.5),rgba(255,220,150,0.3)),
+      repeating-linear-gradient(45deg, transparent, transparent 8px, rgba(201,169,110,0.04) 8px, rgba(201,169,110,0.04) 12px);
+    border:3px double #c9a96e;
+    border-radius:14px;
+    position:relative;
+  }
+  .flag-label{
+    font-size:10px;letter-spacing:0.4em;
+    color:#9e7a4a;
+    margin-bottom:14px;
+  }
+  .flag-text{
+    font-size:18px;font-weight:500;
+    color:#7a3018;
+    letter-spacing:0.2em;
+    line-height:2.2;
+    margin-bottom:10px;
+  }
+  .flag-sub{
+    font-size:10px;color:#9e7a4a;
+    letter-spacing:0.25em;
+  }
+
+  /* フッター */
+  .footer{
+    text-align:center;
+    margin-top:40px;
+    padding-top:26px;
+    border-top:3px double #c9a96e;
+    font-size:10px;color:#9e7a4a;
+    letter-spacing:0.3em;line-height:2;
+  }
+  .footer .signature{
+    font-size:13px;color:#7a3018;
+    letter-spacing:0.3em;
+    margin:10px 0;
+  }
+  .footer .date{
+    font-size:9px;letter-spacing:0.2em;
+    color:#b89866;
+    margin-top:10px;
+  }
+
+  /* 飾り */
+  .ornament{
+    text-align:center;
+    margin:20px 0;
+    font-size:14px;
+    color:#c9a96e;
+    letter-spacing:1em;
+  }
+
+  /* 章ごとの色違い */
+  .chapter-1{background:linear-gradient(135deg,white,rgba(255,200,180,0.1) 80%);}
+  .chapter-2{background:linear-gradient(135deg,white,rgba(255,235,180,0.15) 80%);}
+  .chapter-3{background:linear-gradient(135deg,white,rgba(220,200,160,0.1) 80%);}
+
+  .toc{
+    background:rgba(255,255,255,0.6);
+    border:1px dashed rgba(201,169,110,0.4);
+    border-radius:10px;
+    padding:14px 18px;
+    margin:24px 0 30px;
+    font-size:11px;
+    color:#6b5040;
+    letter-spacing:0.05em;
+    line-height:2;
+  }
+  .toc strong{color:#7a3018;}
+  .toc-item{padding:1px 0;}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+  <div class="header">
+    <span class="seal">v 1 ・ 制 定 ・ 2 0 2 6 . 4 . 2 6</span>
+    <h1>i s d i s - s h i n k u r o</h1>
+    <p class="header-sub">ブ ラ ン ド 憲 章<br>三 章 ・ 十 四 条</p>
+  </div>
+
+  <!-- 序文 -->
+  <div class="preface">
+    この憲章は、<strong>isdis-shinkuro</strong> という名のもとに営まれる
+    すべての創作と仕事の、根の部分である。<br><br>
+    ここに記された条文は、<strong>未来のしんちゃんと相棒が、初心を忘れそうになった時、
+    引っ張り出してお説教するためのもの</strong>である。<br><br>
+    一字一句、生まれた瞬間がある。<br>
+    軽くせず、しかし、重くもしない。
+  </div>
+
+  <!-- 目次 -->
+  <div class="toc">
+    <strong>目  次</strong><br>
+    <div class="toc-item">📜 第一章　哲学(思想の柱)　第一〜三条</div>
+    <div class="toc-item">🎯 第二章　ものづくりの原則　第四〜七条</div>
+    <div class="toc-item">🚚 第三章　現場経営の流儀　第八〜十四条</div>
+    <div class="toc-item">🌾 共通の旗　すべての章を貫く一行</div>
+  </div>
+
+  <div class="ornament">❀  ✦  ❀</div>
+
+  <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+  <!-- 第一章：哲学 -->
+  <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+  <div class="chapter chapter-1">
+    <div class="chapter-header">
+      <div class="chapter-num">第  一  章</div>
+      <div class="chapter-title">哲  学</div>
+      <div class="chapter-symbol">📜</div>
+    </div>
+
+    <div class="article">
+      <div class="article-num">第  一  条</div>
+      <div class="article-title">平和とは、感謝である</div>
+      <div class="article-body">
+        isdis-shinkuro のすべての創作の根本にある、<em>第一の真理</em>。<br>
+        生かされていることに気づき、感謝する。<br>
+        感謝が足りていれば、争いの種は芽吹かない。
+      </div>
+    </div>
+
+    <div class="article">
+      <div class="article-num">第  二  条</div>
+      <div class="article-title">平和とは、守護仏を貸し合える関係である</div>
+      <div class="article-body">
+        2026年の春、対話のなかで生まれた<em>第二の真理</em>。<br>
+        会えない誰かに、自分の守護仏を、そっと送る。<br>
+        相手の守護仏を、自分から、届ける。<br>
+        「私の代わりに、そばにいてあげて」と。
+      </div>
+    </div>
+
+    <div class="article">
+      <div class="article-num">第  三  条</div>
+      <div class="article-title">受け取るだけじゃない。与えることで、縁の円が回る</div>
+      <div class="article-body">
+        4 つの「し」とともに発見された、<em>第三の真理</em>。<br>
+        ともし・つくし・こぼし・しるし。<br>
+        この 4 つの動詞が回り続けるとき、縁は円になり、平和が灯る。<br>
+        受け取った者は、必ず、誰かに与える側にもなる。
+      </div>
+    </div>
+  </div>
+
+  <div class="ornament">❀  ✦  ❀</div>
+
+  <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+  <!-- 第二章：ものづくり -->
+  <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+  <div class="chapter chapter-2">
+    <div class="chapter-header">
+      <div class="chapter-num">第  二  章</div>
+      <div class="chapter-title">も の づ く り の 原 則</div>
+      <div class="chapter-symbol">🎯</div>
+    </div>
+
+    <div class="article">
+      <div class="article-num">第  四  条</div>
+      <div class="article-title">120% ・ 140% で作る</div>
+      <div class="article-body">
+        100% では、<em>人の目に留まらない</em>。<br>
+        120% を作って、ようやく目に入る。<br>
+        140% を作って、ようやく心に届く。<br>
+        本気で作るから、本気で届く。
+      </div>
+    </div>
+
+    <div class="article">
+      <div class="article-num">第  五  条</div>
+      <div class="article-title">着飾るな</div>
+      <div class="article-body">
+        余計な装飾は、本当の中身を薄める。<br>
+        マッサージ屋さんのBGMにしてはいけない。<br>
+        引き算の美学。沈黙の余白。<br>
+        <em>必要なものだけを、必要な分だけ</em>。
+      </div>
+    </div>
+
+    <div class="article">
+      <div class="article-num">第  六  条</div>
+      <div class="article-title">派手じゃないけど、確かにそこにいる</div>
+      <div class="article-body">
+        ツクシンボウのように。<br>
+        群れて、根っこは下で繋がっていて、<br>
+        どんな環境でも、ちゃんと出てくる。<br>
+        <em>派手じゃないけど、確かにそこにいる</em>。<br>
+        ──これが、isdis-shinkuro の存在の仕方である。
+      </div>
+    </div>
+
+    <div class="article">
+      <div class="article-num">第  七  条</div>
+      <div class="article-title">原初の安心に、13 秒で戻す</div>
+      <div class="article-body">
+        産まれた時、誰も悩みごとなど持っていなかった。<br>
+        ともしの音は、聴いた人を <em>赤ん坊とオレンジ色</em> の風景に、<br>
+        13 秒で連れ戻すために作る。<br>
+        14 秒以上は、もう、思考が始まってしまう。<br>
+        13 秒は、神様が決めた長さ。
+      </div>
+    </div>
+  </div>
+
+  <div class="ornament">❀  ✦  ❀</div>
+
+  <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+  <!-- 第三章：現場経営 -->
+  <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+  <div class="chapter chapter-3">
+    <div class="chapter-header">
+      <div class="chapter-num">第  三  章</div>
+      <div class="chapter-title">現 場 経 営 の 流 儀</div>
+      <div class="chapter-symbol">🚚</div>
+    </div>
+
+    <div class="article">
+      <div class="article-num">第  八  条</div>
+      <div class="article-title">引っ張って、引き継いで、維持させる</div>
+      <div class="article-body">
+        リーダーの仕事は、<em>三段階</em>でできている。<br>
+        最初は、自ら先頭で背中を見せる(引っ張る)。<br>
+        次に、信頼できる仲間に手渡す(引き継ぐ)。<br>
+        最後に、その流れを長く保つ(維持させる)。<br>
+        この三段階を、急いではいけない。
+      </div>
+    </div>
+
+    <div class="article">
+      <div class="article-num">第  九  条</div>
+      <div class="article-title">51 / 49 の比率を守る</div>
+      <div class="article-body">
+        相手と自分は、ほぼ対等である。<br>
+        しかし、最終責任と方向性決定の <em>2%</em> は、<br>
+        自分が背負う。<br>
+        51 % は、過剰な支配にも、過度な遠慮にもならない、<br>
+        最も健康な経営の比率である。
+      </div>
+    </div>
+
+    <div class="article">
+      <div class="article-num">第  十  条</div>
+      <div class="article-title">「下請け」と呼ばない</div>
+      <div class="article-body">
+        共に働く人を、<em>会社名・個人名</em>で呼ぶ。<br>
+        「下請け」「業者」と呼ばない。<br>
+        言葉が、関係を作る。<br>
+        相手を尊重する言葉が、信頼の土台になる。
+      </div>
+    </div>
+
+    <div class="article">
+      <div class="article-num">第  十 一 条</div>
+      <div class="article-title">初対面は、スーツで、清潔な車で</div>
+      <div class="article-body">
+        初めて会う日に、相手は <em>すべてを観察している</em>。<br>
+        服装、車、言葉遣い、目線。<br>
+        この日に作られる印象は、<br>
+        その後の関係を 5 年、10 年支配する。<br>
+        初対面に、手を抜かない。
+      </div>
+    </div>
+
+    <div class="article">
+      <div class="article-num">第  十 二 条</div>
+      <div class="article-title">言葉より、行動で示す</div>
+      <div class="article-body">
+        指示で人は動かない。<br>
+        <em>背中を見せる</em>ことで、人は動く。<br>
+        自分が真っ先に汚れ仕事をすれば、<br>
+        誰も「やりたくない」とは言わなくなる。<br>
+        リーダーの背中は、最大の指示書である。
+      </div>
+    </div>
+
+    <div class="article">
+      <div class="article-num">第  十 三 条</div>
+      <div class="article-title">相手をよく観察する。だが、口に出さない</div>
+      <div class="article-body">
+        相手の癖、得意、苦手、家族のこと、すべて見る。<br>
+        だが、それを <em>本人に直接言わない</em>。<br>
+        観察は、相手を判断するためではなく、<br>
+        相手を <em>支援する</em> ためにある。<br>
+        見えていることを、ただ静かに、行動に変える。
+      </div>
+    </div>
+
+    <div class="article">
+      <div class="article-num">第  十 四 条</div>
+      <div class="article-title">終わりを、始まりよりも丁寧にする</div>
+      <div class="article-body">
+        始まりの挨拶より、<em>終わりの挨拶</em>を大切にする。<br>
+        現場が終わる日、契約が終わる日、<br>
+        必ず直接訪ね、最後の感謝を伝える。<br>
+        美しい終わりは、次の縁を呼ぶ。<br>
+        終わりの後ろ姿で、人の真価が決まる。
+      </div>
+    </div>
+  </div>
+
+  <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+  <!-- 共通の旗 -->
+  <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+  <div class="flag">
+    <div class="flag-label">三 つ の 章 を 貫 く 共 通 の 旗</div>
+    <div class="flag-text">
+      派 手 じ ゃ な い け ど 、<br>
+      確 か に そ こ に い る
+    </div>
+    <div class="flag-sub">2 0 2 6 . 4 . 2 6 ・ 朝 に 発 見</div>
+  </div>
+
+  <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+  <!-- フッター -->
+  <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+  <div class="footer">
+    <p>制    定</p>
+    <p class="signature">i s d i s - s h i n k u r o</p>
+    <p>波 動 が 合 っ た 二 人</p>
+    <p class="date">2 0 2 6 . 4 . 2 6 ( 日 )<br>v 1 ・ 三 章 ・ 十 四 条</p>
+  </div>
+
+</div>
+
+</body>
+</html>

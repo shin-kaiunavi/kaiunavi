@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>isdis-shinkuro ロードマップ v4</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@200;300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  body{
+    background:linear-gradient(135deg,#fef8e8 0%,#fff5db 100%);
+    font-family:'Noto Serif JP',serif;
+    color:#3a3228;
+    padding:20px 14px 80px;
+    line-height:1.85;
+    min-height:100vh;
+  }
+  .container{max-width:760px;margin:0 auto;}
+  .header{text-align:center;margin-bottom:20px;padding:18px 0;border-top:2px solid #c9a96e;border-bottom:2px solid #c9a96e;}
+  .badge{display:inline-block;background:linear-gradient(135deg,#c9a96e,#b8945a);color:white;padding:4px 12px;border-radius:14px;font-size:10px;letter-spacing:0.25em;margin-bottom:10px;}
+  .v2-tag{display:inline-block;background:linear-gradient(135deg,#d18a3a,#a06520);color:white;padding:3px 10px;border-radius:10px;font-size:9px;letter-spacing:0.2em;margin-left:4px;}
+  h1{font-size:17px;font-weight:400;letter-spacing:0.25em;color:#c9a96e;margin-bottom:6px;}
+  .sub{font-size:10px;color:#9e9088;letter-spacing:0.2em;line-height:1.9;}
+
+  .dashboard{background:white;border:2px solid #c9a96e;border-radius:14px;padding:18px 16px;margin:18px 0;box-shadow:0 3px 12px rgba(201,169,110,0.1);}
+  .dashboard-title{font-size:11px;color:#c9a96e;letter-spacing:0.2em;text-align:center;margin-bottom:14px;font-weight:500;}
+
+  .pie-section{display:flex;align-items:center;justify-content:center;gap:18px;padding-bottom:16px;border-bottom:1px dashed rgba(201,169,110,0.3);margin-bottom:14px;}
+  .pie-wrap{position:relative;width:130px;height:130px;flex-shrink:0;}
+  .pie-svg{width:100%;height:100%;transform:rotate(-90deg);}
+  .pie-bg{fill:none;stroke:rgba(201,169,110,0.12);stroke-width:14;}
+  .pie-done{fill:none;stroke:url(#pieGradient);stroke-width:14;stroke-linecap:round;transition:stroke-dasharray 1s ease;}
+  .pie-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;}
+  .pie-percent{font-size:24px;font-weight:500;color:#c9a96e;letter-spacing:0.05em;}
+  .pie-label{font-size:9px;color:#9e9088;letter-spacing:0.15em;margin-top:2px;}
+  .pie-stats{flex:1;font-size:10.5px;line-height:1.85;}
+  .pie-stat{display:flex;justify-content:space-between;align-items:center;padding:5px 8px;border-radius:6px;margin-bottom:4px;}
+  .pie-stat.done-stat{background:rgba(136,160,110,0.12);}
+  .pie-stat.todo-stat{background:rgba(201,169,110,0.08);}
+  .pie-stat.total-stat{background:rgba(201,169,110,0.18);font-weight:500;}
+  .stat-label{color:#6b5f54;letter-spacing:0.05em;}
+  .stat-value{color:#c9a96e;font-weight:500;}
+  .pie-stat.done-stat .stat-value{color:#5a7a44;}
+
+  .bar-title{font-size:10px;color:#9e9088;letter-spacing:0.15em;margin-bottom:8px;}
+  .bar-row{display:grid;grid-template-columns:80px 1fr 38px;gap:8px;align-items:center;margin-bottom:6px;font-size:9.5px;}
+  .bar-label{color:#6b5f54;letter-spacing:0.03em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .bar-track{height:7px;background:rgba(201,169,110,0.12);border-radius:4px;overflow:hidden;position:relative;}
+  .bar-fill{height:100%;background:linear-gradient(90deg,#88a06e,#c9a96e,#fff4c4);width:0%;transition:width 0.6s ease;border-radius:4px;}
+  .bar-fill.important{background:linear-gradient(90deg,#d18a3a,#fff4c4);}
+  .bar-count{color:#9e9088;font-size:9px;text-align:right;letter-spacing:0.05em;}
+
+  .legend{background:rgba(255,255,255,0.6);border:1px dashed rgba(201,169,110,0.3);border-radius:10px;padding:9px 12px;margin:14px 0;font-size:9.5px;color:#6b5f54;letter-spacing:0.05em;line-height:1.95;}
+  .legend strong{color:#c9a96e;}
+
+  .phase{background:white;border:1px solid rgba(201,169,110,0.3);border-radius:14px;padding:16px 14px;margin-bottom:16px;box-shadow:0 2px 8px rgba(201,169,110,0.06);}
+  .phase-header{display:flex;align-items:center;gap:10px;padding-bottom:10px;border-bottom:1px dashed rgba(201,169,110,0.3);margin-bottom:12px;}
+  .phase-date{flex-shrink:0;background:linear-gradient(135deg,#c9a96e,#b8945a);color:white;padding:5px 10px;border-radius:9px;font-size:9.5px;letter-spacing:0.12em;text-align:center;min-width:80px;line-height:1.4;}
+  .phase-title{flex:1;font-size:13px;font-weight:500;color:#3a3228;letter-spacing:0.08em;line-height:1.5;}
+  .phase-progress-text{font-size:10.5px;color:#c9a96e;letter-spacing:0.1em;flex-shrink:0;}
+  .phase-bar{height:3px;background:rgba(201,169,110,0.12);border-radius:2px;margin-bottom:12px;overflow:hidden;}
+  .phase-fill{height:100%;background:linear-gradient(90deg,#e8a03a,#fff4c4);width:0%;transition:width 0.5s ease;border-radius:2px;}
+  .phase.important{background:linear-gradient(135deg,rgba(255,235,180,0.4),white);border-color:#d18a3a;}
+  .phase.important .phase-date{background:linear-gradient(135deg,#d18a3a,#a06520);}
+
+  .check-item{display:flex;align-items:flex-start;gap:9px;padding:7px 4px;border-bottom:1px dashed rgba(201,169,110,0.15);cursor:pointer;transition:all 0.2s ease;position:relative;}
+  .check-item:last-child{border-bottom:none;}
+  .check-item:hover{background:rgba(255,235,180,0.15);}
+  .check-item.checked{opacity:0.65;}
+  .check-box{flex-shrink:0;width:17px;height:17px;border:2px solid #c9a96e;border-radius:5px;display:flex;align-items:center;justify-content:center;transition:all 0.2s ease;background:white;margin-top:1px;}
+  .check-item.checked .check-box{background:linear-gradient(135deg,#c9a96e,#b8945a);}
+  .check-mark{color:white;font-size:11px;font-weight:700;opacity:0;transform:scale(0);transition:all 0.25s cubic-bezier(0.34,1.56,0.64,1);}
+  .check-item.checked .check-mark{opacity:1;transform:scale(1);}
+  .check-content{flex:1;font-size:11px;line-height:1.65;}
+  .check-text{color:#3a3228;letter-spacing:0.02em;}
+  .check-item.checked .check-text{text-decoration:line-through;color:#9e9088;}
+  .check-note{font-size:9px;color:#9e9088;margin-top:2px;letter-spacing:0.05em;font-style:italic;}
+  .check-item.preset-done{opacity:0.65;}
+  .check-item.preset-done .check-box{background:linear-gradient(135deg,#88a06e,#5a7a44);border-color:#5a7a44;}
+  .check-item.preset-done .check-text{text-decoration:line-through;color:#5a7a44;}
+  .check-item.user-added .check-text::after{content:'+';display:inline-block;margin-left:6px;background:rgba(209,138,58,0.15);color:#a06520;padding:0 5px;border-radius:4px;font-size:9px;letter-spacing:0.1em;vertical-align:middle;}
+  .delete-btn{flex-shrink:0;background:none;border:none;color:rgba(160,101,32,0.5);font-size:14px;cursor:pointer;padding:0 4px;margin-top:-2px;}
+  .delete-btn:hover{color:#a06520;}
+
+  .add-task-btn{width:100%;background:rgba(201,169,110,0.05);border:1px dashed rgba(201,169,110,0.4);color:#9e9088;padding:9px;border-radius:8px;font-family:inherit;font-size:10.5px;letter-spacing:0.15em;cursor:pointer;margin-top:10px;transition:all 0.2s ease;}
+  .add-task-btn:hover{background:rgba(201,169,110,0.1);}
+
+  .add-form{display:none;margin-top:10px;padding:10px;background:rgba(255,235,180,0.3);border:1px dashed rgba(209,138,58,0.4);border-radius:8px;}
+  .add-form.show{display:block;}
+  .add-form-input{width:100%;border:1px solid rgba(201,169,110,0.4);border-radius:6px;padding:7px 10px;font-family:inherit;font-size:11px;color:#3a3228;background:white;margin-bottom:6px;}
+  .add-form-input:focus{outline:none;border-color:#c9a96e;}
+  .add-form-buttons{display:flex;gap:6px;}
+  .add-form-buttons button{flex:1;padding:6px;border:none;border-radius:6px;font-family:inherit;font-size:10px;letter-spacing:0.1em;cursor:pointer;}
+  .btn-confirm{background:linear-gradient(135deg,#c9a96e,#b8945a);color:white;}
+  .btn-cancel{background:rgba(158,144,136,0.15);color:#6b5f54;}
+
+  .star-mark{color:#d18a3a;margin-right:3px;}
+  .footer{text-align:center;margin-top:30px;padding-top:18px;border-top:1px dashed rgba(201,169,110,0.3);font-size:9.5px;color:#9e9088;letter-spacing:0.2em;}
+  .reset-btn{display:block;margin:20px auto 0;background:rgba(201,169,110,0.1);border:1px solid rgba(201,169,110,0.4);color:#9e9088;padding:7px 16px;border-radius:14px;font-family:inherit;font-size:9.5px;letter-spacing:0.2em;cursor:pointer;}
+  .reflection{background:linear-gradient(135deg,rgba(201,169,110,0.1),rgba(201,169,110,0.02));border-left:4px solid #c9a96e;padding:12px 16px;margin:18px 0;font-size:10.5px;color:#6b5f54;line-height:2;letter-spacing:0.05em;border-radius:0 8px 8px 0;}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <div class="header">
+    <span class="badge">i s d i s - s h i n k u r o</span>
+    <span class="v2-tag">V 4</span>
+    <h1>リ リ ー ス ま で の 全 タ ス ク</h1>
+    <p class="sub">2 0 2 6 . 4 . 2 6 → 2 0 2 6 . 7 . 1 9</p>
+  </div>
+
+  <div class="reflection">
+    <strong>v 4 の進化(2026.4.29 朝)：</strong>4/27 住所変更DAYと4/28の朝の成果を「既に完成」へ追加。
+    白山神社・永昌院との出会い、個人ノート4篇シリーズも反映。霧がさらに、晴れた🌅
+  </div>
+
+  <div class="dashboard">
+    <div class="dashboard-title">📊  進  捗  ダ ッ シ ュ ボ ー ド</div>
+
+    <div class="pie-section">
+      <div class="pie-wrap">
+        <svg class="pie-svg" viewBox="0 0 120 120">
+          <defs>
+            <linearGradient id="pieGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#88a06e"/>
+              <stop offset="50%" stop-color="#c9a96e"/>
+              <stop offset="100%" stop-color="#fff4c4"/>
+            </linearGradient>
+          </defs>
+          <circle class="pie-bg" cx="60" cy="60" r="50"/>
+          <circle class="pie-done" id="pieDone" cx="60" cy="60" r="50" stroke-dasharray="0 314"/>
+        </svg>
+        <div class="pie-center">
+          <div class="pie-percent" id="piePercent">0%</div>
+          <div class="pie-label">着 地 ま で</div>
+        </div>
+      </div>
+      <div class="pie-stats">
+        <div class="pie-stat done-stat"><span class="stat-label">✓ 完了</span><span class="stat-value" id="statDone">0</span></div>
+        <div class="pie-stat todo-stat"><span class="stat-label">○ 残り</span><span class="stat-value" id="statTodo">0</span></div>
+        <div class="pie-stat total-stat"><span class="stat-label">＝ 全体</span><span class="stat-value" id="statTotal">0</span></div>
+      </div>
+    </div>
+
+    <div class="bar-title">フ ェ ー ズ 別 進 捗</div>
+    <div id="barRows"></div>
+  </div>
+
+  <div class="legend">
+    🟢 <strong>緑</strong>＝完了済　🟡 <strong>金</strong>＝今後タップ　⭐ ＝重要マイルストーン　＋ ＝タスク追加
+  </div>
+
+  <div id="phaseContainer">
+
+    <div class="phase" data-phase-id="0" data-phase-name="これまでに達成">
+      <div class="phase-header">
+        <div class="phase-date">既 に<br>完 成</div>
+        <div class="phase-title">これまでに 達成したこと</div>
+        <div class="phase-progress-text" data-phase="0">- / -</div>
+      </div>
+      <div class="phase-bar"><div class="phase-fill" data-phase="0"></div></div>
+      <div class="phase-items">
+        <div class="check-item preset-done" data-phase="0"><div class="check-box"><div class="check-mark">✓</div></div><div class="check-content"><div class="check-text">開運ナビ 17時間全見直し（占術正確化）</div><div class="check-note">JDN計算・吉日ハードコード・立春境界・九星気学</div></div></div>
+        <div class="check-item preset-done" data-phase="0"><div class="check-box"><div class="check-mark">✓</div></div><div class="check-content"><div class="check-text">開運ナビ憲章 三箇条 制定（4/20 甲子日）</div></div></div>
+        <div class="check-item preset-done" data-phase="0"><div class="check-box"><div class="check-mark">✓</div></div><div class="check-content"><div class="check-text">ボン一族 8匹のAPNGアニメ完成</div></div></div>
+        <div class="check-item preset-done" data-phase="0"><div class="check-box"><div class="check-mark">✓</div></div><div class="check-content"><div class="check-text">メイン画像（240×240 APNG）・タブ画像 完成</div></div></div>
+        <div class="check-item preset-done" data-phase="0"><div class="check-box"><div class="check-mark">✓</div></div><div class="check-content"><div class="check-text">スタンプ申請テキスト確定</div></div></div>
+        <div class="check-item preset-done" data-phase="0"><div class="check-box"><div class="check-mark">✓</div></div><div class="check-content"><div class="check-text">告知文ドラフト v5（送り合いっこ・お守りの交換）</div></div></div>
+        <div class="check-item preset-done" data-phase="0"><div class="check-box"><div class="check-mark">✓</div></div><div class="check-content"><div class="check-text">ともしアプリ 起動シーケンス v5</div></div></div>
+        <div class="check-item preset-done" data-phase="0"><div class="check-box"><div class="check-mark">✓</div></div><div class="check-content"><div class="check-text">ともしオープニング曲（マリンバ3層・13秒）完成</div></div></div>
+        <div class="check-item preset-done" data-phase="0"><div class="check-box"><div class="check-mark">✓</div></div><div class="check-content"><div class="check-text">isdis-shinkuro 用語辞典 v1（4つの「し」・TUKK）</div></div></div>
+        <div class="check-item preset-done" data-phase="0"><div class="check-box"><div class="check-mark">✓</div></div><div class="check-content"><div class="check-text">4つのスケジュール柱 確定</div></div></div>
+        <div class="check-item preset-done" data-phase="0"><div class="check-box"><div class="check-mark">✓</div></div><div class="check-content"><div class="check-text">告知文ドラフト v6（縁の円・TUKKを織り込む）</div><div class="check-note">2026.4.26 朝 完成</div></div></div>
+        <div class="check-item preset-done" data-phase="0"><div class="check-box"><div class="check-mark">✓</div></div><div class="check-content"><div class="check-text">告知文ドラフト v7（土筆の物語を添えて）</div><div class="check-note">2026.4.26 朝 完成・「派手じゃないけど確かにそこにいる」発見</div></div></div>
+        <div class="check-item preset-done" data-phase="0"><div class="check-box"><div class="check-mark">✓</div></div><div class="check-content"><div class="check-text">isdis-shinkuro ブランド憲章 v1（三章十四条）</div><div class="check-note">2026.4.26 夜 制定・「派手じゃないけど〜」を旗に</div></div></div>
+        <div class="check-item preset-done" data-phase="0"><div class="check-box"><div class="check-mark">✓</div></div><div class="check-content"><div class="check-text">中山白山神社 予習資料</div><div class="check-note">2026.4.26 夜・氏神様への礼儀として</div></div></div>
+        <div class="check-item preset-done" data-phase="0"><div class="check-box"><div class="check-mark">✓</div></div><div class="check-content"><div class="check-text">4/27 住所変更ワンストップDAY 完遂</div><div class="check-note">2026.4.27・氏神様朝晩二度参り、すべて滑らか</div></div></div>
+        <div class="check-item preset-done" data-phase="0"><div class="check-box"><div class="check-mark">✓</div></div><div class="check-content"><div class="check-text">しんちゃん家立地調査（四神相応の発見）</div><div class="check-note">2026.4.27・西=白山神社、東=永昌院、ど真ん中</div></div></div>
+        <div class="check-item preset-done" data-phase="0"><div class="check-box"><div class="check-mark">✓</div></div><div class="check-content"><div class="check-text">個人ノート第二篇：ばぁちゃんと両親の教えの解読</div><div class="check-note">2026.4.27 午後・お風呂で降りてきた気づき</div></div></div>
+        <div class="check-item preset-done" data-phase="0"><div class="check-box"><div class="check-mark">✓</div></div><div class="check-content"><div class="check-text">個人ノート第三篇：住所変更DAYの物語</div><div class="check-note">2026.4.28 朝・一日の体験を物語として記録</div></div></div>
+        <div class="check-item preset-done" data-phase="0"><div class="check-box"><div class="check-mark">✓</div></div><div class="check-content"><div class="check-text">個人ノート第四篇 v1.1：飯成山と軽バンとご飯の仕事</div><div class="check-note">2026.4.28 朝・東の山と仕事の繋がりの発見</div></div></div>
+        <div class="check-item preset-done" data-phase="0"><div class="check-box"><div class="check-mark">✓</div></div><div class="check-content"><div class="check-text">実穂ちゃんへ Claude 入門の橋渡し（みほクロ誕生）</div><div class="check-note">2026.4.28 夜・第三篇・第四篇を渡し、長電話で深い対話</div></div></div>
+      </div>
+    </div>
+
+    <div class="phase important" data-phase-id="1" data-phase-name="4/27 住所変更">
+      <div class="phase-header">
+        <div class="phase-date">4 / 2 7<br>(月) 大安</div>
+        <div class="phase-title"><span class="star-mark">★</span>住所変更ワンストップDAY</div>
+        <div class="phase-progress-text" data-phase="1">0 / 6</div>
+      </div>
+      <div class="phase-bar"><div class="phase-fill" data-phase="1"></div></div>
+      <div class="phase-items">
+        <div class="check-item preset-done" data-phase="1"><div class="check-box"><div class="check-mark">✓</div></div><div class="check-content"><div class="check-text">前日(4/26)夜：持ち物の最終確認</div><div class="check-note">完璧に準備した</div></div></div>
+        <div class="check-item preset-done" data-phase="1"><div class="check-box"><div class="check-mark">✓</div></div><div class="check-content"><div class="check-text">朝：お香を焚いて守護仏にご挨拶</div></div></div>
+        <div class="check-item preset-done" data-phase="1"><div class="check-box"><div class="check-mark">✓</div></div><div class="check-content"><div class="check-text">10:00 八王子駅南口総合事務所</div><div class="check-note">転居届+マイナンバー、滑らかに完了</div></div></div>
+        <div class="check-item preset-done" data-phase="1"><div class="check-box"><div class="check-mark">✓</div></div><div class="check-content"><div class="check-text">住民票の写し発行(300円)</div></div></div>
+        <div class="check-item preset-done" data-phase="1"><div class="check-box"><div class="check-mark">✓</div></div><div class="check-content"><div class="check-text">13:00 警察署：免許証 住所変更</div></div></div>
+        <div class="check-item preset-done" data-phase="1"><div class="check-box"><div class="check-mark">✓</div></div><div class="check-content"><div class="check-text">帰り道：神社参拝（白山神社・永昌院二度参り）</div><div class="check-note">心地よい風・アゲハチョウとの出会い</div></div></div>
+      </div>
+      <button class="add-task-btn">＋ このフェーズにタスクを追加</button>
+      <div class="add-form"><input type="text" class="add-form-input" placeholder="新しいタスクを入力..."><div class="add-form-buttons"><button class="btn-confirm">追加</button><button class="btn-cancel">キャンセル</button></div></div>
+    </div>
+
+    <div class="phase" data-phase-id="2" data-phase-name="開業前準備">
+      <div class="phase-header">
+        <div class="phase-date">4 / 2 8<br>〜 5 / 2 5</div>
+        <div class="phase-title">開業前準備（約 1 ヶ月）</div>
+        <div class="phase-progress-text" data-phase="2">0 / 8</div>
+      </div>
+      <div class="phase-bar"><div class="phase-fill" data-phase="2"></div></div>
+      <div class="phase-items">
+        <div class="check-item" data-phase="2"><div class="check-box"><div class="check-mark">✓</div></div><div class="check-content"><div class="check-text">屋号付き銀行口座のリサーチ</div></div></div>
+        <div class="check-item" data-phase="2"><div class="check-box"><div class="check-mark">✓</div></div><div class="check-content"><div class="check-text">D-U-N-Sナンバーについて学ぶ</div></div></div>
+        <div class="check-item" data-phase="2"><div class="check-box"><div class="check-mark">✓</div></div><div class="check-content"><div class="check-text">事業概要文の最終確定</div></div></div>
+        <div class="check-item" data-phase="2"><div class="check-box"><div class="check-mark">✓</div></div><div class="check-content"><div class="check-text">開業届の事前記入チェック</div></div></div>
+        <div class="check-item" data-phase="2"><div class="check-box"><div class="check-mark">✓</div></div><div class="check-content"><div class="check-text">青色申告承認申請書の事前記入</div></div></div>
+        <div class="check-item" data-phase="2"><div class="check-box"><div class="check-mark">✓</div></div><div class="check-content"><div class="check-text">税務署の場所・時間の最終確認</div></div></div>
+        <div class="check-item" data-phase="2"><div class="check-box"><div class="check-mark">✓</div></div><div class="check-content"><div class="check-text">確定申告ソフトの選定</div></div></div>
+        <div class="check-item" data-phase="2"><div class="check-box"><div class="check-mark">✓</div></div><div class="check-content"><div class="check-text">開運ナビの "中途半端な部分" の洗い出し</div></div></div>
+      </div>
+      <button class="add-task-btn">＋ このフェーズにタスクを追加</button>
+      <div class="add-form"><input type="text" class="add-form-input" placeholder="新しいタスクを入力..."><div class="add-form-buttons"><button class="btn-confirm">追加</button><button class="btn-cancel">キャンセル</button></div></div>
+    </div>
+
+    <div class="phase important" data-phase-id="3" data-phase-name="5/26 開業">
+      <div class="phase-header">
+        <div class="phase-date">5 / 2 6<br>(火) 大安・己巳</div>
+        <div class="phase-title"><span class="star-mark">★</span>isdis-shinkuro 正式誕生</div>
+        <div class="phase-progress-text" data-phase="3">0 / 5</div>
+      </div>
+      <div class="phase-bar"><div class="phase-fill" data-phase="3"></div></div>
+      <div class="phase-items">
+        <div class="check-item" data-phase="3"><div class="check-box"><div class="check-mark">✓</div></div><div class="check-content"><div class="check-text">前日：守護仏と弁財天にご挨拶の準備</div></div></div>
+        <div class="check-item" data-phase="3"><div class="check-box"><div class="check-mark">✓</div></div><div class="check-content"><div class="check-text">8:30 八王子税務署：開業届 提出</div></div></div>
+        <div class="check-item" data-phase="3"><div class="check-box"><div class="check-mark">✓</div></div><div class="check-content"><div class="check-text">青色申告承認申請書 同時提出</div></div></div>
+        <div class="check-item" data-phase="3"><div class="check-box"><div class="check-mark">✓</div></div><div class="check-content"><div class="check-text">控えのリーフレット受領 → 正式誕生 🎉</div></div></div>
+        <div class="check-item" data-phase="3"><div class="check-box"><div class="check-mark">✓</div></div><div class="check-content"><div class="check-text">帰り道：神社で「ご報告とお礼」参拝</div></div></div>
+      </div>
+      <button class="add-task-btn">＋ このフェーズにタスクを追加</button>
+      <div class="add-form"><input type="text" class="add-form-input" placeholder="新しいタスクを入力..."><div class="add-form-buttons"><button class="btn-confirm">追加</button><button class="btn-cancel">キャンセル</button></div></div>
+    </div>
+
+    <div class="phase" data-phase-id="4" data-phase-name="ボン一族準備">
+      <div class="phase-header">
+        <div class="phase-date">5 / 2 7<br>〜 6 / 2 3</div>
+        <div class="phase-title">ボン一族 リリース準備（約 4 週間）</div>
+        <div class="phase-progress-text" data-phase="4">0 / 11</div>
+      </div>
+      <div class="phase-bar"><div class="phase-fill" data-phase="4"></div></div>
+      <div class="phase-items">
+        <div class="check-item" data-phase="4"><div class="check-box"><div class="check-mark">✓</div></div><div class="check-content"><div class="check-text">屋号付き銀行口座 開設</div></div></div>
+        <div class="check-item" data-phase="4"><div class="check-box"><div class="check-mark">✓</div></div><div class="check-content"><div class="check-text">LINE Creators Market 登録</div></div></div>
+        <div class="check-item" data-phase="4"><div class="check-box"><div class="check-mark">✓</div></div><div class="check-content"><div class="check-text">税情報・振込先設定</div></div></div>
+        <div class="check-item" data-phase="4"><div class="check-box"><div class="check-mark">✓</div></div><div class="check-content"><div class="check-text">ボン一族 申請・アップロード</div></div></div>
+        <div class="check-item" data-phase="4"><div class="check-box"><div class="check-mark">✓</div></div><div class="check-content"><div class="check-text">審査通過の確認</div></div></div>
+        <div class="check-item preset-done" data-phase="4"><div class="check-box"><div class="check-mark">✓</div></div><div class="check-content"><div class="check-text">告知文を v5 → v6 → v7 へアップデート</div><div class="check-note">2026.4.26 完成</div></div></div>
+        <div class="check-item" data-phase="4"><div class="check-box"><div class="check-mark">✓</div></div><div class="check-content"><div class="check-text">プレリリース戦略の具体化</div></div></div>
+        <div class="check-item" data-phase="4"><div class="check-box"><div class="check-mark">✓</div></div><div class="check-content"><div class="check-text">SNS アカウントの整備</div></div></div>
+        <div class="check-item" data-phase="4"><div class="check-box"><div class="check-mark">✓</div></div><div class="check-content"><div class="check-text">ハッシュタグ戦略</div></div></div>
+        <div class="check-item" data-phase="4"><div class="check-box"><div class="check-mark">✓</div></div><div class="check-content"><div class="check-text">プレリリース投稿開始</div></div></div>
+        <div class="check-item" data-phase="4"><div class="check-box"><div class="check-mark">✓</div></div><div class="check-content"><div class="check-text">かづさん（QA担当）に最終チェック依頼</div></div></div>
+      </div>
+      <button class="add-task-btn">＋ このフェーズにタスクを追加</button>
+      <div class="add-form"><input type="text" class="add-form-input" placeholder="新しいタスクを入力..."><div class="add-form-buttons"><button class="btn-confirm">追加</button><button class="btn-cancel">キャンセル</button></div></div>
+    </div>
+
+    <div class="phase important" data-phase-id="5" data-phase-name="6/24 ボン一族">
+      <div class="phase-header">
+        <div class="phase-date">6 / 2 4<br>(水) 己巳・万倍</div>
+        <div class="phase-title"><span class="star-mark">★</span>ボン一族 世界デビュー</div>
+        <div class="phase-progress-text" data-phase="5">0 / 5</div>
+      </div>
+      <div class="phase-bar"><div class="phase-fill" data-phase="5"></div></div>
+      <div class="phase-items">
+        <div class="check-item" data-phase="5"><div class="check-box"><div class="check-mark">✓</div></div><div class="check-content"><div class="check-text">朝：守護仏・弁財天にご挨拶</div></div></div>
+        <div class="check-item" data-phase="5"><div class="check-box"><div class="check-mark">✓</div></div><div class="check-content"><div class="check-text">リリース確認 → URL 取得</div></div></div>
+        <div class="check-item" data-phase="5"><div class="check-box"><div class="check-mark">✓</div></div><div class="check-content"><div class="check-text">X（Twitter）リリース告知投稿</div></div></div>
+        <div class="check-item" data-phase="5"><div class="check-box"><div class="check-mark">✓</div></div><div class="check-content"><div class="check-text">Instagram / note 物語仕立て長文 公開</div></div></div>
+        <div class="check-item" data-phase="5"><div class="check-box"><div class="check-mark">✓</div></div><div class="check-content"><div class="check-text">神社参拝(リリースのご報告)</div></div></div>
+      </div>
+      <button class="add-task-btn">＋ このフェーズにタスクを追加</button>
+      <div class="add-form"><input type="text" class="add-form-input" placeholder="新しいタスクを入力..."><div class="add-form-buttons"><button class="btn-confirm">追加</button><button class="btn-cancel">キャンセル</button></div></div>
+    </div>
+
+    <div class="phase" data-phase-id="6" data-phase-name="ともしアプリ準備">
+      <div class="phase-header">
+        <div class="phase-date">6 / 2 5<br>〜 7 / 1 8</div>
+        <div class="phase-title">ともしアプリ リリース準備（約 3.5 週間）</div>
+        <div class="phase-progress-text" data-phase="6">0 / 14</div>
+      </div>
+      <div class="phase-bar"><div class="phase-fill" data-phase="6"></div></div>
+      <div class="phase-items">
+        <div class="check-item" data-phase="6"><div class="check-box"><div class="check-mark">✓</div></div><div class="check-content"><div class="check-text">起動シーケンスを tomoshi.html に統合</div></div></div>
+        <div class="check-item" data-phase="6"><div class="check-box"><div class="check-mark">✓</div></div><div class="check-content"><div class="check-text">マリンバ3層 BGM を tomoshi.html に統合</div></div></div>
+        <div class="check-item" data-phase="6"><div class="check-box"><div class="check-mark">✓</div></div><div class="check-content"><div class="check-text">じぶん辞書「今日」ページの実装</div></div></div>
+        <div class="check-item" data-phase="6"><div class="check-box"><div class="check-mark">✓</div></div><div class="check-content"><div class="check-text">じぶん辞書「今月」ページの実装</div></div></div>
+        <div class="check-item" data-phase="6"><div class="check-box"><div class="check-mark">✓</div></div><div class="check-content"><div class="check-text">じぶん辞書「方位」ページの実装</div></div></div>
+        <div class="check-item" data-phase="6"><div class="check-box"><div class="check-mark">✓</div></div><div class="check-content"><div class="check-text">料金ティア実装（無料/ミディアム/プレミアム/プロ）</div></div></div>
+        <div class="check-item" data-phase="6"><div class="check-box"><div class="check-mark">✓</div></div><div class="check-content"><div class="check-text">エラー自動検出 / Sentry アラート設定</div></div></div>
+        <div class="check-item" data-phase="6"><div class="check-box"><div class="check-mark">✓</div></div><div class="check-content"><div class="check-text">AI 応答の自動 3 リトライ + バックアップ</div></div></div>
+        <div class="check-item" data-phase="6"><div class="check-box"><div class="check-mark">✓</div></div><div class="check-content"><div class="check-text">通知設定機能の実装</div></div></div>
+        <div class="check-item" data-phase="6"><div class="check-box"><div class="check-mark">✓</div></div><div class="check-content"><div class="check-text">ボン一族 7柱 を ともしに正式実装</div></div></div>
+        <div class="check-item" data-phase="6"><div class="check-box"><div class="check-mark">✓</div></div><div class="check-content"><div class="check-text">D-U-N-Sナンバー 申請</div></div></div>
+        <div class="check-item" data-phase="6"><div class="check-box"><div class="check-mark">✓</div></div><div class="check-content"><div class="check-text">Google Play Console 申請（$25）</div></div></div>
+        <div class="check-item" data-phase="6"><div class="check-box"><div class="check-mark">✓</div></div><div class="check-content"><div class="check-text">Apple Developer Program 申請（年$99）</div></div></div>
+        <div class="check-item" data-phase="6"><div class="check-box"><div class="check-mark">✓</div></div><div class="check-content"><div class="check-text">かづさん QA 最終テスト</div></div></div>
+      </div>
+      <button class="add-task-btn">＋ このフェーズにタスクを追加</button>
+      <div class="add-form"><input type="text" class="add-form-input" placeholder="新しいタスクを入力..."><div class="add-form-buttons"><button class="btn-confirm">追加</button><button class="btn-cancel">キャンセル</button></div></div>
+    </div>
+
+    <div class="phase important" data-phase-id="7" data-phase-name="7/19 ともしアプリ">
+      <div class="phase-header">
+        <div class="phase-date">7 / 1 9<br>(日) 天赦・万倍・大安</div>
+        <div class="phase-title"><span class="star-mark">★</span>ともしアプリ 世界デビュー</div>
+        <div class="phase-progress-text" data-phase="7">0 / 5</div>
+      </div>
+      <div class="phase-bar"><div class="phase-fill" data-phase="7"></div></div>
+      <div class="phase-items">
+        <div class="check-item" data-phase="7"><div class="check-box"><div class="check-mark">✓</div></div><div class="check-content"><div class="check-text">朝：守護仏に最終ご報告</div></div></div>
+        <div class="check-item" data-phase="7"><div class="check-box"><div class="check-mark">✓</div></div><div class="check-content"><div class="check-text">アプリ公開（Google Play / App Store）</div></div></div>
+        <div class="check-item" data-phase="7"><div class="check-box"><div class="check-mark">✓</div></div><div class="check-content"><div class="check-text">SNS で 大々的告知（最強開運日）</div></div></div>
+        <div class="check-item" data-phase="7"><div class="check-box"><div class="check-mark">✓</div></div><div class="check-content"><div class="check-text">ボン一族とのクロス告知</div></div></div>
+        <div class="check-item" data-phase="7"><div class="check-box"><div class="check-mark">✓</div></div><div class="check-content"><div class="check-text">神社参拝（最大の感謝のご報告）</div></div></div>
+      </div>
+      <button class="add-task-btn">＋ このフェーズにタスクを追加</button>
+      <div class="add-form"><input type="text" class="add-form-input" placeholder="新しいタスクを入力..."><div class="add-form-buttons"><button class="btn-confirm">追加</button><button class="btn-cancel">キャンセル</button></div></div>
+    </div>
+
+    <div class="phase" data-phase-id="8" data-phase-name="リリース後">
+      <div class="phase-header">
+        <div class="phase-date">7 / 2 0<br>〜 継 続</div>
+        <div class="phase-title">リリース後 ・ 育てる時期</div>
+        <div class="phase-progress-text" data-phase="8">0 / 6</div>
+      </div>
+      <div class="phase-bar"><div class="phase-fill" data-phase="8"></div></div>
+      <div class="phase-items">
+        <div class="check-item" data-phase="8"><div class="check-box"><div class="check-mark">✓</div></div><div class="check-content"><div class="check-text">ユーザーの反響を観察、感謝投稿</div></div></div>
+        <div class="check-item" data-phase="8"><div class="check-box"><div class="check-mark">✓</div></div><div class="check-content"><div class="check-text">バグ・エラー対応、こまめな改善</div></div></div>
+        <div class="check-item" data-phase="8"><div class="check-box"><div class="check-mark">✓</div></div><div class="check-content"><div class="check-text">ボン一族の使い方紹介</div></div></div>
+        <div class="check-item" data-phase="8"><div class="check-box"><div class="check-mark">✓</div></div><div class="check-content"><div class="check-text">月次振り返り（その月の宝物を一覧化）</div></div></div>
+        <div class="check-item" data-phase="8"><div class="check-box"><div class="check-mark">✓</div></div><div class="check-content"><div class="check-text">Tシャツ第二章の構想を温める</div></div></div>
+        <div class="check-item" data-phase="8"><div class="check-box"><div class="check-mark">✓</div></div><div class="check-content"><div class="check-text">ブランド憲章 v1.5：稲穂の旗・第二の旗を組み込む</div><div class="check-note">「実るほど、頭を垂れる稲穂かな」を共通の旗に追加</div></div></div>
+      </div>
+      <button class="add-task-btn">＋ このフェーズにタスクを追加</button>
+      <div class="add-form"><input type="text" class="add-form-input" placeholder="新しいタスクを入力..."><div class="add-form-buttons"><button class="btn-confirm">追加</button><button class="btn-cancel">キャンセル</button></div></div>
+    </div>
+
+  </div>
+
+  <button class="reset-btn" id="resetBtn">↻ 自分のチェックをリセット</button>
+
+  <div class="footer">
+    <p>i s d i s - s h i n k u r o</p>
+    <p style="margin-top:6px;">2 0 2 6 . 4 . 2 7  →  7 . 1 9</p>
+    <p style="margin-top:6px;">霧の中の地図 ・ v 4</p>
+  </div>
+
+</div>
+
+<script>
+'use strict';
+
+const STORAGE_KEY_CHECK = 'shinchan_roadmap_v4_checks';
+const STORAGE_KEY_ADDED = 'shinchan_roadmap_v4_added';
+
+// 各 .check-item にユニークキーを付与（既存項目はインデックスベース）
+function assignKeys(){
+  document.querySelectorAll('.check-item:not(.user-added)').forEach((item, i) => {
+    if(!item.dataset.checkKey){
+      const phase = item.dataset.phase;
+      const phaseItems = document.querySelectorAll(`.check-item[data-phase="${phase}"]:not(.user-added)`);
+      const idx = Array.from(phaseItems).indexOf(item);
+      item.dataset.checkKey = `default-${phase}-${idx}`;
+    }
+  });
+}
+
+function loadChecks(){
+  try{
+    const saved = localStorage.getItem(STORAGE_KEY_CHECK);
+    if(saved){
+      JSON.parse(saved).forEach(key => {
+        const item = document.querySelector(`.check-item[data-check-key="${key}"]`);
+        if(item && !item.classList.contains('preset-done')) item.classList.add('checked');
+      });
+    }
+  } catch(e){}
+}
+
+function saveChecks(){
+  const keys = [];
+  document.querySelectorAll('.check-item.checked:not(.preset-done)').forEach(item => {
+    if(item.dataset.checkKey) keys.push(item.dataset.checkKey);
+  });
+  try{ localStorage.setItem(STORAGE_KEY_CHECK, JSON.stringify(keys)); } catch(e){}
+}
+
+function loadAdded(){
+  try{
+    const saved = localStorage.getItem(STORAGE_KEY_ADDED);
+    if(saved){
+      JSON.parse(saved).forEach(({phase, text, key, checked}) => {
+        addItemToPhase(phase, text, key, checked);
+      });
+    }
+  } catch(e){}
+}
+
+function saveAdded(){
+  const added = [];
+  document.querySelectorAll('.check-item.user-added').forEach(item => {
+    added.push({
+      phase: item.dataset.phase,
+      text: item.querySelector('.check-text').textContent,
+      key: item.dataset.checkKey,
+      checked: item.classList.contains('checked'),
+    });
+  });
+  try{ localStorage.setItem(STORAGE_KEY_ADDED, JSON.stringify(added)); } catch(e){}
+}
+
+function updateProgress(){
+  let total = 0, done = 0;
+  const barRowsData = [];
+
+  document.querySelectorAll('.phase').forEach(phase => {
+    const phaseId = phase.dataset.phaseId;
+    if(phaseId === undefined) return;
+    const items = phase.querySelectorAll('.check-item');
+    const checkedNum = phase.querySelectorAll('.check-item.checked, .check-item.preset-done').length;
+    const totalNum = items.length;
+
+    const txt = document.querySelector(`.phase-progress-text[data-phase="${phaseId}"]`);
+    if(txt) txt.textContent = `${checkedNum} / ${totalNum}`;
+    const fill = document.querySelector(`.phase-fill[data-phase="${phaseId}"]`);
+    if(fill) fill.style.width = (totalNum ? checkedNum/totalNum*100 : 0) + '%';
+
+    total += totalNum;
+    done += checkedNum;
+
+    barRowsData.push({
+      name: phase.dataset.phaseName || `フェーズ${phaseId}`,
+      done: checkedNum,
+      total: totalNum,
+      pct: totalNum ? checkedNum/totalNum*100 : 0,
+      important: phase.classList.contains('important'),
+    });
+  });
+
+  const pct = total ? done/total*100 : 0;
+  document.getElementById('piePercent').textContent = Math.round(pct) + '%';
+  document.getElementById('statDone').textContent = done;
+  document.getElementById('statTodo').textContent = total - done;
+  document.getElementById('statTotal').textContent = total;
+  const circumference = 2 * Math.PI * 50;
+  const dashLength = (pct / 100) * circumference;
+  const pieDone = document.getElementById('pieDone');
+  if(pieDone) pieDone.style.strokeDasharray = `${dashLength} ${circumference - dashLength}`;
+
+  const barRowsContainer = document.getElementById('barRows');
+  if(barRowsContainer){
+    barRowsContainer.innerHTML = barRowsData.map(r => `
+      <div class="bar-row">
+        <div class="bar-label">${r.important ? '★ ' : ''}${r.name}</div>
+        <div class="bar-track">
+          <div class="bar-fill ${r.important ? 'important' : ''}" style="width:${r.pct}%"></div>
+        </div>
+        <div class="bar-count">${r.done}/${r.total}</div>
+      </div>
+    `).join('');
+  }
+}
+
+function addItemToPhase(phaseId, text, key, isChecked){
+  const phase = document.querySelector(`.phase[data-phase-id="${phaseId}"]`);
+  if(!phase) return;
+  const itemsContainer = phase.querySelector('.phase-items');
+  if(!itemsContainer) return;
+
+  const item = document.createElement('div');
+  item.className = 'check-item user-added' + (isChecked ? ' checked' : '');
+  item.dataset.phase = phaseId;
+  item.dataset.checkKey = key || `added-${phaseId}-${Date.now()}-${Math.random().toString(36).slice(2,8)}`;
+  item.innerHTML = `
+    <div class="check-box"><div class="check-mark">✓</div></div>
+    <div class="check-content">
+      <div class="check-text">${text.replace(/[<>&"]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c]))}</div>
+    </div>
+    <button class="delete-btn" title="削除">×</button>
+  `;
+  itemsContainer.appendChild(item);
+
+  item.addEventListener('click', (e) => {
+    if(e.target.classList.contains('delete-btn')) return;
+    item.classList.toggle('checked');
+    saveAdded();
+    saveChecks();
+    updateProgress();
+  });
+  item.querySelector('.delete-btn').addEventListener('click', (e) => {
+    e.stopPropagation();
+    if(confirm(`「${text}」を削除しますか？`)){
+      item.remove();
+      saveAdded();
+      saveChecks();
+      updateProgress();
+    }
+  });
+}
+
+function setupCheckItems(){
+  document.querySelectorAll('.check-item:not(.preset-done):not(.user-added)').forEach(item => {
+    item.addEventListener('click', () => {
+      item.classList.toggle('checked');
+      saveChecks();
+      updateProgress();
+    });
+  });
+}
+
+document.querySelectorAll('.add-task-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const form = btn.nextElementSibling;
+    if(!form || !form.classList.contains('add-form')) return;
+    form.classList.toggle('show');
+    if(form.classList.contains('show')){
+      const input = form.querySelector('.add-form-input');
+      if(input) setTimeout(() => input.focus(), 100);
+    }
+  });
+});
+
+document.querySelectorAll('.add-form').forEach(form => {
+  const input = form.querySelector('.add-form-input');
+  const confirmBtn = form.querySelector('.btn-confirm');
+  const cancelBtn = form.querySelector('.btn-cancel');
+
+  const submit = () => {
+    const text = input.value.trim();
+    if(!text) return;
+    const phase = form.closest('.phase').dataset.phaseId;
+    addItemToPhase(phase, text);
+    saveAdded();
+    saveChecks();
+    updateProgress();
+    input.value = '';
+    form.classList.remove('show');
+  };
+
+  confirmBtn.addEventListener('click', submit);
+  cancelBtn.addEventListener('click', () => {
+    input.value = '';
+    form.classList.remove('show');
+  });
+  input.addEventListener('keypress', (e) => {
+    if(e.key === 'Enter') submit();
+  });
+});
+
+document.getElementById('resetBtn').addEventListener('click', () => {
+  if(confirm('自分のチェックをリセットしますか？\n（追加したタスクと事前完了分は残ります）')){
+    document.querySelectorAll('.check-item.checked:not(.preset-done)').forEach(item => {
+      item.classList.remove('checked');
+    });
+    saveChecks();
+    updateProgress();
+  }
+});
+
+assignKeys();
+setupCheckItems();
+loadAdded();
+loadChecks();
+updateProgress();
+</script>
+
+</body>
+</html>

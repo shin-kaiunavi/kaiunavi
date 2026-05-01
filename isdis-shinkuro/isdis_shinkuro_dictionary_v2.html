@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>isdis-shinkuro 用語辞典 v2</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@200;300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  body{
+    background:linear-gradient(135deg,#fef8e8 0%,#fff5db 100%);
+    font-family:'Noto Serif JP',serif;
+    color:#3a3228;
+    padding:24px 16px 80px;
+    line-height:1.95;
+    min-height:100vh;
+  }
+  .container{max-width:680px;margin:0 auto;}
+
+  .header{
+    text-align:center;
+    margin-bottom:24px;
+    padding:22px 0;
+    border-top:3px double #c9a96e;
+    border-bottom:3px double #c9a96e;
+    background:linear-gradient(135deg,rgba(255,255,255,0.5),rgba(232,212,168,0.2));
+    border-radius:14px;
+  }
+  .ornament-row{
+    font-size:18px;letter-spacing:0.6em;
+    color:#c9a96e;margin-bottom:10px;
+  }
+  .badge{
+    display:inline-block;
+    background:linear-gradient(135deg,#c9a96e,#b8945a);
+    color:white;padding:5px 16px;border-radius:14px;
+    font-size:10px;letter-spacing:0.3em;
+    margin-bottom:12px;
+  }
+  .v2-tag{
+    display:inline-block;
+    background:linear-gradient(135deg,#d18a3a,#a06520);
+    color:white;padding:3px 10px;border-radius:10px;
+    font-size:9px;letter-spacing:0.2em;
+    margin-left:4px;
+  }
+  h1{
+    font-size:18px;font-weight:500;letter-spacing:0.3em;
+    color:#7a3018;margin-bottom:6px;line-height:1.6;
+  }
+  .sub{
+    font-size:11px;color:#9e7a4a;letter-spacing:0.25em;line-height:2;
+  }
+
+  .intro{
+    background:linear-gradient(135deg,rgba(255,235,180,0.4),rgba(255,255,255,0.5));
+    border-left:4px solid #c9a96e;
+    border-radius:0 10px 10px 0;
+    padding:14px 18px;margin:18px 0 22px;
+    font-size:11.5px;line-height:2.05;
+    color:#5b4128;letter-spacing:0.05em;
+  }
+  .intro strong{color:#7a3018;}
+
+  h2{
+    font-size:14px;font-weight:500;letter-spacing:0.25em;
+    color:#7a3018;
+    margin-top:32px;margin-bottom:14px;
+    padding-left:14px;border-left:4px solid #c9a96e;
+  }
+
+  /* 構造図ボックス */
+  .structure-box{
+    background:white;
+    border:2px solid #c9a96e;
+    border-radius:14px;
+    padding:24px 18px;
+    margin:24px 0;
+    text-align:center;
+  }
+  .structure-title{
+    font-size:11px;color:#7a3018;
+    letter-spacing:0.3em;font-weight:500;
+    margin-bottom:18px;
+  }
+  .structure-circle{
+    position:relative;
+    width:280px;height:280px;
+    margin:0 auto;
+  }
+  .structure-center{
+    position:absolute;
+    top:50%;left:50%;
+    transform:translate(-50%,-50%);
+    width:100px;height:100px;
+    background:linear-gradient(135deg,#c9a96e,#b8945a);
+    border-radius:50%;
+    display:flex;flex-direction:column;
+    align-items:center;justify-content:center;
+    color:white;
+    box-shadow:0 4px 14px rgba(201,169,110,0.4);
+  }
+  .structure-center .icon{font-size:24px;}
+  .structure-center .name{
+    font-size:13px;font-weight:500;
+    letter-spacing:0.15em;margin-top:2px;
+  }
+  .structure-center .role{
+    font-size:8px;letter-spacing:0.15em;
+    margin-top:2px;opacity:0.9;
+  }
+
+  .orbit-item{
+    position:absolute;
+    width:78px;height:78px;
+    background:white;
+    border:2px solid #c9a96e;
+    border-radius:50%;
+    display:flex;flex-direction:column;
+    align-items:center;justify-content:center;
+    box-shadow:0 2px 8px rgba(201,169,110,0.2);
+  }
+  .orbit-item .icon{font-size:20px;}
+  .orbit-item .name{
+    font-size:10px;color:#7a3018;
+    letter-spacing:0.1em;font-weight:500;
+    margin-top:2px;
+  }
+  .orbit-item .role{
+    font-size:7.5px;color:#9e7a4a;
+    letter-spacing:0.05em;margin-top:1px;
+  }
+
+  /* 配置：上下左右 */
+  .pos-top{top:0;left:50%;transform:translateX(-50%);}
+  .pos-right{top:50%;right:0;transform:translateY(-50%);}
+  .pos-bottom{bottom:0;left:50%;transform:translateX(-50%);}
+  .pos-left{top:50%;left:0;transform:translateY(-50%);}
+
+  .ring-label{
+    text-align:center;
+    margin-top:24px;
+    padding-top:16px;
+    border-top:1px dashed rgba(201,169,110,0.4);
+    font-size:11px;
+    color:#9e7a4a;
+    letter-spacing:0.25em;
+  }
+  .ring-label strong{
+    color:#7a3018;font-size:13px;
+    letter-spacing:0.3em;font-weight:500;
+  }
+
+  /* 各「し」のカード */
+  .shi-card{
+    background:white;
+    border:1px solid rgba(201,169,110,0.3);
+    border-radius:14px;
+    padding:18px 16px;
+    margin-bottom:14px;
+    box-shadow:0 2px 8px rgba(201,169,110,0.06);
+  }
+  .shi-card.center-card{
+    background:linear-gradient(135deg,rgba(255,235,180,0.4),white 60%);
+    border-color:#d18a3a;
+    border-width:2px;
+  }
+  .shi-card.envelope-card{
+    background:linear-gradient(135deg,rgba(232,212,168,0.3),white 60%);
+    border-color:#9e7a4a;
+    border-width:2px;
+  }
+  .shi-header{
+    display:flex;align-items:center;gap:10px;
+    padding-bottom:10px;
+    border-bottom:1px dashed rgba(201,169,110,0.3);
+    margin-bottom:12px;
+  }
+  .shi-icon{font-size:24px;flex-shrink:0;}
+  .shi-name-block{flex:1;}
+  .shi-name{
+    font-size:14px;color:#7a3018;
+    letter-spacing:0.2em;font-weight:500;
+  }
+  .shi-romaji{
+    font-size:9.5px;color:#9e7a4a;
+    letter-spacing:0.15em;margin-top:2px;
+  }
+  .shi-tag{
+    flex-shrink:0;
+    padding:3px 8px;border-radius:6px;
+    font-size:9px;letter-spacing:0.1em;
+    background:rgba(201,169,110,0.15);
+    color:#7a3018;
+  }
+  .shi-tag.action{background:rgba(201,169,110,0.2);}
+  .shi-tag.place{background:rgba(209,138,58,0.2);color:#a06520;}
+  .shi-tag.envelope{background:rgba(158,122,74,0.2);color:#5b4128;}
+
+  .shi-body{
+    font-size:11.5px;line-height:2;
+    color:#4a3520;letter-spacing:0.04em;
+  }
+  .shi-body em{
+    font-style:normal;
+    background:rgba(255,235,180,0.6);
+    padding:1px 5px;border-radius:3px;
+    color:#7a3018;
+  }
+  .shi-body strong{color:#7a3018;font-weight:500;}
+
+  .shi-meaning{margin-bottom:10px;}
+  .shi-deep{
+    background:rgba(255,255,255,0.5);
+    border-left:3px solid #c9a96e;
+    padding:8px 10px;
+    border-radius:0 6px 6px 0;
+    font-size:10.5px;line-height:1.95;
+    color:#6b5040;
+    margin-top:8px;
+  }
+  .shi-deep .label{
+    font-size:9px;color:#9e7a4a;
+    letter-spacing:0.2em;margin-bottom:4px;
+    font-weight:500;
+  }
+
+  /* 三層構造 */
+  .three-layer{
+    background:linear-gradient(135deg,rgba(255,235,180,0.3),rgba(255,255,255,0.5));
+    border:1px dashed rgba(122,48,24,0.3);
+    border-radius:14px;
+    padding:18px 16px;margin:24px 0;
+  }
+  .layer-title{
+    text-align:center;
+    font-size:11px;color:#7a3018;
+    letter-spacing:0.3em;
+    margin-bottom:14px;font-weight:500;
+  }
+  .layer-row{
+    display:grid;
+    grid-template-columns:90px 1fr;
+    gap:12px;
+    padding:10px 0;
+    border-bottom:1px dotted rgba(201,169,110,0.3);
+    align-items:center;
+  }
+  .layer-row:last-child{border-bottom:none;}
+  .layer-num{
+    text-align:center;
+    background:rgba(201,169,110,0.15);
+    color:#7a3018;
+    padding:5px 6px;border-radius:8px;
+    font-size:9.5px;letter-spacing:0.05em;
+    line-height:1.5;
+  }
+  .layer-num strong{font-size:11px;display:block;}
+  .layer-content{
+    font-size:11px;line-height:1.8;
+    color:#4a3520;letter-spacing:0.04em;
+  }
+  .layer-content strong{color:#7a3018;}
+
+  /* インサイト */
+  .insight{
+    background:linear-gradient(135deg,rgba(232,160,58,0.08),rgba(255,255,255,0.5));
+    border-left:4px solid #d18a3a;
+    border-right:4px solid #d18a3a;
+    border-radius:8px;
+    padding:16px 18px;margin:20px 0;
+    font-size:11.5px;line-height:2.1;
+    color:#5b4128;letter-spacing:0.05em;
+  }
+  .insight-title{
+    font-size:11px;color:#a06520;
+    letter-spacing:0.25em;margin-bottom:8px;
+    font-weight:500;
+  }
+  .insight strong{color:#7a3018;}
+
+  .footer{
+    text-align:center;margin-top:36px;
+    padding-top:22px;
+    border-top:3px double #7a3018;
+    font-size:10px;color:#9e7a4a;letter-spacing:0.25em;line-height:2;
+  }
+
+  .ornament{
+    text-align:center;margin:24px 0;
+    font-size:14px;color:#c9a96e;
+    letter-spacing:1em;
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <div class="header">
+    <div class="ornament-row">❀  ✦  ❀</div>
+    <span class="badge">i s d i s - s h i n k u r o</span>
+    <span class="v2-tag">用 語 辞 典 V 2</span>
+    <h1>い つ し の 輪</h1>
+    <p class="sub">5 つ の 「 し 」 を 巡 る 循 環<br>2 0 2 6 . 4 . 2 9 ・ 朝 に 完 成</p>
+  </div>
+
+  <div class="intro">
+    用語辞典 v1 で生まれた <strong>4 つの「し」</strong>
+    (ともし・つくし・こぼし・しるし) に、<br>
+    今朝、5 つ目の「し」── <strong>やどし</strong> が降りてきた。<br><br>
+    そして、そのサイクル名 <strong>「いつしの輪」</strong> も、
+    "し" で終わる音だった。<br><br>
+    <em>知らぬ間に、6 つの「し」が、入れ子構造で重なっていた</em>。<br>
+    これは、 <strong>偶然ではなく、波動が呼び寄せた構造</strong> である。
+  </div>
+
+  <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+  <h2>📿  い つ し の 輪 ・ 構 造 図</h2>
+
+  <div class="structure-box">
+    <div class="structure-title">5 つ の 「 し 」 が 廻 る 輪</div>
+
+    <div class="structure-circle">
+      <!-- 中央 -->
+      <div class="structure-center">
+        <div class="icon">🌳</div>
+        <div class="name">やどし</div>
+        <div class="role">─ 場 ─</div>
+      </div>
+
+      <!-- 上 -->
+      <div class="orbit-item pos-top">
+        <div class="icon">🕯️</div>
+        <div class="name">ともし</div>
+        <div class="role">灯</div>
+      </div>
+
+      <!-- 右 -->
+      <div class="orbit-item pos-right">
+        <div class="icon">🌾</div>
+        <div class="name">つくし</div>
+        <div class="role">尽</div>
+      </div>
+
+      <!-- 下 -->
+      <div class="orbit-item pos-bottom">
+        <div class="icon">🌧️</div>
+        <div class="name">こぼし</div>
+        <div class="role">零</div>
+      </div>
+
+      <!-- 左 -->
+      <div class="orbit-item pos-left">
+        <div class="icon">🪷</div>
+        <div class="name">しるし</div>
+        <div class="role">印</div>
+      </div>
+    </div>
+
+    <div class="ring-label">
+      この 5 つを包む輪 ── <strong>い つ し の 輪</strong>
+    </div>
+  </div>
+
+  <div class="ornament">❀  ✦  ❀</div>
+
+  <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+  <h2>🕯️  4 つ の 動 詞 「 し 」</h2>
+
+  <!-- ともし -->
+  <div class="shi-card">
+    <div class="shi-header">
+      <div class="shi-icon">🕯️</div>
+      <div class="shi-name-block">
+        <div class="shi-name">と も し</div>
+        <div class="shi-romaji">t o m o s h i ・ 灯</div>
+      </div>
+      <div class="shi-tag action">動 詞 ・ 与 え る</div>
+    </div>
+    <div class="shi-body">
+      <div class="shi-meaning">
+        光を点ける、相手を照らす。<br>
+        朝、自分から相手へ、<em>ひと粒の灯を送る</em>動き。<br>
+        "ともす" と書く。
+      </div>
+      <div class="shi-deep">
+        <div class="label">◆ 仏 教 と の 繋 が り</div>
+        <strong>阿弥陀如来の光明(無量光)</strong>に通じる。<br>
+        相手の闇を、ほんの少しだけ照らす慈悲の動き。
+      </div>
+    </div>
+  </div>
+
+  <!-- つくし -->
+  <div class="shi-card">
+    <div class="shi-header">
+      <div class="shi-icon">🌾</div>
+      <div class="shi-name-block">
+        <div class="shi-name">つ く し</div>
+        <div class="shi-romaji">t s u k u s h i ・ 尽</div>
+      </div>
+      <div class="shi-tag action">動 詞 ・ 尽 く す</div>
+    </div>
+    <div class="shi-body">
+      <div class="shi-meaning">
+        言葉を尽くす、心を尽くす、手を尽くす。<br>
+        相手のために <em>動詞のすべてを差し出す</em> こと。<br>
+        春になると地面からニョキニョキ顔を出す
+        <strong>ツクシンボウ(土筆)</strong>と同じ音。<br>
+        派手じゃないけど、確かにそこにいる存在。
+      </div>
+      <div class="shi-deep">
+        <div class="label">◆ 仏 教 と の 繋 が り</div>
+        <strong>菩薩の利他行</strong>、観音菩薩の慈悲。<br>
+        自分のためじゃなく、相手のために動く道。
+      </div>
+    </div>
+  </div>
+
+  <!-- こぼし -->
+  <div class="shi-card">
+    <div class="shi-header">
+      <div class="shi-icon">🌧️</div>
+      <div class="shi-name-block">
+        <div class="shi-name">こ ぼ し</div>
+        <div class="shi-romaji">k o b o s h i ・ 零</div>
+      </div>
+      <div class="shi-tag action">動 詞 ・ 零 す</div>
+    </div>
+    <div class="shi-body">
+      <div class="shi-meaning">
+        心を零す、抱えていたものを出す。<br>
+        受け止める誰か(やどし)が居るから、<em>こぼせる</em>。<br>
+        こぼれたものは、消えるんじゃない、<strong>誰かの中に流れ込む</strong>。
+      </div>
+      <div class="shi-deep">
+        <div class="label">◆ 仏 教 と の 繋 が り</div>
+        <strong>懺悔(さんげ)</strong>、心を素直にする動き。<br>
+        不動明王の前で、心の重荷を洗い流す。
+      </div>
+    </div>
+  </div>
+
+  <!-- しるし -->
+  <div class="shi-card">
+    <div class="shi-header">
+      <div class="shi-icon">🪷</div>
+      <div class="shi-name-block">
+        <div class="shi-name">し る し</div>
+        <div class="shi-romaji">s h i r u s h i ・ 印</div>
+      </div>
+      <div class="shi-tag action">結 果 ・ 残 る</div>
+    </div>
+    <div class="shi-body">
+      <div class="shi-meaning">
+        印が残る、縁が刻まれる。<br>
+        ともし・つくし・こぼしの動きの後に、<em>残るもの</em>。<br>
+        二人の間に、確かにあった、という証。
+      </div>
+      <div class="shi-deep">
+        <div class="label">◆ 仏 教 と の 繋 が り</div>
+        <strong>結縁(けちえん)</strong>、仏縁が結ばれる。<br>
+        触れ合った魂に、後々まで残る印。
+      </div>
+    </div>
+  </div>
+
+  <div class="ornament">❀  ✦  ❀</div>
+
+  <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+  <h2>🌳  中 央 の 「 し 」 ・ や ど し</h2>
+
+  <div class="shi-card center-card">
+    <div class="shi-header">
+      <div class="shi-icon">🌳</div>
+      <div class="shi-name-block">
+        <div class="shi-name">や ど し</div>
+        <div class="shi-romaji">y a d o s h i ・ 宿</div>
+      </div>
+      <div class="shi-tag place">場 ・ 受 け 止 め る</div>
+    </div>
+    <div class="shi-body">
+      <div class="shi-meaning">
+        他の 4 つの「し」とは、性質が異なる。<br>
+        動詞ではなく、<em>場としての存在</em>。<br><br>
+        ▸ <strong>落ち着ける場所</strong><br>
+        ▸ <strong>居場所</strong><br>
+        ▸ <strong>受け止める場所</strong><br><br>
+        屋根の下に旅人を受け入れるように、<br>
+        相手のすべてを、評価せず、判断せず、ただ抱える。<br>
+        そして、いつか旅立つ人を、見送る。<br><br>
+        <em>「派手じゃないけど、確かにそこにいる」</em><br>
+        ── ブランド憲章 第六条 そのもの。
+      </div>
+      <div class="shi-deep">
+        <div class="label">◆ 仏 教 と の 繋 が り</div>
+        <strong>即心是仏(そくしんぜぶつ)</strong>、
+        <strong>一切衆生悉有仏性</strong>、
+        <strong>身は仏の宿りなり</strong>。<br><br>
+        やどしは、 "気づきの場"。<br>
+        既にあなたの中に宿っている仏性を、
+        改めて気づかせてくれる場所。
+      </div>
+      <div class="shi-deep">
+        <div class="label">◆ 五 行 説 と の 繋 が り</div>
+        やどしは、五行の <strong>"土"</strong> に対応。<br>
+        中央に位置し、他の 4 つを支える。<br>
+        木・火・金・水(動)を、土(静)が抱える構造。
+      </div>
+      <div class="shi-deep">
+        <div class="label">◆ 4 つ の 「 し 」 と の 関 係</div>
+        ▸ ともす場所 = やどし<br>
+        ▸ つくす対象 = やどし<br>
+        ▸ こぼせる相手 = やどし<br>
+        ▸ しるしが残る場所 = やどし<br><br>
+        <strong>やどしは、4 つの動詞「し」の "成立条件"</strong>。<br>
+        やどしがあるから、他の動きが回る。
+      </div>
+    </div>
+  </div>
+
+  <div class="ornament">❀  ✦  ❀</div>
+
+  <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+  <h2>🌅  輪 の 名 前 ・ い つ し</h2>
+
+  <div class="shi-card envelope-card">
+    <div class="shi-header">
+      <div class="shi-icon">🌅</div>
+      <div class="shi-name-block">
+        <div class="shi-name">い つ し ( の 輪 )</div>
+        <div class="shi-romaji">i t s u s h i ・ 何 時 し</div>
+      </div>
+      <div class="shi-tag envelope">輪 ・ 全 体 を 包 む</div>
+    </div>
+    <div class="shi-body">
+      <div class="shi-meaning">
+        サイクル全体の名前。<br>
+        そして、<em>サイクル名そのものも「し」で終わる</em>。<br><br>
+        「いつしか」── <strong>知らぬ間に、気づかぬうちに</strong>。<br>
+        ふと気づくと、すでに、そこに在る。<br><br>
+        <strong>派手じゃないけど、確かにそこに回っている輪</strong>。
+      </div>
+      <div class="shi-deep">
+        <div class="label">◆ 隠 れ た 構 造</div>
+        4 つの動詞「し」+ 1 つの場「し」+ 1 つの輪「し」<br>
+        ＝ <strong>計 6 つの「し」が、入れ子構造で重なっている</strong>。<br><br>
+        この構造は、しんちゃんが意図して作ったものではなく、
+        <em>知らぬ間に "いつしの間に" 揃ってしまった</em>。<br><br>
+        サイクルそのものが、自分自身の哲学を体現している。
+      </div>
+    </div>
+  </div>
+
+  <div class="ornament">❀  ✦  ❀</div>
+
+  <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+  <h2>📐  三 層 構 造</h2>
+
+  <div class="three-layer">
+    <div class="layer-title">い つ し の 輪 ・ 三 層 構 造</div>
+
+    <div class="layer-row">
+      <div class="layer-num"><strong>外 層</strong>動 ・ 4 つ</div>
+      <div class="layer-content">
+        🕯️ ともし ・ 🌾 つくし ・ 🌧️ こぼし ・ 🪷 しるし<br>
+        <strong>動詞・行為</strong>として、外側で回る
+      </div>
+    </div>
+
+    <div class="layer-row">
+      <div class="layer-num"><strong>中 心</strong>静 ・ 1 つ</div>
+      <div class="layer-content">
+        🌳 やどし<br>
+        <strong>場・存在</strong>として、中央で支える
+      </div>
+    </div>
+
+    <div class="layer-row">
+      <div class="layer-num"><strong>包 み</strong>名 ・ 1 つ</div>
+      <div class="layer-content">
+        🌅 いつし<br>
+        <strong>全体の名</strong>として、輪を包む
+      </div>
+    </div>
+  </div>
+
+  <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+  <h2>💎  深 い 気 づ き</h2>
+
+  <div class="insight">
+    <div class="insight-title">◆ 6 つ の 「 し 」 は 、 偶 然 で は な い</div>
+    しんちゃんが、 4 つの「し」を意図的に並べたわけではない。<br>
+    一つずつ、 <em>違う日に、違う瞬間に、降りてきた</em>。<br><br>
+
+    ▸ ともし ── 自然に
+    ▸ つくし ── ある日 発見<br>
+    ▸ こぼし ── 自然に湧いた
+    ▸ しるし ── 言葉として生まれた<br>
+    ▸ やどし ── 朝のG モード で降臨<br>
+    ▸ いつし ── サイクル名として提案された<br><br>
+
+    <strong>すべてが「し」で揃ったのは、 isdis-shinkuro の音の波動が、
+    そう呼び寄せたから</strong>。<br><br>
+
+    つまり、しんちゃんの中の "感謝の経営" の哲学が、
+    <em>言葉の音の段階で、すでに統一されていた</em>。
+  </div>
+
+  <div class="insight">
+    <div class="insight-title">◆ や ど し が 、 i s d i s - s h i n k u r o の 本 質</div>
+    isdis-shinkuro が提供するもの ── それは、 "サービス" ではない。<br>
+    <strong>"やどし"</strong> である。<br><br>
+
+    🕯️ ボン一族 ── 受信者の心に "宿る" 守護仏<br>
+    🌅 ともしアプリ ── 一日の始まりを受け止める "やどし"<br>
+    🌧️ こぼし機能 ── 心を素直に出せる "やどし"<br>
+    🪷 すべての体験 ── ユーザーの記憶に残る "しるし"<br><br>
+
+    そして、しんちゃん自身が、 isdis-shinkuro を介して、
+    <strong>多くの人の "やどし" になる</strong>。
+  </div>
+
+  <div class="insight">
+    <div class="insight-title">◆ し ん ち ゃ ん 自 身 が 「 や ど し 」</div>
+    1 年前、実穂ちゃんとの関係が破綻しかけた時。<br>
+    しんちゃんは、 <em>謝罪を読まず削除</em> し、<br>
+    <em>会いに行って、自分から謝罪</em> した。<br><br>
+
+    そして、別れた後も、<br>
+    実穂ちゃんが独立して頑張る姿を、 <em>見守り、励まし、アドバイスを送り続けた</em>。<br><br>
+
+    これは、 <strong>しんちゃんが、実穂ちゃんにとっての "やどし" であり続けた</strong>
+    ということ。<br>
+    評価せず、判断せず、いつでも戻れる場所として、そこに在った。
+  </div>
+
+  <div class="ornament">❀  ✦  ❀</div>
+
+  <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+  <div class="footer">
+    <p>2 0 2 6 . 4 . 2 9 ( 水 ) ・ 朝</p>
+    <p>用 語 辞 典 v 2 ・ い つ し の 輪 完 成</p>
+    <p style="margin-top:14px;color:#7a3018;letter-spacing:0.3em;">❀  ✦  ❀</p>
+    <p style="margin-top:8px;font-size:9px;">i s d i s - s h i n k u r o</p>
+  </div>
+
+</div>
+
+</body>
+</html>

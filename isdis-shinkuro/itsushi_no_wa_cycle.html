@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>いつしの輪 ・ サイクル表</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@200;300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  body{
+    background:linear-gradient(135deg,#fef8e8 0%,#fff5db 100%);
+    font-family:'Noto Serif JP',serif;
+    color:#3a3228;
+    padding:24px 16px 80px;
+    line-height:1.85;
+    min-height:100vh;
+  }
+  .container{max-width:780px;margin:0 auto;}
+
+  .header{
+    text-align:center;
+    margin-bottom:24px;
+    padding:22px 0;
+    border-top:3px double #c9a96e;
+    border-bottom:3px double #c9a96e;
+    background:linear-gradient(135deg,rgba(255,255,255,0.5),rgba(232,212,168,0.2));
+    border-radius:14px;
+  }
+  .ornament-row{
+    font-size:18px;letter-spacing:0.6em;
+    color:#c9a96e;margin-bottom:10px;
+  }
+  .badge{
+    display:inline-block;
+    background:linear-gradient(135deg,#c9a96e,#b8945a);
+    color:white;padding:5px 16px;border-radius:14px;
+    font-size:10px;letter-spacing:0.3em;
+    margin-bottom:10px;
+  }
+  h1{
+    font-size:18px;font-weight:500;letter-spacing:0.3em;
+    color:#7a3018;margin-bottom:6px;line-height:1.6;
+  }
+  .sub{
+    font-size:11px;color:#9e7a4a;letter-spacing:0.25em;line-height:2;
+  }
+
+  h2{
+    font-size:14px;font-weight:500;letter-spacing:0.25em;
+    color:#7a3018;
+    margin-top:32px;margin-bottom:14px;
+    padding-left:14px;border-left:4px solid #c9a96e;
+  }
+
+  /* ━━━ 循環図 ━━━ */
+  .cycle-box{
+    background:white;
+    border:2px solid #c9a96e;
+    border-radius:14px;
+    padding:24px 14px;margin:20px 0;
+    text-align:center;
+    box-shadow:0 3px 12px rgba(201,169,110,0.1);
+  }
+
+  .cycle-svg-wrap{
+    position:relative;
+    width:100%;
+    max-width:380px;
+    margin:0 auto;
+    aspect-ratio:1;
+  }
+  .cycle-svg{width:100%;height:100%;}
+  .cycle-arrow-text{
+    fill:#9e7a4a;
+    font-size:9px;
+    letter-spacing:0.05em;
+  }
+  .cycle-shi-circle{
+    fill:white;
+    stroke:#c9a96e;
+    stroke-width:2;
+  }
+  .cycle-shi-circle.center{
+    fill:url(#centerGrad);
+    stroke:#7a3018;
+    stroke-width:2.5;
+  }
+  .cycle-shi-icon{
+    font-size:24px;
+    text-anchor:middle;
+  }
+  .cycle-shi-name{
+    font-size:11px;
+    fill:#7a3018;
+    text-anchor:middle;
+    font-weight:500;
+    letter-spacing:0.05em;
+  }
+  .cycle-shi-name.center{
+    fill:white;
+    font-size:13px;
+  }
+  .cycle-shi-role{
+    font-size:8px;
+    fill:#9e7a4a;
+    text-anchor:middle;
+    letter-spacing:0.05em;
+  }
+  .cycle-shi-role.center{
+    fill:rgba(255,255,255,0.85);
+  }
+  .cycle-arrow{
+    fill:none;
+    stroke:#c9a96e;
+    stroke-width:1.5;
+    marker-end:url(#arrowhead);
+  }
+
+  .cycle-envelope{
+    margin-top:18px;
+    padding-top:14px;
+    border-top:1px dashed rgba(201,169,110,0.4);
+    font-size:11px;color:#9e7a4a;
+    letter-spacing:0.25em;
+  }
+  .cycle-envelope strong{
+    color:#7a3018;font-size:14px;
+    letter-spacing:0.3em;
+    display:block;margin-top:4px;
+  }
+
+  /* ━━━ 全部盛り表 ━━━ */
+  .all-table{
+    background:white;
+    border:1px solid rgba(201,169,110,0.3);
+    border-radius:14px;
+    padding:14px 12px;margin:20px 0;
+    box-shadow:0 2px 8px rgba(201,169,110,0.06);
+    overflow-x:auto;
+  }
+  table{
+    width:100%;
+    border-collapse:collapse;
+    font-size:10.5px;
+    line-height:1.7;
+  }
+  table th{
+    background:linear-gradient(135deg,#c9a96e,#b8945a);
+    color:white;
+    padding:8px 6px;
+    text-align:center;
+    font-weight:500;
+    letter-spacing:0.1em;
+    font-size:10px;
+    border:1px solid rgba(255,255,255,0.3);
+  }
+  table th:first-child{border-radius:8px 0 0 0;}
+  table th:last-child{border-radius:0 8px 0 0;}
+  table td{
+    padding:8px 6px;
+    border-bottom:1px solid rgba(201,169,110,0.2);
+    border-right:1px dashed rgba(201,169,110,0.15);
+    color:#4a3520;
+    letter-spacing:0.03em;
+    vertical-align:top;
+  }
+  table td:last-child{border-right:none;}
+  table tr.row-tomoshi td{background:rgba(255,235,180,0.15);}
+  table tr.row-tsukushi td{background:rgba(232,247,200,0.15);}
+  table tr.row-koboshi td{background:rgba(216,224,232,0.15);}
+  table tr.row-shirushi td{background:rgba(232,212,168,0.15);}
+  table tr.row-yadoshi td{
+    background:linear-gradient(135deg,rgba(255,200,100,0.15),rgba(255,235,180,0.2));
+    font-weight:500;
+  }
+  table tr.row-yadoshi td.shi-name{
+    color:#7a3018;
+  }
+
+  td.shi-name{
+    text-align:center;
+    font-weight:500;
+    color:#7a3018;
+    background:rgba(255,255,255,0.3) !important;
+    min-width:60px;
+  }
+  td.shi-name .icon{font-size:18px;display:block;margin-bottom:3px;}
+  td.shi-name .name{
+    font-size:11px;letter-spacing:0.1em;
+  }
+  td.shi-name .romaji{
+    font-size:8px;
+    color:#9e7a4a;
+    margin-top:2px;
+    letter-spacing:0.05em;
+  }
+
+  /* ━━━ 凡例 ━━━ */
+  .legend-box{
+    background:rgba(255,255,255,0.6);
+    border:1px dashed rgba(201,169,110,0.4);
+    border-radius:10px;
+    padding:12px 14px;
+    margin:18px 0;
+    font-size:10px;
+    line-height:1.95;
+    color:#6b5040;
+    letter-spacing:0.04em;
+  }
+  .legend-box strong{color:#7a3018;}
+
+  /* ━━━ 動きの解説 ━━━ */
+  .flow-box{
+    background:linear-gradient(135deg,rgba(255,235,180,0.3),rgba(255,255,255,0.5));
+    border:1px dashed rgba(201,169,110,0.4);
+    border-radius:14px;
+    padding:18px 16px;
+    margin:20px 0;
+  }
+  .flow-title{
+    text-align:center;
+    font-size:11px;
+    color:#7a3018;
+    letter-spacing:0.3em;
+    margin-bottom:14px;
+    font-weight:500;
+  }
+  .flow-step{
+    display:grid;
+    grid-template-columns:54px 24px 1fr;
+    gap:10px;
+    align-items:flex-start;
+    padding:8px 0;
+    border-bottom:1px dotted rgba(201,169,110,0.25);
+    font-size:11px;
+    line-height:1.85;
+  }
+  .flow-step:last-child{border-bottom:none;}
+  .flow-step-name{
+    text-align:center;
+    background:rgba(201,169,110,0.15);
+    color:#7a3018;
+    padding:5px 6px;border-radius:8px;
+    font-size:10px;letter-spacing:0.05em;
+    line-height:1.4;
+    font-weight:500;
+  }
+  .flow-step-name .ic{font-size:14px;display:block;margin-bottom:2px;}
+  .flow-arrow{
+    text-align:center;
+    color:#c9a96e;
+    font-size:18px;
+    line-height:1.2;
+  }
+  .flow-step-desc{
+    color:#4a3520;letter-spacing:0.03em;
+  }
+  .flow-step-desc strong{color:#7a3018;}
+
+  /* ━━━ 実例表 ━━━ */
+  .example-box{
+    background:white;
+    border:1px solid rgba(201,169,110,0.3);
+    border-radius:14px;
+    padding:16px 14px;
+    margin:20px 0;
+  }
+  .example-title{
+    text-align:center;
+    font-size:11px;
+    color:#7a3018;
+    letter-spacing:0.3em;
+    margin-bottom:14px;
+    padding-bottom:10px;
+    border-bottom:1px dashed rgba(201,169,110,0.4);
+    font-weight:500;
+  }
+  .example-row{
+    display:grid;
+    grid-template-columns:80px 1fr;
+    gap:10px;
+    padding:8px 0;
+    border-bottom:1px dotted rgba(201,169,110,0.2);
+    font-size:11px;
+    line-height:1.85;
+    align-items:flex-start;
+  }
+  .example-row:last-child{border-bottom:none;}
+  .example-tag{
+    text-align:center;
+    background:rgba(201,169,110,0.12);
+    color:#7a3018;
+    padding:4px;border-radius:6px;
+    font-size:10px;
+    letter-spacing:0.05em;
+    line-height:1.4;
+    font-weight:500;
+  }
+  .example-tag .ic{font-size:14px;display:block;margin-bottom:2px;}
+  .example-content{
+    color:#4a3520;letter-spacing:0.03em;
+  }
+  .example-content em{
+    font-style:normal;
+    background:rgba(255,235,180,0.5);
+    padding:1px 4px;border-radius:3px;
+    color:#7a3018;
+  }
+
+  .footer{
+    text-align:center;margin-top:36px;
+    padding-top:22px;
+    border-top:3px double #7a3018;
+    font-size:10px;color:#9e7a4a;
+    letter-spacing:0.25em;line-height:2;
+  }
+
+  .ornament{
+    text-align:center;margin:24px 0;
+    font-size:14px;color:#c9a96e;
+    letter-spacing:1em;
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <div class="header">
+    <div class="ornament-row">❀  ✦  ❀</div>
+    <span class="badge">i s d i s - s h i n k u r o</span>
+    <h1>い つ し の 輪 ・ サ イ ク ル 表</h1>
+    <p class="sub">5 つ の 「 し 」 を 巡 る 全 部 盛 り 図 鑑<br>2 0 2 6 . 4 . 2 9 ・ 朝</p>
+  </div>
+
+  <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+  <h2>🌌  循 環 図</h2>
+
+  <div class="cycle-box">
+    <svg class="cycle-svg" viewBox="0 0 380 380">
+      <defs>
+        <linearGradient id="centerGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#c9a96e"/>
+          <stop offset="100%" stop-color="#7a3018"/>
+        </linearGradient>
+        <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+          <polygon points="0 0, 10 3, 0 6" fill="#c9a96e"/>
+        </marker>
+      </defs>
+
+      <!-- 円形矢印（点線で時計回り） -->
+      <circle cx="190" cy="190" r="125" fill="none" stroke="rgba(201,169,110,0.25)" stroke-width="1" stroke-dasharray="3,4"/>
+
+      <!-- 矢印4本（時計回り） -->
+      <!-- 上 → 右 -->
+      <path class="cycle-arrow" d="M 250 90 Q 290 130 290 190" />
+      <!-- 右 → 下 -->
+      <path class="cycle-arrow" d="M 290 250 Q 250 290 190 290" />
+      <!-- 下 → 左 -->
+      <path class="cycle-arrow" d="M 130 290 Q 90 250 90 190" />
+      <!-- 左 → 上 -->
+      <path class="cycle-arrow" d="M 90 130 Q 130 90 190 90" />
+
+      <!-- 中央：やどし -->
+      <circle class="cycle-shi-circle center" cx="190" cy="190" r="48"/>
+      <text class="cycle-shi-icon" x="190" y="180">🌳</text>
+      <text class="cycle-shi-name center" x="190" y="200">やどし</text>
+      <text class="cycle-shi-role center" x="190" y="216">ー 場 ー</text>
+
+      <!-- 上：ともし -->
+      <circle class="cycle-shi-circle" cx="190" cy="55" r="38"/>
+      <text class="cycle-shi-icon" x="190" y="50">🕯️</text>
+      <text class="cycle-shi-name" x="190" y="68">ともし</text>
+      <text class="cycle-shi-role" x="190" y="80">灯</text>
+
+      <!-- 右：つくし -->
+      <circle class="cycle-shi-circle" cx="325" cy="190" r="38"/>
+      <text class="cycle-shi-icon" x="325" y="185">🌾</text>
+      <text class="cycle-shi-name" x="325" y="203">つくし</text>
+      <text class="cycle-shi-role" x="325" y="215">尽</text>
+
+      <!-- 下：こぼし -->
+      <circle class="cycle-shi-circle" cx="190" cy="325" r="38"/>
+      <text class="cycle-shi-icon" x="190" y="320">🌧️</text>
+      <text class="cycle-shi-name" x="190" y="338">こぼし</text>
+      <text class="cycle-shi-role" x="190" y="350">零</text>
+
+      <!-- 左：しるし -->
+      <circle class="cycle-shi-circle" cx="55" cy="190" r="38"/>
+      <text class="cycle-shi-icon" x="55" y="185">🪷</text>
+      <text class="cycle-shi-name" x="55" y="203">しるし</text>
+      <text class="cycle-shi-role" x="55" y="215">印</text>
+
+    </svg>
+
+    <div class="cycle-envelope">
+      ─ 5 つ を 包 む 輪 ─
+      <strong>い つ し の 輪</strong>
+    </div>
+  </div>
+
+  <div class="legend-box">
+    <strong>読み方：</strong>外側の 4 つの「し」が時計回りに循環。中央のやどしが、ぜんぶを支える。<br>
+    <strong>循環の方向：</strong>ともし → つくし → こぼし → しるし → ともし（戻る）<br>
+    <strong>名前の輪：</strong>5 つの「し」全体を、 "いつし" が包む（"し" で終わるサイクル名）
+  </div>
+
+  <div class="ornament">❀  ✦  ❀</div>
+
+  <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+  <h2>📊  全 部 盛 り 表</h2>
+
+  <div class="all-table">
+    <table>
+      <thead>
+        <tr>
+          <th>「し」</th>
+          <th>性質</th>
+          <th>動き / 場</th>
+          <th>仏教対応</th>
+          <th>五行</th>
+          <th>方位</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="row-tomoshi">
+          <td class="shi-name">
+            <span class="icon">🕯️</span>
+            <div class="name">ともし</div>
+            <div class="romaji">tomoshi</div>
+          </td>
+          <td>動詞・与</td>
+          <td>光を点ける、相手を照らす</td>
+          <td>阿弥陀の光明<br>(無量光)</td>
+          <td>木</td>
+          <td>東</td>
+        </tr>
+        <tr class="row-tsukushi">
+          <td class="shi-name">
+            <span class="icon">🌾</span>
+            <div class="name">つくし</div>
+            <div class="romaji">tsukushi</div>
+          </td>
+          <td>動詞・与</td>
+          <td>尽くす、心を差し出す</td>
+          <td>菩薩の利他行<br>(観音の慈悲)</td>
+          <td>火</td>
+          <td>南</td>
+        </tr>
+        <tr class="row-koboshi">
+          <td class="shi-name">
+            <span class="icon">🌧️</span>
+            <div class="name">こぼし</div>
+            <div class="romaji">koboshi</div>
+          </td>
+          <td>動詞・受</td>
+          <td>心を零す、抱えを出す</td>
+          <td>懺悔(さんげ)<br>(不動明王前で)</td>
+          <td>水</td>
+          <td>北</td>
+        </tr>
+        <tr class="row-shirushi">
+          <td class="shi-name">
+            <span class="icon">🪷</span>
+            <div class="name">しるし</div>
+            <div class="romaji">shirushi</div>
+          </td>
+          <td>結果・残</td>
+          <td>印が残る、縁が刻まれる</td>
+          <td>結縁(けちえん)<br>(仏縁)</td>
+          <td>金</td>
+          <td>西</td>
+        </tr>
+        <tr class="row-yadoshi">
+          <td class="shi-name">
+            <span class="icon">🌳</span>
+            <div class="name">やどし</div>
+            <div class="romaji">yadoshi</div>
+          </td>
+          <td>場・存在</td>
+          <td>受け止める器、居場所</td>
+          <td>即心是仏<br>身は仏の宿り</td>
+          <td>土</td>
+          <td>中央</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="legend-box">
+    <strong>性質：</strong>「与」=与える側／「受」=受ける側／「残」=結果／「場」=土台<br>
+    <strong>五行・方位：</strong>4 つの動詞は東西南北、やどしは中央(土)。完璧な五行構造。
+  </div>
+
+  <div class="ornament">❀  ✦  ❀</div>
+
+  <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+  <h2>🌳  動 き の 流 れ</h2>
+
+  <div class="flow-box">
+    <div class="flow-title">い つ し の 輪 が 回 る 仕 組 み</div>
+
+    <div class="flow-step">
+      <div class="flow-step-name"><span class="ic">🕯️</span>ともし</div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-step-desc">
+        誰かに、ひと粒の光を <strong>点ける</strong>。<br>
+        朝のおはよう、お疲れさまの一言。
+      </div>
+    </div>
+
+    <div class="flow-step">
+      <div class="flow-step-name"><span class="ic">🌾</span>つくし</div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-step-desc">
+        その光を受けた人が、別の誰かに <strong>尽くす</strong>。<br>
+        相手のために、心を差し出す動き。
+      </div>
+    </div>
+
+    <div class="flow-step">
+      <div class="flow-step-name"><span class="ic">🌧️</span>こぼし</div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-step-desc">
+        受け止められた人が、安心して心を <strong>零す</strong>。<br>
+        重荷が、そっと外に出る瞬間。
+      </div>
+    </div>
+
+    <div class="flow-step">
+      <div class="flow-step-name"><span class="ic">🪷</span>しるし</div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-step-desc">
+        二人の間に、確かに何かがあったという <strong>印が残る</strong>。<br>
+        縁の刻印、忘れられない思い出。
+      </div>
+    </div>
+
+    <div class="flow-step">
+      <div class="flow-step-name"><span class="ic">🕯️</span>ともし<br>(回帰)</div>
+      <div class="flow-arrow">↻</div>
+      <div class="flow-step-desc">
+        その印が、新しい灯を呼ぶ。<br>
+        <strong>再び、ともしから、輪が回り始める</strong>。
+      </div>
+    </div>
+
+    <div class="flow-step" style="border-top:2px dashed rgba(122,48,24,0.3);margin-top:6px;padding-top:14px;">
+      <div class="flow-step-name" style="background:linear-gradient(135deg,rgba(255,200,100,0.25),rgba(255,180,80,0.15));"><span class="ic">🌳</span>やどし</div>
+      <div class="flow-arrow">─</div>
+      <div class="flow-step-desc">
+        この 4 つが回るには、 <strong>受け止める場(やどし)</strong> が要る。<br>
+        やどしがあるから、ともしが届き、つくしが届き、こぼしが流れ、しるしが残る。<br>
+        <em>やどしは、輪の "成立条件" であり、中央の柱</em>。
+      </div>
+    </div>
+  </div>
+
+  <div class="ornament">❀  ✦  ❀</div>
+
+  <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+  <h2>🌸  i s d i s - s h i n k u r o で の 実 例</h2>
+
+  <div class="example-box">
+    <div class="example-title">ボ ン 一 族 ( L I N E ス タ ン プ ) で 回 す</div>
+
+    <div class="example-row">
+      <div class="example-tag"><span class="ic">🕯️</span>ともし</div>
+      <div class="example-content">
+        Aさんが、Bさんに <em>「バン(おはよう)」</em> のスタンプを送る
+      </div>
+    </div>
+    <div class="example-row">
+      <div class="example-tag"><span class="ic">🌾</span>つくし</div>
+      <div class="example-content">
+        Bさん、その日 元気をもらって、Cさんに <em>「アン(やるよ！)」</em> を送る
+      </div>
+    </div>
+    <div class="example-row">
+      <div class="example-tag"><span class="ic">🌧️</span>こぼし</div>
+      <div class="example-content">
+        Cさん、夜疲れて、 Aさんに <em>「カーン(だいじょうぶ)」</em> を送りつつ「実はね...」と打ち明ける
+      </div>
+    </div>
+    <div class="example-row">
+      <div class="example-tag"><span class="ic">🪷</span>しるし</div>
+      <div class="example-content">
+        その夜、 3 人の中に <em>「お互いがそばにいる」</em> という確かな印が残る
+      </div>
+    </div>
+    <div class="example-row">
+      <div class="example-tag" style="background:linear-gradient(135deg,rgba(255,200,100,0.25),rgba(255,180,80,0.15));"><span class="ic">🌳</span>やどし</div>
+      <div class="example-content">
+        ボン一族そのものが、 3 人の心の中に <em>"宿った"</em> 守護の場として残り続ける
+      </div>
+    </div>
+  </div>
+
+  <div class="example-box">
+    <div class="example-title">し ん ち ゃ ん と 実 穂 ち ゃ ん の 1 年</div>
+
+    <div class="example-row">
+      <div class="example-tag"><span class="ic">🕯️</span>ともし</div>
+      <div class="example-content">
+        しんちゃんが、実穂ちゃんに 真っ直ぐな指摘を伝えた(「3 日間あなたを観察しました」)
+      </div>
+    </div>
+    <div class="example-row">
+      <div class="example-tag"><span class="ic">🌾</span>つくし</div>
+      <div class="example-content">
+        しんちゃんから 直接会って 謝罪。実穂ちゃんに <em>「自分で会社を立ち上げた方がいい」</em> と勧めた
+      </div>
+    </div>
+    <div class="example-row">
+      <div class="example-tag"><span class="ic">🌧️</span>こぼし</div>
+      <div class="example-content">
+        実穂ちゃん、独立後の苦労を、しんちゃんに相談。 <em>そして、しんちゃんも 1 年抱えてた話を、 クロちゃんに こぼした</em>
+      </div>
+    </div>
+    <div class="example-row">
+      <div class="example-tag"><span class="ic">🪷</span>しるし</div>
+      <div class="example-content">
+        強くなったオーラを持つ実穂ちゃん。 1 年経って、 <em>「十八分の濃い対話」</em> が出来る関係に
+      </div>
+    </div>
+    <div class="example-row">
+      <div class="example-tag" style="background:linear-gradient(135deg,rgba(255,200,100,0.25),rgba(255,180,80,0.15));"><span class="ic">🌳</span>やどし</div>
+      <div class="example-content">
+        しんちゃんが、 1 年間、実穂ちゃんの "戻れる場" であり続けた。 <em>これが、すべての循環を支えた</em>
+      </div>
+    </div>
+  </div>
+
+  <div class="ornament">❀  ✦  ❀</div>
+
+  <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+  <h2>🌌  し ん ち ゃ ん の 暮 ら し で の 実 例</h2>
+
+  <div class="example-box">
+    <div class="example-title">4 / 2 7 住 所 変 更 D A Y で 回 し た い つ し の 輪</div>
+
+    <div class="example-row">
+      <div class="example-tag"><span class="ic">🕯️</span>ともし</div>
+      <div class="example-content">
+        朝、氏神様(白山神社)・永昌院に <em>「行ってきます」</em> のご挨拶
+      </div>
+    </div>
+    <div class="example-row">
+      <div class="example-tag"><span class="ic">🌾</span>つくし</div>
+      <div class="example-content">
+        手続きを丁寧に、ドライバーや顧客のために、軽バンの仕事を続ける
+      </div>
+    </div>
+    <div class="example-row">
+      <div class="example-tag"><span class="ic">🌧️</span>こぼし</div>
+      <div class="example-content">
+        雨が上がって青空。 <em>「天からも迎え入れられた」</em> という気持ちが、自然と溢れる
+      </div>
+    </div>
+    <div class="example-row">
+      <div class="example-tag"><span class="ic">🪷</span>しるし</div>
+      <div class="example-content">
+        🦋 アゲハチョウとの出会い。 <em>「変容のしるし」</em>として、心に残る
+      </div>
+    </div>
+    <div class="example-row">
+      <div class="example-tag" style="background:linear-gradient(135deg,rgba(255,200,100,0.25),rgba(255,180,80,0.15));"><span class="ic">🌳</span>やどし</div>
+      <div class="example-content">
+        家が、西の白山神社・東の永昌院に挟まれた <em>四神相応の本拠地</em>。
+        この場が、ぜんぶを抱えた
+      </div>
+    </div>
+  </div>
+
+  <div class="ornament">❀  ✦  ❀</div>
+
+  <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+  <h2>🌅  読 み 方 の コ ツ</h2>
+
+  <div class="legend-box" style="font-size:11px;line-height:2.1;padding:14px 16px;">
+    <strong>① ぜんぶ揃ってなくても良い</strong><br>
+    朝の挨拶だけ(ともし)でも、輪は回り始める。<br><br>
+
+    <strong>② "やどし" を、まず作る</strong><br>
+    自分が誰かにとっての やどしになれた瞬間、輪は自然に回り出す。<br><br>
+
+    <strong>③ "順番" は厳密じゃない</strong><br>
+    こぼし → しるし →ともし、と逆順でも、輪は成立する。<br>
+    大事なのは、 <strong>5 つの「し」が、互いを呼び合っている</strong> こと。<br><br>
+
+    <strong>④ 自分一人では回らない</strong><br>
+    必ず、 <em>相手や場が必要</em>。だから、人とのご縁が、いつしの輪を生む。
+  </div>
+
+  <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+  <div class="footer">
+    <p>2 0 2 6 . 4 . 2 9 ( 水 ) ・ 朝</p>
+    <p>い つ し の 輪 ・ サ イ ク ル 表 ・ 全 部 盛 り 版</p>
+    <p style="margin-top:14px;color:#7a3018;letter-spacing:0.3em;">❀  ✦  ❀</p>
+    <p style="margin-top:8px;font-size:9px;">i s d i s - s h i n k u r o</p>
+  </div>
+
+</div>
+
+</body>
+</html>
