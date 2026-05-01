@@ -3231,12 +3231,18 @@ function renderFushime(){
 
   // ④ 大殺界（あれば）
   if(daisa && daisa.dsPhase){
+    // endYearを計算（calcDaissakkaiは返さないのでここで算出）
+    var phaseNames=['陰影','停止','減退'];
+    var phasePos=phaseNames.indexOf(daisa.dsPhase);
+    var yearNum=phasePos>=0?phasePos+1:1;
+    var yearsLeft=3-yearNum;
+    var endYear=yearForJudge+yearsLeft+1;
     rows.push({
       cls:'normal',
       icon:'🌑',
       label:'運 気 サ イ ク ル',
       title:'大殺界・'+daisa.dsPhase+'期',
-      sub:daisa.hoshi+daisa.plusMinus+'。'+daisa.endYear+'年に明けます。',
+      sub:daisa.hoshi+daisa.plusMinus+'。'+endYear+'年に明けます。',
       modalType:null  // 既存の警告セクションに詳細あり
     });
   }
@@ -4496,7 +4502,16 @@ function getKanteiContextForAI(){
 
   // 大殺界
   var daisa = null;
-  try{ daisa = calcDaissakkai(s.by, s.bm, s.bday, yearForJudge); }catch(e){}
+  var daisaEndYear = null;
+  try{
+    daisa = calcDaissakkai(s.by, s.bm, s.bday, yearForJudge);
+    if(daisa && daisa.dsPhase){
+      var _phaseNames=['陰影','停止','減退'];
+      var _phasePos=_phaseNames.indexOf(daisa.dsPhase);
+      var _yearNum=_phasePos>=0?_phasePos+1:1;
+      daisaEndYear=yearForJudge+(3-_yearNum)+1;
+    }
+  }catch(e){}
 
   // カバラ数秘術
   var kabala = null;
@@ -4525,7 +4540,7 @@ function getKanteiContextForAI(){
     daisa: daisa ? {
       hoshi: daisa.hoshi + daisa.plusMinus,
       phase: daisa.dsPhase,
-      endYear: daisa.endYear
+      endYear: daisaEndYear
     } : null,
     kabala: kabala ? {
       lifePath: kabala.lp ? kabala.lp.num : null,
@@ -4622,20 +4637,25 @@ function generateShokugyoAdvice(){
 
   var prompt = buildShokugyoPrompt(ctx, shokugyo);
 
-  fetch('https://api.anthropic.com/v1/messages', {
+  // Cloudflare Worker (kaiun-ai-proxy) 経由でClaude APIを呼ぶ
+  // APIキーはWorker側のSecretに保管、ブラウザには露出しない
+  fetch('https://yellow-bar-a5ff.shingen06.workers.dev', {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json',
-      'anthropic-version': '2023-06-01',
-      'anthropic-dangerous-direct-browser-access': 'true'
+      'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-      model: 'claude-haiku-4-5-20251001',
-      max_tokens: 1500,
-      messages: [{role:'user', content: prompt}]
+      prompt: prompt
     })
   }).then(function(res){
-    if(!res.ok) throw new Error('API HTTP ' + res.status);
+    if(!res.ok){
+      // Workerからのエラーメッセージを優先的に表示
+      return res.json().then(function(errData){
+        throw new Error(errData.message || ('API HTTP ' + res.status));
+      }).catch(function(){
+        throw new Error('API HTTP ' + res.status);
+      });
+    }
     return res.json();
   }).then(function(data){
     var text = '';
