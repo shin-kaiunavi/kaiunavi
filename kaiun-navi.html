@@ -4649,11 +4649,20 @@ function generateShokugyoAdvice(){
     })
   }).then(function(res){
     if(!res.ok){
-      // Workerからのエラーメッセージを優先的に表示
+      var status = res.status;
+      // Workerからのエラータイプとメッセージを保持
       return res.json().then(function(errData){
-        throw new Error(errData.message || ('API HTTP ' + res.status));
-      }).catch(function(){
-        throw new Error('API HTTP ' + res.status);
+        var e = new Error(errData.message || ('API HTTP ' + status));
+        e.errorType = errData.error || 'http_error';
+        e.status = status;
+        throw e;
+      }).catch(function(parseErr){
+        // 既にerrorTypeがあれば再スロー、なければHTTPエラーとして扱う
+        if(parseErr && parseErr.errorType){ throw parseErr; }
+        var e = new Error('API HTTP ' + status);
+        e.errorType = 'http_error';
+        e.status = status;
+        throw e;
       });
     }
     return res.json();
@@ -4676,7 +4685,7 @@ function generateShokugyoAdvice(){
     renderShokugyoResult(parsed, ctx, shokugyo);
   }).catch(function(err){
     console.error('Shokugyo AI error:', err);
-    renderShokugyoError(err.message || String(err), shokugyo);
+    renderShokugyoError(err.message || String(err), shokugyo, err.errorType);
   }).finally(function(){
     btn.disabled = false;
     btn.innerHTML = '<span class="shokugyo-btn-icon">🕯️</span><span>もう一度読み解く</span>';
@@ -4732,17 +4741,39 @@ function renderShokugyoResult(data, ctx, shokugyo){
 }
 
 // エラー表示
-function renderShokugyoError(errMsg, shokugyo){
+function renderShokugyoError(errMsg, shokugyo, errorType){
   var resultEl = document.getElementById('shokugyoResult');
   if(!resultEl) return;
-  resultEl.innerHTML = '<div class="shokugyo-error">'
+
+  // エラータイプ別に文言を出し分け
+  // - rate_limit: 1日5回の上限到達（再試行ボタンは出さない）
+  // - api_error / fetch_error: Worker→Anthropic API側のエラー
+  // - それ以外（http_error / ネットワーク等）: 通信環境系
+  var mainText, subText, showRetry;
+  if(errorType === 'rate_limit'){
+    mainText = '本日のお試し回数に達しました';
+    subText = '一日のお試し回数には上限がございます。<br>明日またそっとお試しください。';
+    showRetry = false;
+  } else if(errorType === 'api_error' || errorType === 'fetch_error'){
+    mainText = '読み解きの導きが、今はうまく届きませんでした';
+    subText = '少し時間をおいて、<br>もう一度お試しください。';
+    showRetry = true;
+  } else {
+    mainText = '読み解きの導きが、今はうまく届きませんでした';
+    subText = 'ネット環境を整えていただくか、<br>少し時間をおいてもう一度お試しください。';
+    showRetry = true;
+  }
+
+  var html = '<div class="shokugyo-error">'
     +'<div class="shokugyo-error-icon">🕯️</div>'
-    +'<div class="shokugyo-error-text">読み解きの導きが、今はうまく届きませんでした。</div>'
-    +'<div class="shokugyo-error-sub">'
-    +'ネット環境を整えていただくか、<br>少し時間をおいてもう一度お試しください。'
-    +'</div>'
-    +'<div class="shokugyo-error-retry" onclick="generateShokugyoAdvice()">↺ もう一度試す</div>'
-    +'</div>';
+    +'<div class="shokugyo-error-text">'+mainText+'</div>'
+    +'<div class="shokugyo-error-sub">'+subText+'</div>';
+  if(showRetry){
+    html += '<div class="shokugyo-error-retry" onclick="generateShokugyoAdvice()">↺ もう一度試す</div>';
+  }
+  html += '</div>';
+
+  resultEl.innerHTML = html;
 }
 
 // リセット
