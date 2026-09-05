@@ -904,6 +904,9 @@
     <p class="koboshi-response-text" id="koboshiResponseText">…</p>
   </div>
 
+  <!-- もう一度こぼす（テストモード時のみ） -->
+  <button class="koboshi-send-btn" id="koboshiAgainBtn" style="display:none; margin-top:16px;" onclick="koboshiAgain()">もう一度こぼす</button>
+
   <!-- 使用済みメッセージ -->
   <div class="koboshi-used" id="koboshiUsed">
     <p>今日のこぼしは<br>もう使いました</p>
@@ -1010,6 +1013,12 @@
 </div>
 
 <script>
+// ─────────────────────────────────────
+// テストモード（?test=1 を付けた時だけ、こぼしの回数制限を解除）
+// 課金の制度を決めるまでの一時的な仕組み。リリース時に判断する。
+// ─────────────────────────────────────
+const TEST_MODE = new URLSearchParams(location.search).get('test') === '1';
+
 // 守護仏データ（干支別）
 const GUARDIAN = {
   '子': { name: '千手観音菩薩', message: '慈悲の千の手で、あなたをやさしく包んでいます', bonji: 'キリーク', shingon: 'オン・バサラ・タラマ・キリク', meaning: '千の手で、あらゆる苦しみに応える慈悲の仏' },
@@ -1238,6 +1247,16 @@ function openKoboshi() {
   const usedDate = localStorage.getItem('tomoshi_koboshi_date');
   const savedResponse = localStorage.getItem('tomoshi_koboshi_response');
 
+  // テストモード：常に未使用として開く
+  if (TEST_MODE) {
+    document.getElementById('koboshiText').value = '';
+    document.getElementById('koboshiInputArea').style.display = 'flex';
+    document.getElementById('koboshiResponse').classList.remove('active');
+    document.getElementById('koboshiUsed').classList.remove('active');
+    document.getElementById('koboshiAgainBtn').style.display = 'none';
+    return;
+  }
+
   if (usedDate === today && savedResponse) {
     // 使用済み＋返答あり
     document.getElementById('koboshiInputArea').style.display = 'none';
@@ -1355,21 +1374,37 @@ ${text}
     const data = await res.json();
     const response = data.content?.[0]?.text || 'そばにいます。';
 
-    // 保存
-    localStorage.setItem('tomoshi_koboshi_date', today.toDateString());
-    localStorage.setItem('tomoshi_koboshi_response', response);
+    // 保存（テスト中は本番の記録を汚さない）
+    if (!TEST_MODE) {
+      localStorage.setItem('tomoshi_koboshi_date', today.toDateString());
+      localStorage.setItem('tomoshi_koboshi_response', response);
+    }
 
     // 表示
     document.getElementById('koboshiInputArea').style.display = 'none';
     document.getElementById('koboshiResponseText').textContent = response;
     document.getElementById('koboshiResponse').classList.add('active');
+    if (TEST_MODE) document.getElementById('koboshiAgainBtn').style.display = 'block';
 
   } catch(e) {
     document.getElementById('koboshiInputArea').style.display = 'none';
     document.getElementById('koboshiResponseText').textContent = 'あなたの気持ち、ちゃんと届きました。今日もそばにいます。';
     document.getElementById('koboshiResponse').classList.add('active');
-    localStorage.setItem('tomoshi_koboshi_date', today.toDateString());
+    if (!TEST_MODE) localStorage.setItem('tomoshi_koboshi_date', today.toDateString());
+    if (TEST_MODE) document.getElementById('koboshiAgainBtn').style.display = 'block';
+  } finally {
+    btn.textContent = 'ともしに打ち明ける';
+    btn.disabled = false;
   }
+}
+
+// テストモード：もう一度こぼす
+function koboshiAgain() {
+  document.getElementById('koboshiText').value = '';
+  document.getElementById('koboshiResponse').classList.remove('active');
+  document.getElementById('koboshiAgainBtn').style.display = 'none';
+  document.getElementById('koboshiInputArea').style.display = 'flex';
+  document.getElementById('koboshiText').focus();
 }
 
 // 守護仏詳細
