@@ -555,6 +555,90 @@
     opacity: 0.9;
   }
 
+  /* ともしの自己紹介（初回のみ） */
+  .intro-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(253,250,246,0.98);
+    backdrop-filter: blur(12px);
+    z-index: 101;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 32px;
+  }
+
+  .intro-overlay.active {
+    display: flex;
+    animation: fadeIn 1.2s ease forwards;
+  }
+
+  .intro-flame {
+    font-size: 30px;
+    margin-bottom: 28px;
+    animation: flicker 3s ease-in-out infinite;
+  }
+
+  .intro-text {
+    max-width: 300px;
+    text-align: center;
+    font-size: 15px;
+    font-weight: 300;
+    line-height: 2.4;
+    letter-spacing: 0.08em;
+    color: var(--text-deep);
+  }
+
+  .intro-text p {
+    margin-bottom: 22px;
+    opacity: 0;
+    animation: introFade 1.4s ease forwards;
+  }
+
+  .intro-text p:nth-child(1) { animation-delay: 0.3s; }
+  .intro-text p:nth-child(2) { animation-delay: 1.1s; }
+  .intro-text p:nth-child(3) { animation-delay: 1.9s; }
+  .intro-text p:nth-child(4) { animation-delay: 2.7s; }
+  .intro-text p:nth-child(5) { animation-delay: 3.5s; }
+  .intro-text p:nth-child(6) { animation-delay: 4.3s; }
+
+  .intro-soft {
+    color: var(--text-soft);
+    font-size: 13.5px;
+  }
+
+  .intro-last {
+    letter-spacing: 0.14em;
+  }
+
+  @keyframes introFade {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .intro-btn {
+    margin-top: 36px;
+    background: linear-gradient(135deg, rgba(201,169,110,0.9), rgba(184,148,90,0.9));
+    border: none;
+    border-radius: 14px;
+    padding: 16px 56px;
+    font-size: 14px;
+    font-family: 'Noto Serif JP', serif;
+    font-weight: 300;
+    color: white;
+    letter-spacing: 0.3em;
+    cursor: pointer;
+    opacity: 0;
+    animation: introFade 1.4s ease forwards;
+    animation-delay: 5.2s;
+    transition: transform 0.3s ease;
+  }
+
+  .intro-btn:active {
+    transform: scale(0.98);
+  }
+
   /* こぼし・ともし ボタンペア */
   .action-pair {
     display: grid;
@@ -879,6 +963,20 @@
   </div>
 </div>
 
+<!-- ともしの自己紹介（初回のみ） -->
+<div class="intro-overlay" id="introOverlay">
+  <div class="intro-flame">🕯️</div>
+  <div class="intro-text">
+    <p>はじめまして。<br>私はともし。</p>
+    <p>好きに呼んでね。<br>ともでも、ともちゃんでも、<br>その日の気分で。</p>
+    <p>何でも、こぼしていいよ。<br>嬉しかったことも、<br>しんどかったことも。</p>
+    <p class="intro-soft">こぼした言葉は、どこにも行きません。<br>ここに、あるだけ。</p>
+    <p class="intro-soft">上手く言えなくて大丈夫。<br>途中で止まっても大丈夫。</p>
+    <p class="intro-last">私は、そばにいます。</p>
+  </div>
+  <button class="intro-btn" onclick="closeIntro()">は じ め る</button>
+</div>
+
 <!-- ともしモーダル -->
 <div class="tomoshi-modal" id="tomoshiModal">
   <span class="tomoshi-modal-flame">🕯️</span>
@@ -942,22 +1040,22 @@
       </div>
     </div>
 
-    <!-- こぼし・ともし ボタンペア -->
-    <div class="action-pair">
+    <!-- こぼす -->
+    <div class="action-pair" style="grid-template-columns:1fr; max-width:220px; margin-left:auto; margin-right:auto;">
       <button class="action-btn" onclick="openKoboshi()">
         <span class="action-btn-icon">💬</span>
-        <span class="action-btn-title">今日のこぼし</span>
+        <span class="action-btn-title">こ ぼ す</span>
         <span class="action-btn-sub">打ち明ける</span>
       </button>
-      <button class="action-btn" onclick="scrollToTomoshi()">
+      <button class="action-btn" onclick="scrollToTomoshi()" style="display:none;">
         <span class="action-btn-icon">🕯️</span>
         <span class="action-btn-title">今日のともし</span>
         <span class="action-btn-sub">受け取る</span>
       </button>
     </div>
 
-    <!-- ③日付・ご縁日 -->
-    <div class="date-block">
+    <!-- ③日付・ご縁日（非表示・開運ナビの領分） -->
+    <div class="date-block" style="display:none;">
       <p class="date-label">今日という日</p>
       <p class="date-main" id="todayDate">—</p>
       <div class="ennichi-badge">
@@ -966,28 +1064,28 @@
       </div>
     </div>
 
-    <!-- ④守護仏 -->
-    <div class="guardian-block">
+    <!-- ④守護仏（非表示・開運ナビの領分） -->
+    <div class="guardian-block" style="display:none;">
       <p class="guardian-label">あなたの守護仏</p>
       <p class="guardian-name" id="guardianName">—</p>
       <p class="guardian-message" id="guardianMessage">あなたをずっと見守っています</p>
     </div>
 
-    <!-- ⑤AIの今日だけの一言 -->
-    <div class="ai-message-block">
+    <!-- ⑤AIの今日だけの一言（非表示） -->
+    <div class="ai-message-block" style="display:none;">
       <p class="ai-label">今日のともし</p>
       <p class="ai-message-text" id="aiMessage">今日もあなたは充分に満たされています。感謝の心が、すべての縁を引き寄せます。ゆっくりと、深く息を吸って。今日という一日が、あなたにとって穏やかで温かなものとなりますように。</p>
     </div>
 
-    <div class="divider"></div>
+    <div class="divider" style="display:none;"></div>
 
     <!-- リセットボタン -->
     <div style="text-align:center; margin-bottom: 16px; opacity:0; animation: fadeIn 1s ease forwards; animation-delay: 4.2s;">
       <button onclick="resetApp()" style="background:none; border:none; font-size:11px; color:var(--text-soft); letter-spacing:0.2em; font-family:'Noto Serif JP',serif; cursor:pointer; padding:8px 16px;">情報を変更する</button>
     </div>
 
-    <!-- 下部ナビ -->
-    <div class="bottom-nav">
+    <!-- 下部ナビ（非表示・じぶん辞書は開運ナビの領分） -->
+    <div class="bottom-nav" style="display:none;">
       <p class="nav-label">じ ぶ ん 辞 書</p>
       <div class="nav-grid">
         <a class="nav-item" href="javascript:void(0)" onclick="openGuardianDetail()">
@@ -1101,7 +1199,34 @@ function startApp() {
   localStorage.setItem('tomoshi_name', name);
   localStorage.setItem('tomoshi_nickname', nickname);
   localStorage.setItem('tomoshi_birth', birth);
+
+  // 初回だけ、ともしが名乗る
+  if (!localStorage.getItem('tomoshi_intro_done')) {
+    document.getElementById('setupOverlay').style.display = 'none';
+    document.getElementById('introOverlay').classList.add('active');
+    window._pendingStart = { name, nickname, birth };
+    return;
+  }
   showMain(name, nickname, birth);
+}
+
+// 自己紹介を閉じてホームへ
+function closeIntro() {
+  localStorage.setItem('tomoshi_intro_done', '1');
+  const overlay = document.getElementById('introOverlay');
+  overlay.style.transition = 'opacity 0.8s ease';
+  overlay.style.opacity = '0';
+  const p = window._pendingStart || {
+    name: localStorage.getItem('tomoshi_name'),
+    nickname: localStorage.getItem('tomoshi_nickname'),
+    birth: localStorage.getItem('tomoshi_birth')
+  };
+  setTimeout(() => {
+    overlay.classList.remove('active');
+    overlay.style.opacity = '';
+    overlay.style.transition = '';
+    showMain(p.name, p.nickname, p.birth);
+  }, 800);
 }
 
 // セレクター初期化
@@ -1158,7 +1283,8 @@ function showMain(name, nickname, birth) {
   document.getElementById('guardianMessage').textContent = guardian.message;
 
   // AI一言生成
-  generateTomoshiMessage(nickname, guardian.name, ennichi);
+  // 今日のともしは非表示のため停止（復活させる時はこの行を戻す）
+  // generateTomoshiMessage(nickname, guardian.name, ennichi);
 }
 
 // AI一言生成
@@ -1235,6 +1361,7 @@ function resetApp() {
   localStorage.removeItem('tomoshi_name');
   localStorage.removeItem('tomoshi_nickname');
   localStorage.removeItem('tomoshi_birth');
+  localStorage.removeItem('tomoshi_intro_done');
   document.getElementById('setupOverlay').style.display = 'flex';
   document.getElementById('mainApp').style.display = 'none';
 }
