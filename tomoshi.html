@@ -719,6 +719,25 @@
   .note-page { width: 100%; max-width: 360px; }
 
   .note-entry { margin-bottom: 26px; }
+  .note-entry.appear { animation: noteAppear 1.1s cubic-bezier(0.22,0.61,0.36,1) forwards; }
+  @keyframes noteAppear {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .note-thinking {
+    text-align: center; padding: 10px 0 24px;
+    font-size: 20px; letter-spacing: 0.4em; color: var(--gold);
+  }
+  .note-thinking span {
+    display: inline-block; opacity: 0.25;
+    animation: dotBreath 1.8s ease-in-out infinite;
+  }
+  .note-thinking span:nth-child(2) { animation-delay: 0.3s; }
+  .note-thinking span:nth-child(3) { animation-delay: 0.6s; }
+  @keyframes dotBreath {
+    0%, 100% { opacity: 0.2; transform: translateY(0); }
+    50%      { opacity: 0.85; transform: translateY(-3px); }
+  }
   .note-who {
     font-size: 10px; letter-spacing: 0.3em; margin-bottom: 10px;
     font-weight: 300; text-align: center;
@@ -1010,7 +1029,7 @@
     ありがとうございます
   </p>
   <div class="setup-form">
-    <div class="name-row">
+    <div class="name-row" style="display:none;">
       <div class="setup-field">
         <label>姓</label>
         <input type="text" id="inputLastName" placeholder="林" maxlength="8">
@@ -1021,10 +1040,10 @@
       </div>
     </div>
     <div class="setup-field">
-      <label>呼び名（アプリでの呼び方）</label>
-      <input type="text" id="inputNickname" placeholder="例：しんさん、のぶちゃん" maxlength="12">
+      <label>なんて呼ばれたい？</label>
+      <input type="text" id="inputNickname" placeholder="例：しんちゃん、しょこたん" maxlength="12">
     </div>
-    <div class="setup-field">
+    <div class="setup-field" style="display:none;">
       <label>生年月日</label>
       <div style="display:grid; grid-template-columns:2fr 1fr 1fr; gap:8px;">
         <select id="inputYear" style="background:rgba(255,255,255,0.9); border:1px solid rgba(201,169,110,0.4); border-radius:12px; padding:16px 10px; font-size:16px; font-family:'Noto Serif JP',serif; font-weight:300; color:#3A3228; outline:none; -webkit-appearance:none; appearance:none; text-align:center;">
@@ -1286,13 +1305,15 @@ function startApp() {
   const year = document.getElementById('inputYear').value;
   const month = document.getElementById('inputMonth').value;
   const day = document.getElementById('inputDay').value;
-  if (!lastName || !firstName || !nickname || !year || !month || !day) {
-    errEl.textContent = 'すべての項目を入力してください';
+  if (!nickname) {
+    errEl.textContent = '呼ばれたい名前を入れてください';
     return;
   }
   errEl.textContent = '';
-  const name = lastName + firstName;
-  const birth = `${year}-${month.padStart(2,'0')}-${day.padStart(2,'0')}`;
+  const name = (lastName + firstName) || nickname;
+  const birth = (year && month && day)
+    ? `${year}-${String(month).padStart(2,'0')}-${String(day).padStart(2,'0')}`
+    : '';
   localStorage.setItem('tomoshi_name', name);
   localStorage.setItem('tomoshi_nickname', nickname);
   localStorage.setItem('tomoshi_birth', birth);
@@ -1468,6 +1489,8 @@ function resetApp() {
 //          tomoshi_note_days      = ['YYYY-MM-DD', ...]（書いた日）
 
 let _noteDate = null;   // いま開いているページ（Date）
+let _shownCount = 0;    // 表示済みの件数（新しい分だけふわっと出す）
+let _thinking = false;  // ともしが考えている最中
 let _calDate  = null;   // カレンダーで見ている月
 
 function dateKey(d) {
@@ -1497,8 +1520,9 @@ function todayCount() {
 
 function openKoboshi() {
   _noteDate = new Date();
-  document.getElementById('koboshiOverlay').classList.add('active');
+  _shownCount = 0;
   renderPage();
+  document.getElementById('koboshiOverlay').classList.add('active');
 }
 
 function closeKoboshi() {
@@ -1511,6 +1535,7 @@ function noteGo(step) {
   d.setDate(d.getDate() + step);
   if (d > new Date()) return;
   _noteDate = d;
+  _shownCount = 0;
   renderPage();
 }
 
@@ -1538,15 +1563,21 @@ function renderPage() {
     page.innerHTML = isToday(d)
       ? ''
       : '<div class="note-empty">この日は、<br>何も書かれていません</div>';
+    _shownCount = 0;
   } else {
     const nickname = localStorage.getItem('tomoshi_nickname') || 'わたし';
-    page.innerHTML = entries.map(e => `
-      <div class="note-entry ${e.who}">
+    page.innerHTML = entries.map((e, i) => `
+      <div class="note-entry ${e.who}${i >= _shownCount ? ' appear' : ''}">
         <p class="note-who ${e.who === 'me' ? 'me' : 'tomoshi'}">${e.who === 'me' ? esc(nickname) : 'と も し よ り'}</p>
         <p class="note-text">${esc(e.text)}</p>
       </div>
       <div class="note-line"></div>
     `).join('');
+    _shownCount = entries.length;
+  }
+  if (_thinking) {
+    page.insertAdjacentHTML('beforeend',
+      '<div class="note-thinking" id="noteThinking"><span>・</span><span>・</span><span>・</span></div>');
   }
 
   // 入力欄は今日のページだけ
@@ -1599,8 +1630,14 @@ async function sendKoboshi() {
   entries.push({ who: 'me', text: text });
   savePage(today, entries);
   document.getElementById('koboshiText').value = '';
+  document.getElementById('koboshiText').blur();
   _noteDate = new Date();
+  _thinking = true;
   renderPage();
+  setTimeout(() => {
+    const t = document.getElementById('noteThinking');
+    if (t) t.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }, 120);
 
   const nickname = localStorage.getItem('tomoshi_nickname') || 'あなた';
   const birth = localStorage.getItem('tomoshi_birth') || '';
@@ -1696,18 +1733,28 @@ ${text}
   } catch(e) {
     response = 'あなたの気持ち、ちゃんと届きました。今日もそばにいます。';
   }
+  await new Promise(r => setTimeout(r, 300));
 
   const now = loadPage(today);
   now.push({ who: 'tomoshi', text: response });
   savePage(today, now);
+
+  // 点々をそっと消してから、返事が浮かび上がる
+  const dots = document.getElementById('noteThinking');
+  if (dots) {
+    dots.style.transition = 'opacity 0.5s ease';
+    dots.style.opacity = '0';
+    await new Promise(r => setTimeout(r, 450));
+  }
+  _thinking = false;
   renderPage();
 
   btn.textContent = 'ともしに話す';
   btn.disabled = false;
   setTimeout(() => {
-    const page = document.getElementById('notePage');
-    if (page.lastElementChild) page.lastElementChild.scrollIntoView({ behavior:'smooth', block:'end' });
-  }, 100);
+    const es = document.querySelectorAll('.note-entry');
+    if (es.length) es[es.length-1].scrollIntoView({ behavior:'smooth', block:'start' });
+  }, 150);
 }
 
 // ─── カレンダー ───
