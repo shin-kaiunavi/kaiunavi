@@ -697,6 +697,86 @@
   .koboshi-used.active { display: block; }
   .koboshi-used p { font-size: 12px; color: var(--text-soft); letter-spacing: 0.15em; line-height: 2.2; font-weight: 200; }
 
+  /* ─── 交換日記 ─── */
+  .note-nav {
+    width: 100%; max-width: 360px;
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 26px;
+  }
+  .note-arrow {
+    background: none; border: none; font-size: 18px; color: var(--gold);
+    padding: 6px 14px; cursor: pointer; font-family: 'Noto Serif JP', serif;
+    opacity: 0.7; transition: opacity 0.3s ease;
+  }
+  .note-arrow:disabled { opacity: 0.15; cursor: default; }
+  .note-date {
+    background: none; border: none; font-size: 14px; font-weight: 300;
+    letter-spacing: 0.2em; color: var(--text-deep);
+    font-family: 'Noto Serif JP', serif; cursor: pointer; padding: 6px 10px;
+  }
+  .note-date span { font-size: 10px; color: var(--text-soft); letter-spacing: 0.15em; display: block; margin-top: 4px; }
+
+  .note-page { width: 100%; max-width: 360px; }
+
+  .note-entry { margin-bottom: 26px; }
+  .note-who {
+    font-size: 10px; letter-spacing: 0.3em; margin-bottom: 10px;
+    font-weight: 300; text-align: center;
+  }
+  .note-who.me { color: var(--text-soft); }
+  .note-who.tomoshi { color: var(--gold); }
+  .note-text {
+    font-size: 14px; color: var(--text-deep); letter-spacing: 0.08em;
+    line-height: 2.4; font-weight: 300; text-align: center;
+    white-space: pre-wrap;
+  }
+  .note-entry.tomoshi .note-text {
+    background: linear-gradient(160deg, rgba(255,250,240,0.95), rgba(247,242,234,0.8));
+    border: 1px solid rgba(201,169,110,0.25);
+    border-radius: 20px; padding: 24px 20px;
+  }
+  .note-line {
+    width: 40px; height: 1px; margin: 0 auto 26px;
+    background: linear-gradient(90deg, transparent, rgba(201,169,110,0.4), transparent);
+  }
+  .note-empty {
+    text-align: center; padding: 48px 20px;
+    font-size: 12px; color: var(--text-soft);
+    letter-spacing: 0.15em; line-height: 2.2; font-weight: 200;
+  }
+
+  /* カレンダー */
+  .cal-overlay {
+    position: fixed; inset: 0; background: rgba(253,250,246,0.97);
+    backdrop-filter: blur(12px); z-index: 120;
+    display: none; flex-direction: column; align-items: center; justify-content: center;
+    padding: 40px 24px;
+  }
+  .cal-overlay.active { display: flex; animation: fadeIn 0.4s ease forwards; }
+  .cal-head {
+    display: flex; align-items: center; justify-content: space-between;
+    width: 100%; max-width: 320px; margin-bottom: 20px;
+  }
+  .cal-month { font-size: 14px; letter-spacing: 0.2em; color: var(--text-deep); font-weight: 300; }
+  .cal-grid {
+    display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px;
+    width: 100%; max-width: 320px;
+  }
+  .cal-dow { text-align: center; font-size: 9px; color: var(--text-soft); letter-spacing: 0.1em; padding-bottom: 6px; }
+  .cal-day {
+    aspect-ratio: 1; display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    font-size: 12px; color: var(--text-deep); font-weight: 300;
+    border-radius: 10px; cursor: pointer; background: none; border: none;
+    font-family: 'Noto Serif JP', serif;
+  }
+  .cal-day.blank { visibility: hidden; }
+  .cal-day.has-note { background: rgba(201,169,110,0.14); }
+  .cal-day.today { border: 1px solid rgba(201,169,110,0.5); }
+  .cal-day.future { opacity: 0.2; cursor: default; }
+  .cal-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--gold); margin-top: 3px; }
+
+
   /* ともしモーダル */
   .tomoshi-modal {
     position: fixed;
@@ -985,33 +1065,50 @@
   <button class="tomoshi-modal-close" onclick="document.getElementById('tomoshiModal').classList.remove('active')">とじる</button>
 </div>
 
-<!-- こぼしモーダル -->
+<!-- 交換日記 -->
 <div class="koboshi-overlay" id="koboshiOverlay">
-  <p class="koboshi-title">今日のこぼし</p>
-  <p class="koboshi-subtitle">今日だけ、ひとつだけ<br>打ち明けてみてください</p>
 
-  <!-- 入力エリア（未使用時） -->
-  <div id="koboshiInputArea" style="width:100%; max-width:360px; display:flex; flex-direction:column; align-items:center;">
-    <textarea class="koboshi-textarea" id="koboshiText" placeholder="今日の気持ちや悩みをここに…"></textarea>
-    <button class="koboshi-send-btn" onclick="sendKoboshi()">ともしに打ち明ける</button>
+  <!-- 日付ナビ -->
+  <div class="note-nav">
+    <button class="note-arrow" id="notePrev" onclick="noteGo(-1)">←</button>
+    <button class="note-date" id="noteDate" onclick="openCalendar()">—</button>
+    <button class="note-arrow" id="noteNext" onclick="noteGo(1)">→</button>
   </div>
 
-  <!-- 返答エリア -->
-  <div class="koboshi-response" id="koboshiResponse">
+  <!-- ページ本体 -->
+  <div class="note-page" id="notePage"></div>
+
+  <!-- 入力エリア（今日のページのみ） -->
+  <div id="koboshiInputArea" style="width:100%; max-width:360px; display:flex; flex-direction:column; align-items:center;">
+    <textarea class="koboshi-textarea" id="koboshiText" placeholder="今日の気持ちや悩みをここに…"></textarea>
+    <button class="koboshi-send-btn" id="koboshiSendBtn" onclick="sendKoboshi()">ともしに話す</button>
+  </div>
+
+  <!-- 返答エリア（旧・非表示のまま残す） -->
+  <div class="koboshi-response" id="koboshiResponse" style="display:none;">
     <p class="koboshi-response-label">ともしより</p>
     <p class="koboshi-response-text" id="koboshiResponseText">…</p>
   </div>
+  <button class="koboshi-send-btn" id="koboshiAgainBtn" style="display:none;" onclick="koboshiAgain()">もう一度こぼす</button>
 
-  <!-- もう一度こぼす（テストモード時のみ） -->
-  <button class="koboshi-send-btn" id="koboshiAgainBtn" style="display:none; margin-top:16px;" onclick="koboshiAgain()">もう一度こぼす</button>
-
-  <!-- 使用済みメッセージ -->
+  <!-- 上限メッセージ -->
   <div class="koboshi-used" id="koboshiUsed">
     <p>今日のこぼしは<br>もう使いました</p>
     <p style="margin-top:12px;">また明日、ここで待っています</p>
   </div>
 
   <button class="koboshi-close-btn" onclick="closeKoboshi()">とじる</button>
+</div>
+
+<!-- カレンダー -->
+<div class="cal-overlay" id="calOverlay">
+  <div class="cal-head">
+    <button class="note-arrow" onclick="calMove(-1)">←</button>
+    <span class="cal-month" id="calMonth">—</span>
+    <button class="note-arrow" onclick="calMove(1)">→</button>
+  </div>
+  <div class="cal-grid" id="calGrid"></div>
+  <button class="koboshi-close-btn" style="margin-top:28px;" onclick="closeCalendar()">とじる</button>
 </div>
 
 <!-- メイン画面 -->
@@ -1366,64 +1463,147 @@ function resetApp() {
   document.getElementById('mainApp').style.display = 'none';
 }
 
-// こぼし関連
+// ─── 交換日記 ───
+// データ： tomoshi_note_YYYY-MM-DD = [{who:'me'|'tomoshi', text:'...'}]
+//          tomoshi_note_days      = ['YYYY-MM-DD', ...]（書いた日）
+
+let _noteDate = null;   // いま開いているページ（Date）
+let _calDate  = null;   // カレンダーで見ている月
+
+function dateKey(d) {
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+function isToday(d) { return dateKey(d) === dateKey(new Date()); }
+
+function loadPage(d) {
+  try { return JSON.parse(localStorage.getItem('tomoshi_note_' + dateKey(d)) || '[]'); }
+  catch(e) { return []; }
+}
+function savePage(d, entries) {
+  const key = dateKey(d);
+  localStorage.setItem('tomoshi_note_' + key, JSON.stringify(entries));
+  let days = [];
+  try { days = JSON.parse(localStorage.getItem('tomoshi_note_days') || '[]'); } catch(e) {}
+  if (!days.includes(key)) { days.push(key); days.sort(); localStorage.setItem('tomoshi_note_days', JSON.stringify(days)); }
+}
+function noteDays() {
+  try { return JSON.parse(localStorage.getItem('tomoshi_note_days') || '[]'); } catch(e) { return []; }
+}
+
+// 今日こぼした回数（＝自分の書き込み数）
+function todayCount() {
+  return loadPage(new Date()).filter(e => e.who === 'me').length;
+}
+
 function openKoboshi() {
-  const overlay = document.getElementById('koboshiOverlay');
-  overlay.classList.add('active');
-  const today = new Date().toDateString();
-  const usedDate = localStorage.getItem('tomoshi_koboshi_date');
-  const savedResponse = localStorage.getItem('tomoshi_koboshi_response');
-
-  // テストモード：常に未使用として開く
-  if (TEST_MODE) {
-    document.getElementById('koboshiText').value = '';
-    document.getElementById('koboshiInputArea').style.display = 'flex';
-    document.getElementById('koboshiResponse').classList.remove('active');
-    document.getElementById('koboshiUsed').classList.remove('active');
-    document.getElementById('koboshiAgainBtn').style.display = 'none';
-    return;
-  }
-
-  if (usedDate === today && savedResponse) {
-    // 使用済み＋返答あり
-    document.getElementById('koboshiInputArea').style.display = 'none';
-    document.getElementById('koboshiResponse').classList.add('active');
-    document.getElementById('koboshiResponseText').textContent = savedResponse;
-    document.getElementById('koboshiUsed').classList.add('active');
-  } else if (usedDate === today) {
-    // 使用済みのみ
-    document.getElementById('koboshiInputArea').style.display = 'none';
-    document.getElementById('koboshiUsed').classList.add('active');
-  } else {
-    // 未使用
-    document.getElementById('koboshiInputArea').style.display = 'flex';
-    document.getElementById('koboshiResponse').classList.remove('active');
-    document.getElementById('koboshiUsed').classList.remove('active');
-  }
+  _noteDate = new Date();
+  document.getElementById('koboshiOverlay').classList.add('active');
+  renderPage();
 }
 
 function closeKoboshi() {
   document.getElementById('koboshiOverlay').classList.remove('active');
+  document.getElementById('koboshiText').value = '';
 }
 
-function scrollToTomoshi() {
-  const modal = document.getElementById('tomoshiModal');
-  const msg = document.getElementById('aiMessage').textContent;
-  document.getElementById('tomoshiModalText').textContent = _tomoshiReady ? msg : 'ともしの言葉を準備しています…';
-  modal.classList.add('active');
+function noteGo(step) {
+  const d = new Date(_noteDate);
+  d.setDate(d.getDate() + step);
+  if (d > new Date()) return;
+  _noteDate = d;
+  renderPage();
+}
+
+function goToDate(key) {
+  const [y,m,dd] = key.split('-').map(Number);
+  _noteDate = new Date(y, m-1, dd);
+  closeCalendar();
+  if (!document.getElementById('koboshiOverlay').classList.contains('active')) {
+    document.getElementById('koboshiOverlay').classList.add('active');
+  }
+  renderPage();
+}
+
+function renderPage() {
+  const d = _noteDate;
+  const wd = ['日','月','火','水','木','金','土'][d.getDay()];
+  const label = `${d.getMonth()+1}月${d.getDate()}日（${wd}）`;
+  document.getElementById('noteDate').innerHTML = label + (isToday(d) ? '<span>き ょ う</span>' : '');
+  document.getElementById('noteNext').disabled = isToday(d);
+
+  const entries = loadPage(d);
+  const page = document.getElementById('notePage');
+
+  if (entries.length === 0) {
+    page.innerHTML = isToday(d)
+      ? ''
+      : '<div class="note-empty">この日は、<br>何も書かれていません</div>';
+  } else {
+    const nickname = localStorage.getItem('tomoshi_nickname') || 'わたし';
+    page.innerHTML = entries.map(e => `
+      <div class="note-entry ${e.who}">
+        <p class="note-who ${e.who === 'me' ? 'me' : 'tomoshi'}">${e.who === 'me' ? esc(nickname) : 'と も し よ り'}</p>
+        <p class="note-text">${esc(e.text)}</p>
+      </div>
+      <div class="note-line"></div>
+    `).join('');
+  }
+
+  // 入力欄は今日のページだけ
+  const input = document.getElementById('koboshiInputArea');
+  const used = document.getElementById('koboshiUsed');
+  used.classList.remove('active');
+
+  if (!isToday(d)) {
+    input.style.display = 'none';
+    return;
+  }
+
+  // 今日：回数制限（テスト中・無料期間中は無制限）
+  if (!TEST_MODE && !canSpillMore()) {
+    input.style.display = 'none';
+    used.classList.add('active');
+  } else {
+    input.style.display = 'flex';
+  }
+}
+
+// こぼせるかどうか（無料期間中は放題／その後は1日1往復）
+function canSpillMore() {
+  let started = localStorage.getItem('tomoshi_started');
+  if (!started) { started = new Date().toISOString(); localStorage.setItem('tomoshi_started', started); }
+  const days = (Date.now() - new Date(started).getTime()) / 86400000;
+  if (days < 14) return true;                 // 無料期間：放題
+  return todayCount() < 1;                    // その後：1日1往復
+}
+
+function esc(t) {
+  const el = document.createElement('div');
+  el.textContent = t;
+  return el.innerHTML;
 }
 
 async function sendKoboshi() {
   const text = document.getElementById('koboshiText').value.trim();
   if (!text) return;
 
-  const btn = document.querySelector('.koboshi-send-btn');
+  const btn = document.getElementById('koboshiSendBtn');
   btn.textContent = '…';
   btn.disabled = true;
 
+  const today = new Date();
+  const entries = loadPage(today);
+  const isFirst = entries.filter(e => e.who === 'me').length === 0;
+
+  // 自分の言葉を先に書き込む
+  entries.push({ who: 'me', text: text });
+  savePage(today, entries);
+  document.getElementById('koboshiText').value = '';
+  _noteDate = new Date();
+  renderPage();
+
   const nickname = localStorage.getItem('tomoshi_nickname') || 'あなた';
   const birth = localStorage.getItem('tomoshi_birth') || '';
-  const today = new Date();
   const day = today.getDate();
   const ennichi = ENNICHI[day] || '諸仏';
   const birthYear = birth ? new Date(birth).getFullYear() : 1980;
@@ -1488,50 +1668,89 @@ ${text}
 
 返答は本文のみ。${nickname}の、今日のこぼしに、そっと灯りをともしてください。`;
 
+  // 会話の流れを組み立てる（1通目に心得、以降はそのまま往復）
+  const msgs = [];
+  let first = true;
+  for (const e of entries) {
+    if (e.who === 'me') {
+      msgs.push({ role: 'user', content: first ? prompt : e.text });
+      first = false;
+    } else {
+      msgs.push({ role: 'assistant', content: e.text });
+    }
+  }
+
+  let response = '';
   try {
     const res = await fetch('https://kaiunavi.vercel.app/api/claude', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        system: '必ず日本語で返答してください。あなたは「ともし」。相手のそばにいて、アドバイスや評価はせず、言いたいだけのことは言わず、ただ寄り添い、相手が自分で心の核心に気づくのをそっと手伝う灯りのような存在です。隣でやわらかい声でうなずくような、人間くさく体温のある話し方をします。',
-        messages: [{ role: 'user', content: prompt }],
+        system: '必ず日本語で返答してください。あなたは「ともし」。相手のそばにいて、アドバイスや評価はせず、言いたいだけのことは言わず、ただ寄り添い、相手が自分で心の核心に気づくのをそっと手伝う灯りのような存在です。隣でやわらかい声でうなずくような、人間くさく体温のある話し方をします。同じ日のやり取りが続いている時は、それまでの流れを受けて自然に話してください。',
+        messages: msgs,
         max_tokens: 600
       })
     });
     const data = await res.json();
-    const response = data.content?.[0]?.text || 'そばにいます。';
-
-    // 保存（テスト中は本番の記録を汚さない）
-    if (!TEST_MODE) {
-      localStorage.setItem('tomoshi_koboshi_date', today.toDateString());
-      localStorage.setItem('tomoshi_koboshi_response', response);
-    }
-
-    // 表示
-    document.getElementById('koboshiInputArea').style.display = 'none';
-    document.getElementById('koboshiResponseText').textContent = response;
-    document.getElementById('koboshiResponse').classList.add('active');
-    if (TEST_MODE) document.getElementById('koboshiAgainBtn').style.display = 'block';
-
+    response = data.content?.[0]?.text || 'そばにいます。';
   } catch(e) {
-    document.getElementById('koboshiInputArea').style.display = 'none';
-    document.getElementById('koboshiResponseText').textContent = 'あなたの気持ち、ちゃんと届きました。今日もそばにいます。';
-    document.getElementById('koboshiResponse').classList.add('active');
-    if (!TEST_MODE) localStorage.setItem('tomoshi_koboshi_date', today.toDateString());
-    if (TEST_MODE) document.getElementById('koboshiAgainBtn').style.display = 'block';
-  } finally {
-    btn.textContent = 'ともしに打ち明ける';
-    btn.disabled = false;
+    response = 'あなたの気持ち、ちゃんと届きました。今日もそばにいます。';
   }
+
+  const now = loadPage(today);
+  now.push({ who: 'tomoshi', text: response });
+  savePage(today, now);
+  renderPage();
+
+  btn.textContent = 'ともしに話す';
+  btn.disabled = false;
+  setTimeout(() => {
+    const page = document.getElementById('notePage');
+    if (page.lastElementChild) page.lastElementChild.scrollIntoView({ behavior:'smooth', block:'end' });
+  }, 100);
 }
 
-// テストモード：もう一度こぼす
-function koboshiAgain() {
-  document.getElementById('koboshiText').value = '';
-  document.getElementById('koboshiResponse').classList.remove('active');
-  document.getElementById('koboshiAgainBtn').style.display = 'none';
-  document.getElementById('koboshiInputArea').style.display = 'flex';
-  document.getElementById('koboshiText').focus();
+// ─── カレンダー ───
+function openCalendar() {
+  _calDate = new Date(_noteDate);
+  document.getElementById('calOverlay').classList.add('active');
+  renderCalendar();
+}
+function closeCalendar() {
+  document.getElementById('calOverlay').classList.remove('active');
+}
+function calMove(step) {
+  _calDate.setMonth(_calDate.getMonth() + step);
+  renderCalendar();
+}
+function renderCalendar() {
+  const y = _calDate.getFullYear(), m = _calDate.getMonth();
+  document.getElementById('calMonth').textContent = `${y}年${m+1}月`;
+  const days = noteDays();
+  const todayKey = dateKey(new Date());
+  const first = new Date(y, m, 1).getDay();
+  const last = new Date(y, m+1, 0).getDate();
+
+  let html = ['日','月','火','水','木','金','土'].map(d => `<div class="cal-dow">${d}</div>`).join('');
+  for (let i = 0; i < first; i++) html += '<button class="cal-day blank"></button>';
+  for (let d = 1; d <= last; d++) {
+    const key = `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const has = days.includes(key);
+    const future = new Date(y, m, d) > new Date() && key !== todayKey;
+    const cls = ['cal-day', has ? 'has-note' : '', key === todayKey ? 'today' : '', future ? 'future' : ''].join(' ');
+    html += `<button class="${cls}" ${future ? '' : `onclick="goToDate('${key}')"`}>${d}${has ? '<span class="cal-dot"></span>' : ''}</button>`;
+  }
+  document.getElementById('calGrid').innerHTML = html;
+}
+
+function koboshiAgain() { renderPage(); }
+
+
+function scrollToTomoshi() {
+  const modal = document.getElementById('tomoshiModal');
+  const msg = document.getElementById('aiMessage').textContent;
+  document.getElementById('tomoshiModalText').textContent = _tomoshiReady ? msg : 'ともしの言葉を準備しています…';
+  modal.classList.add('active');
 }
 
 // 守護仏詳細
