@@ -1743,15 +1743,26 @@ async function sendKoboshi() {
     }
   }
 
+  // 直前のともしの返事に「ここまで預かっといて」の印をつける。
+  // これで〈心得＋今日のここまでの往復〉ぜんぶが預かり対象になり、
+  // 次のこぼしでは、そこまでを1/10の値段で読める。往復が伸びるほど効く。
+  for (let i = msgs.length - 1; i >= 0; i--) {
+    if (msgs[i].role === 'assistant') {
+      msgs[i] = {
+        role: 'assistant',
+        content: [{ type: 'text', text: msgs[i].content, cache_control: { type: 'ephemeral' } }]
+      };
+      break;
+    }
+  }
+
   let response = '';
   try {
     const res = await fetch('https://kaiunavi.vercel.app/api/claude', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        system: [
-          { type: 'text', text: TOMOSHI_KOKOROE, cache_control: { type: 'ephemeral' } }
-        ],
+        system: TOMOSHI_KOKOROE,
         messages: msgs,
         max_tokens: 600
       })
